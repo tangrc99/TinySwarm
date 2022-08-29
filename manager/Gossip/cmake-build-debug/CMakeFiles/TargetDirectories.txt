@@ -1,0 +1,4 @@
+/Users/tangrenchu/CLionProjects/TinySwarm/manager/Gossip/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/tangrenchu/CLionProjects/TinySwarm/manager/Gossip/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/tangrenchu/CLionProjects/TinySwarm/manager/Gossip/cmake-build-debug/CMakeFiles/usr.dir
+/Users/tangrenchu/CLionProjects/TinySwarm/manager/Gossip/cmake-build-debug/CMakeFiles/Gossip.dir

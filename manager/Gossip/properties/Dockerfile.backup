@@ -1,0 +1,48 @@
+FROM ubuntu:latest
+
+RUN apt-get update
+RUN apt-get install -y build-essential
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y cmake
+RUN apt-get install -y gdb net-tools sudo wget zip
+
+WORKDIR /usr/src
+RUN wget  -P /usr/src http://archive.apache.org/dist/apr/apr-1.7.0.tar.gz
+RUN tar -zxvf apr-1.7.0.tar.gz 
+WORKDIR /usr/src/apr-1.7.0 
+RUN ./configure --prefix=/usr/local/apr 
+RUN make  
+RUN sudo make install
+
+WORKDIR /usr/src
+RUN wget  -P /usr/src http://archive.apache.org/dist/apr/apr-util-1.6.1.tar.gz
+RUN tar -zxvf apr-util-1.6.1.tar.gz
+WORKDIR /usr/src/apr-util-1.6.1
+RUN ./configure  --prefix=/usr/local/apr --with-apr=/usr/local/apr   
+RUN apt-get install libexpat1-dev
+RUN make 
+RUN sudo make install
+
+RUN cp -r /usr/local/apr/bin/* /usr/local/bin
+RUN cp -r /usr/local/apr/lib/* /usr/local/lib
+RUN cp -r /usr/local/apr/include/* /usr/local/include
+
+RUN wget -P /usr/src https://dlcdn.apache.org/logging/log4cxx/0.12.1/apache-log4cxx-0.12.1.zip
+WORKDIR /usr/src/
+RUN unzip apache-log4cxx-0.12.1.zip
+RUN mkdir /usr/src/apache-log4cxx-0.12.1/build
+WORKDIR /usr/src/apache-log4cxx-0.12.1/build
+RUN cmake ../
+RUN make 
+RUN make install
+
+RUN apt-get install -y autoconf automake libtool curl git
+RUN git clone https://github.com/protocolbuffers/protobuf.git /usr/src/protobuf
+WORKDIR /usr/src/protobuf
+RUN ./autogen.sh
+RUN ./configure 
+RUN make 
+RUN make install 
+RUN ldconfig
+
+
+CMD ["/bin/bash"]

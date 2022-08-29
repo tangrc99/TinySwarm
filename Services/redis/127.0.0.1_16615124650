@@ -1,0 +1,5 @@
+redis my_redis 127.0.0.1 1
+
+
+docker: Error response from daemon: Conflict. The container name "/my_redis" is already in use by container "b30404a9f4dc27e11cb6ff32d5845663b3bfae01a70df1e0a939d99095dd0a28". You have to remove (or rename) that container to be able to reuse that name.
+See 'docker run --help'.

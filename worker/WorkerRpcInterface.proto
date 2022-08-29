@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+option cc_generic_services = true;
+
+enum ServiceType
+{
+  host = 0;
+  docker = 1;
+} ;
+
+message UserServiceDescriptor{
+  string service = 1;
+  string alias = 2;
+  ServiceType type = 3;
+}
+
+message ForkInput{
+  string service = 1;
+  string owner = 2;  // 当前服务的创建者标识
+  ServiceType type = 3;
+  string alias = 4;
+  repeated string exe_params = 5;
+  repeated string docker_params = 6;
+  int32 restart = 7;
+}
+
+message ForkEcho{
+  UserServiceDescriptor sd = 1;
+  bool fail = 2;
+  string error_text = 3;
+}
+
+message ShutdownInput{
+  UserServiceDescriptor sd = 1;
+  string user_info = 2;
+}
+
+message Echo{
+  bool fail = 1;
+  string error_text = 2;
+}
+
+message CheckInput{
+  string user_info = 1;
+  int32 line = 2;  // 返回的最多log行数
+}
+
+message DownService{
+  string error_text = 1;
+  int32 exit_num = 2;
+  string alias = 3;
+  string out_file = 4;
+}
+
+message DownServices{
+  repeated DownService service = 1;
+}
+
+message PushInput{
+  string service = 1;
+  bytes bin = 2;
+}
+
+service WorkerService{
+  rpc fork(ForkInput) returns(ForkEcho);
+  rpc shutdown(ShutdownInput) returns(Echo);
+  rpc check(CheckInput) returns(DownServices);
+  rpc push(PushInput) returns(Echo);
+}

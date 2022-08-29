@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option cc_generic_services = true;
+
+message ServiceName{
+  string name_or_alias = 1;
+  int32 type = 2; // -1 代表失败，0 host , 1 docker
+}
+
+message ServiceInformation{
+  string service = 1;
+  string alias = 2;  // 当前服务的创建者标识
+  int32 type = 3;
+  repeated string exe_params = 4;
+  repeated string docker_params = 5;
+  int32 restart = 6;
+}
+
+message ServiceList{
+  repeated ServiceInformation services= 1;
+}
+
+service ManagerService{
+  rpc showServices(ServiceName) returns(ServiceList);
+  rpc createService(ServiceInformation) returns(ServiceName);
+  rpc stopService(ServiceName) returns(ServiceName);
+  rpc transferService(ServiceName) returns(ServiceName);
+}

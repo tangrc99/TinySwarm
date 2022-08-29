@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option cc_generic_services = true;
+
+message MongoImageOidRange{
+  string min_oid = 1;
+  string max_oid = 2;
+}
+
+message YoloTestResult{
+  float accuracy = 1;
+  float precision = 2;
+  float recall = 3;
+  float AP = 4;
+  float IoU = 5;
+}
+
+service YoloTest{
+  rpc testWithRoadSeg(MongoImageOidRange) returns(YoloTestResult);
+  rpc testWithoutRoadSeg(MongoImageOidRange) returns(YoloTestResult);
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option cc_generic_services = true;
+
+enum MessageType
+{
+  ClientMessages = 0;
+  EchoMessages = 1;
+  ERROR = 2; // not used
+}
+
+message MessagePack{  // 客户端所发送的数据包格式
+  bytes data = 1;
+  string Method = 2;    // 客户端所调用的方法名称
+  string Service = 3;    // 客户端所调用的服务名称
+  string PackType = 4;  // 用来记录 data 序列化之前的格式
+}
+
