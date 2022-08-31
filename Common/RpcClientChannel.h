@@ -32,7 +32,7 @@ using google::protobuf::RpcController;
 class RpcClientChannel : public google::protobuf::RpcChannel {
 private:
 
-    int sessions_; // the num of sessions
+    std::atomic<int> sessions_; // the num of sessions
 
     time_t timestamp{}; // 上一次成功通信的时间
 
@@ -138,15 +138,15 @@ public:
 
     // Every new session on channel should call this function
     void sessionCreateNotify() {
-        ++sessions_;
+        sessions_.fetch_add(1);
     }
 
     void sessionDestroyNotify() {
-        --sessions_;
+        sessions_.fetch_sub(1);
     }
 
     [[nodiscard]] int sessions() const {
-        return sessions_;
+        return sessions_.load();
     }
 
     IPAddress ipAddress() {

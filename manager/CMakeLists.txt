@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
 
-        ../Common/Closure.h
         WorkerClient.h
         WorkerRpcInterface.pb.cc
         WorkerRpcInterface.pb.h
@@ -19,9 +18,10 @@ add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
         ../LogUtils/Logging.h
 
 
-         RpcSession.cpp RpcSession.h ServiceImplInfo.h
+        #RpcSession.cpp RpcSession.h
+        ServiceImplInfo.h
         LogQueue.cpp LogQueue.h
-        RPCInterface.cpp RPCInterface.h MRManager.cpp MRManager.h)
+        RPCInterface.cpp RPCInterface.h MRManager.cpp GroupManager.h)
 
 
 target_link_libraries(manager protobuf libTCPServer.a log4cxx hiredis redis++)

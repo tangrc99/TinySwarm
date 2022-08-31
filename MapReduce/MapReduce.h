@@ -17,7 +17,7 @@ namespace mapreduce {
     class MapReduce {
     public:
 
-        explicit MapReduce(std::shared_ptr<ManagerClient> client) : cli(std::move(client)) {
+        explicit MapReduce(std::shared_ptr<RpcClient> client) : cli(std::move(client)) {
 
         }
 
@@ -36,7 +36,7 @@ namespace mapreduce {
             return MapReduceTask(input, num, rpc_method, addresses, map, reduce, cli);
         }
 
-        static bool castMessageType(Message* input,Message *output){
+        static bool castMessageType(const Message* input,Message *output){
             return output->ParseFromString(input->SerializeAsString());
         }
 
@@ -69,9 +69,7 @@ namespace mapreduce {
 
 
     private:
-
-        std::unique_ptr<MongoImg> mongo;
-        std::shared_ptr<ManagerClient> cli;
+        std::shared_ptr<RpcClient> cli;
     };
 
 }

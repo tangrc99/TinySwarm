@@ -9,7 +9,7 @@ message ServiceName{
 
 message ServiceInformation{
   string service = 1;
-  string alias = 2;  // 当前服务的创建者标识
+  string alias = 2 ;  // 当前服务的创建者标识
   int32 type = 3;
   repeated string exe_params = 4;
   repeated string docker_params = 5;
@@ -17,12 +17,37 @@ message ServiceInformation{
 }
 
 message ServiceList{
-  repeated ServiceInformation services= 1;
+  repeated ServiceInformation services = 1;
+}
+
+message ServiceGroupName{
+  string token = 1; // 用户可以指定一个，如果未指定，则由 manager 随机指定
+  int32 service_num = 2;
+  string service = 3;
+  int32 type = 4;
+  repeated string exe_params = 5;
+  repeated string docker_params = 6;
+  int32 restart = 7;
+}
+
+message ServiceGroup{
+  string token = 1;
+  int32 service_num = 2;
+  ServiceList service_list = 3;
+}
+
+message AddressPool{
+  repeated string address = 1;
 }
 
 service ManagerService{
-  rpc showServices(ServiceName) returns(ServiceList);
+  rpc showService(ServiceName) returns(ServiceList); //
   rpc createService(ServiceInformation) returns(ServiceName);
   rpc stopService(ServiceName) returns(ServiceName);
   rpc transferService(ServiceName) returns(ServiceName);
+
+  rpc createServiceGroup(ServiceGroupName) returns(ServiceGroup);
+  rpc getServiceGroupInfo(ServiceGroup) returns(ServiceGroup);
+  rpc getAddressPool(ServiceGroup) returns(AddressPool); // 只返回 ServiceGroup 的地址池
+  rpc stopServiceGroup(ServiceGroup) returns(ServiceGroup);
 }

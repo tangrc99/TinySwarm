@@ -337,7 +337,7 @@ public:
         DownServices downServices;
         std::string error_text;
 
-        auto rpc_res = wd->session->run(CHECK,&input);
+        auto rpc_res = wd->session->run(CHECK, &input);
 
         if (rpc_res.isFailed()) {
             wd->alive = false;  // 如果 worker 没有存活，将所有的服务转为下线
@@ -657,15 +657,19 @@ public:
 //
 //
 //        IPAddress ipAddress(AF_INET, 8989);
-//        std::vector<std::function<void()>> functors = {
-//                [this] {
-//                    auto now = time_t(nullptr);
-//                    if (now > check_time) {
-//                        checkServicesOnAllWorker(10);
-//                        check_time = now + 5;
-//                    }
-//                }
-//        };
+
+        // 周期任务，用来定时跟worker通信，以及查找是否有失活的服务
+        std::vector<std::function<void()>> functors = {
+                [this] {
+                    auto now = time_t(nullptr);
+                    if (now > check_time) {
+                        checkServicesOnAllWorker(10);
+                        check_time = now + 5;
+                    }
+
+                    transferDownService();
+                }
+        };
 //        server = std::make_unique<RPCServer>(ipAddress, functors, 1, -1);
     }
 
@@ -764,7 +768,7 @@ public:
 
     std::unique_ptr<RPCServer> server;
 
-    time_t check_time;
+    time_t check_time;  // 因为底层 TCP 没加计时任务功能，这个是用于计时的
 };
 
 

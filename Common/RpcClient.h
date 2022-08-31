@@ -16,6 +16,9 @@
 class RpcClient {
 public:
 
+    ///
+    /// \param service
+    /// \param proto_path
     explicit RpcClient(const std::string &service, const std::string &proto_path) : generator(
             std::make_shared<DynamicGenerator>(proto_path)) {
 
@@ -62,6 +65,11 @@ public:
         return std::make_shared<Session>(channel, service_, generator, this);
     }
 
+    /// CallBack Function Used By Session.
+    /// \return always true
+    virtual bool SessionCallBack(){
+        return true;
+    }
 
 private:
 

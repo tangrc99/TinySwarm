@@ -20,7 +20,7 @@ add_executable(MapReduce
 
         YoloInfer.pb.h YoloInfer.pb.cc
         #Common/RpcResult.h
-        MapReduceTask.cpp MapReduceTask.h AddressPool.cpp AddressPool.h ManagerClient.cpp ManagerClient.h)
+        MapReduceTask.cpp MapReduceTask.h AddressPool.cpp AddressPool.h ManagerClient.cpp ManagerClient.h ManagerSession.cpp ManagerSession.h)
 
 
 target_link_libraries(MapReduce mongocxx protobuf)

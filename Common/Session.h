@@ -116,14 +116,24 @@ public:
                      const google::protobuf::ServiceDescriptor *service,
                      std::shared_ptr<DynamicGenerator> generator,
                      RpcClient *client)
-            : channel_(channel), timestamp(time(nullptr)), service_(service), generator_(std::move(generator)),cli_(client) {
+            : channel_(channel), timestamp(time(nullptr)), service_(service), generator_(std::move(generator)),
+              cli_(client) {
         async_ = std::make_unique<RpcAsyncSession>(channel);
+        channel_->sessionCreateNotify();
+    }
+
+    /// Copy Constructor. Create a new Session Object on original channel and client.
+    /// \param other Session Object.
+    Session(const Session &other) : channel_(other.channel_), timestamp(time(nullptr)), service_(other.service_),
+                                    generator_(other.generator_), cli_(other.cli_) {
+        async_ = std::make_unique<RpcAsyncSession>(channel_);
         channel_->sessionCreateNotify();
     }
 
     ~Session() {
         channel_->sessionDestroyNotify();
     }
+
 
     bool alive() {
         return channel_->isConnected();
@@ -201,7 +211,7 @@ public:
         return channel_->ipAddress();
     }
 
-    std::string type(){
+    std::string type() {
         return service_->name();
     }
 

@@ -21,9 +21,9 @@ std::vector<Message *> map_test(Message *input, int num) {
 MessagePtr reduce_test(const std::vector<MessagePtr> &inputs) {
     auto result = std::make_shared<YoloTestResult>();
 
-    for(auto &input : inputs){
+    for (auto &input: inputs) {
         YoloTestResult res;
-        MapReduce::castMessageType(input.get(),&res);
+        MapReduce::castMessageType(input.get(), &res);
         result->set_ap(res.ap() * 2 + result->ap());
     }
 
@@ -32,7 +32,8 @@ MessagePtr reduce_test(const std::vector<MessagePtr> &inputs) {
 
 void mapreduce_test() {
 
-    MapReduce mapReduce(std::make_shared<ManagerClient>("YoloTest", "/Users/tangrenchu/CLionProjects/TinySwarm/MapReduce"));
+    MapReduce mapReduce(
+            std::make_shared<ManagerClient>("YoloTest", "/Users/tangrenchu/CLionProjects/TinySwarm/MapReduce"));
 
     MongoImageOidRange oids;
     oids.set_max_oid("100");
@@ -46,16 +47,16 @@ void mapreduce_test() {
 
     auto res = task.getResult();
 
-    if(res.isFailed()){
+    if (res.isFailed()) {
         std::cout << res.ErrorText();
-        return ;
+        return;
     }
 
     YoloTestResult result;
 
     result.ParseFromString(res.Message()->SerializeAsString());
 
-    std::cout << "ap " <<result.ap();
+    std::cout << "ap " << result.ap();
 }
 
 void yolo_test() {
@@ -72,7 +73,7 @@ void yolo_test() {
     YoloTestResult result;
     res.castMessageTo(&result);
 
-     std::cout << result.ap();
+    std::cout << result.ap();
 }
 
 void test() {
@@ -103,17 +104,18 @@ void test() {
     double e_pingxing = 1 - (w_D * w_D) / (w * w) - (w_H * w_H) / (w * w);
     double e_chuizhi = 1 - (w_D * w_D) / ((w * w) - (o_D * o_D)) - (w_H * w_H) / (w * w - o_H * o_H);
 
-    std::cout << "e_x: " << e_x << std::endl
+    std::cout << "w_D: " << w_D << std::endl
+              << "e_x: " << e_x << std::endl
               << "e_pingxing: " << e_pingxing << std::endl
               << "e_chuizhi: " << e_chuizhi << std::endl;
 }
 
-void cast(Message *in,Message *out){
+void cast(Message *in, Message *out) {
     out->ParseFromString(in->SerializeAsString());
 }
 
 
-void protobuf_test(){
+void protobuf_test() {
 
     DynamicGenerator generator("/Users/tangrenchu/CLionProjects/TinySwarm/MapReduce");
 
@@ -123,17 +125,17 @@ void protobuf_test(){
     oids.set_max_oid("100");
     oids.set_min_oid("0");
 
-    pf::Message* m = generator.getMethodInputProto(method)->New();
+    pf::Message *m = generator.getMethodInputProto(method)->New();
 
     std::cout << m->GetTypeName();
     std::cout << m->ParseFromString(oids.SerializeAsString());
     std::cout << m->DebugString() << std::endl;
 
-   // auto test = pf::down_cast<MongoImageOidRange*>(m);
+    // auto test = pf::down_cast<MongoImageOidRange*>(m);
 
     MongoImageOidRange mm;
 
-    cast(m,&mm);
+    cast(m, &mm);
 
     std::cout << mm.max_oid();
 }
@@ -141,9 +143,9 @@ void protobuf_test(){
 int main() {
 
 
-    //mapreduce_test();
-    return 0;
     test();
+    return 0;
+
 
 //    RpcClient client;
 //

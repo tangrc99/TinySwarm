@@ -7,7 +7,7 @@
 
 #include <google/protobuf/stubs/callback.h>
 
-class Closure : public google::protobuf::Closure {
+class ClosureImpl : public google::protobuf::Closure {
 public:
 
     void Run() override{
