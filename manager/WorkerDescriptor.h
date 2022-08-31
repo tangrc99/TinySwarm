@@ -5,7 +5,7 @@
 #ifndef TINYSWARM_WORKERDESCRIPTOR_H
 #define TINYSWARM_WORKERDESCRIPTOR_H
 
-#include "RpcSession.h"
+#include "Session.h"
 
 struct ServiceImplInfo;
 
@@ -15,7 +15,7 @@ struct WorkerDescriptor {
 
     bool alive;     //FIXME 目前只有check 时会改变 alive 信息
 
-    std::shared_ptr<RpcSession> session;   // 用于通信的连接
+    std::shared_ptr<Session> session;   // 用于通信的连接
 
     std::list<ServiceImplInfo *> services; // 当前节点上运行的服务
 

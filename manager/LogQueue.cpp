@@ -5,20 +5,6 @@
 #include "LogQueue.h"
 
 
-//void LogQueue::append() {
-//    LogInformation log("123", "123", "123", "123123123123");
-//    // 进入临界区
-//    while (swp_flag.test_and_set(std::memory_order_acquire));
-//    logs_.emplace_back();
-//    //logs_.emplace_back(std::move(log));
-//    swp_flag.clear(std::memory_order_release);
-//
-//    // 若log线程非活跃，则进行通知
-//    flush_flag.test_and_set(std::memory_order_acquire);
-//    flush_flag.notify_one();
-//
-//}
-
 int LogQueue::append(const std::string &slice) {
     // 进入临界区
     while (swp_flag.test_and_set(std::memory_order_acquire));

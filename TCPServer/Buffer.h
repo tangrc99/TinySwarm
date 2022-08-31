@@ -30,7 +30,7 @@ public:
         buffer.reserve(buff_len);
     }
 
-    size_t CurrentSize(){
+    size_t CurrentSize() {
         return buffer.size();
     }
 
@@ -43,7 +43,7 @@ public:
             std::cout << "buffer increase.\n";
         }
 
-        if(start == end){
+        if (start == end) {
             start = 0;
             end = 0;
         }
@@ -52,12 +52,12 @@ public:
         size_t n = ::read(fd, &buffer[end], buff_len - end);
 
         // 丢弃心跳(写入位置不增长)
-        if( n==1 && buffer[end]==' '){
+        if (n == 1 && buffer[end] == ' ') {
             return 1;
         }
 
-        if (n == -1){
-            std::cout<<"errno: "<<errno<<std::endl;
+        if (n == -1) {
+            std::cout << "errno: " << errno << std::endl;
             return -1;
         }
 
@@ -93,7 +93,7 @@ public:
     }
 
     bool isCatchHTTPEnd() {
-        size_t i = std::max(last_pos,start);
+        size_t i = std::max(last_pos, start);
 
         for (; i < end; i++) {
             if (buffer[i] == '\r' && buffer[i + 1] == '\n' && buffer[i + 2] == '\r' && buffer[i + 3] == '\n') {
@@ -102,12 +102,12 @@ public:
                 break;
             }
         }
-        if(find_num == 0){
+        if (find_num == 0) {
             last_pos = end;
             return false;
         }
 
-        if(this->first() == 'P'){
+        if (this->first() == 'P') {
 
             for (i++; i < end; i++) {
                 if (buffer[i] == '\r' && buffer[i + 1] == '\n' && buffer[i + 2] == '\r' && buffer[i + 3] == '\n') {
@@ -116,7 +116,7 @@ public:
                     break;
                 }
             }
-            if(find_num == 1){
+            if (find_num == 1) {
                 last_pos = end;
                 return false;
             }
@@ -126,10 +126,10 @@ public:
         return true;
     }
 
-    void clearHttpEnd(){
-        start = http_end +1 ;
-        std::cout<<end<<" "<<start<<std::endl;
-        http_end = -1 ;
+    void clearHttpEnd() {
+        start = http_end + 1;
+        std::cout << end << " " << start << std::endl;
+        http_end = -1;
         find_num = 0;
 //        if(start >= end){
 //            start = end = 0;
@@ -144,18 +144,21 @@ public:
             return {};
         }
 
-        return &buffer[start];
+        //FIXME : 这里好像是有问题的
+        std::string str(&buffer[start], end - start);
+
+        return str;
     }
 
     [[nodiscard]] char first() const {
 
-        int i=0;
-        while(buffer[i]==' '){i++;}
+        int i = 0;
+        while (buffer[i] == ' ') { i++; }
 
         return buffer[i];
     }
 
-    size_t size() const {
+    [[nodiscard]] size_t size() const {
         return catchEOF ? end - 4 : end;
     }
 };

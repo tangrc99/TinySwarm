@@ -13,7 +13,6 @@ using MRURI = std::string;
 using ServiceGroup = std::vector<ServiceImplInfo *>;
 
 class MRManager {
-
 public:
 
     MRURI addServiceGroup(const ServiceGroup &group) {

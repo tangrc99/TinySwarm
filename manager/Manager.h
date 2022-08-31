@@ -69,8 +69,6 @@ public:
         input.set_restart(restart);
         input.set_owner(usr_info);
 
-        ForkEcho echo;
-        std::string error_text;
 
         // 提前创建好对应服务的描述量
         ServiceImplInfo info(service, alias, type, 1, wd, exe_params, docker_params, restart);
@@ -85,14 +83,17 @@ public:
         cur_line = logger->append("CSS " + alias);
 
         retry :
-        auto rpc_res = wd->session->fork(&input, &echo, error_text);    //FIXME: 变量提前声明
+        auto rpc_res = wd->session->run(FORK, &input);
         // log << create success
 
-        if (!rpc_res) {
+        if (rpc_res.isFailed()) {
             cur_line = logger->append("CSE " + alias + " Fail");
             services.erase(res.first);  // 如果失败则进行回退
-            return {false, error_text};
+            return {false, rpc_res.ErrorText()};
         }
+
+        ForkEcho echo;
+        rpc_res.castMessageTo(&echo);
 
         if (echo.fail()) {
             if (echo.error_text() == "Manager Down") {
@@ -145,18 +146,19 @@ public:
         input.set_restart(info.restart_);
         input.set_owner(usr_info);
 
-        ForkEcho echo;
-        std::string error_text;
 
         // log << create service ...
         cur_line = logger->append("CSS " + info.alias_);
         retry :
-        auto rpc_res = info.wd_->session->fork(&input, &echo, error_text);
+        auto rpc_res = info.wd_->session->run(FORK, &input);
 
-        if (!rpc_res) {
+        if (rpc_res.isFailed()) {
             cur_line = logger->append("CSE " + info.alias_ + " Fail");
-            return {false, error_text};
+            return {false, rpc_res.ErrorText()};
         }
+
+        ForkEcho echo;
+        rpc_res.castMessageTo(&echo);
 
         if (echo.fail()) {
 
@@ -215,15 +217,17 @@ public:
         input.set_user_info(usr_info);
         input.set_allocated_sd(sd);
 
-        Echo echo;
-        std::string error_text;
-        cur_line = logger->append("DSS " + alias);
-        auto rpc_res = wd->session->shutdown(&input, &echo, error_text);
 
-        if (!rpc_res) {
+        cur_line = logger->append("DSS " + alias);
+        auto rpc_res = wd->session->run(SHUTDOWN, &input);
+
+        if (rpc_res.isFailed()) {
             cur_line = logger->append("DSE " + alias + " Fail");
-            return {false, error_text};
+            return {false, rpc_res.ErrorText()};
         }
+
+        Echo echo;
+        rpc_res.castMessageTo(&echo);
 
         if (echo.fail()) {
             if (echo.error_text() == "Manager Down") {
@@ -333,9 +337,9 @@ public:
         DownServices downServices;
         std::string error_text;
 
-        auto rpc_res = wd->session->check(&input, &downServices, error_text);
+        auto rpc_res = wd->session->run(CHECK,&input);
 
-        if (!rpc_res) {
+        if (rpc_res.isFailed()) {
             wd->alive = false;  // 如果 worker 没有存活，将所有的服务转为下线
             for (auto &service: wd->services) {
                 service->alive_ = false;

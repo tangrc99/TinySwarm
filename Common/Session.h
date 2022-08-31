@@ -19,7 +19,8 @@
 #define RPC_AGAIN "AGAIN"
 #define RPC_TIMEOUT "TIMEOUT"
 
-class RpcAsyncSession {
+
+class RpcAsyncSession final {
 public:
 
     explicit RpcAsyncSession(std::shared_ptr<RpcClientChannel> channel) : channel_(std::move(channel)) {
@@ -31,7 +32,7 @@ public:
     /// \param req The input of rpc.
     /// \param res The output of rpc.
     /// \return If rpc task created. If failed, there is already one rpc running.
-    bool run(const MethodDescriptor *method, Message *req, Message *res) {
+    bool run(const MethodDescriptor *method, const Message *req, MessagePtr res) {
         if (!isFinished())
             return false;
 
@@ -39,11 +40,11 @@ public:
 
         running.test_and_set(); // 因为线程准备需要消耗资源，所以要在线程准备前声明
 
-        response = res;
+        response = std::move(res);
 
-        th_ = std::thread([this, &method, req]() {
+        th_ = std::thread([this, method, req]() {
 
-            channel_->CallMethod(method, &controller, req, response, {});
+            channel_->CallMethod(method, &controller, req, response.get(), {});
 
             running.clear();
         });
@@ -53,7 +54,7 @@ public:
 
     /// Get the rpc response. Do call "isFinished" before call this function.
     /// \return The ptr of rpc response
-    google::protobuf::Message *getResponse() {
+    MessagePtr getResponse() {
         return response;
     }
 
@@ -69,8 +70,9 @@ public:
         while (!isFinished()) {
             usleep(100);
         }
+        if (controller.Failed())
+            response = nullptr; // 清除本次调用的信息
 
-        response = nullptr; // 清除本次调用的信息
         return controller.Failed();
     }
 
@@ -88,7 +90,7 @@ public:
 protected:
     std::shared_ptr<RpcClientChannel> channel_;
 
-    google::protobuf::Message *response = nullptr;
+    MessagePtr response = nullptr;
 
     std::thread th_;
     std::atomic_flag running{};
@@ -99,6 +101,9 @@ protected:
     time_t max_wait = 5;
 };
 
+
+class RpcClient;
+
 // rpc channel 的生命周期并不是由 Session 来控制
 // 一个rpc channel 上可以建立多个 session，session 直接会公用同一个 tpc 链接。
 // 多个 session 之间不共用 rpc controller, 同步与异步之间也不共用。
@@ -108,9 +113,10 @@ public:
     /// Create a session on a connected rpc channel
     /// \param channel Connected rpc channel
     explicit Session(const std::shared_ptr<RpcClientChannel> &channel,
-                     const google::protobuf::ServiceDescriptor *service = nullptr,
-                     std::shared_ptr<DynamicGenerator> generator = nullptr)
-            : channel_(channel), timestamp(time(nullptr)), service_(service), generator_(std::move(generator)) {
+                     const google::protobuf::ServiceDescriptor *service,
+                     std::shared_ptr<DynamicGenerator> generator,
+                     RpcClient *client)
+            : channel_(channel), timestamp(time(nullptr)), service_(service), generator_(std::move(generator)),cli_(client) {
         async_ = std::make_unique<RpcAsyncSession>(channel);
         channel_->sessionCreateNotify();
     }
@@ -137,8 +143,11 @@ public:
         if (method == nullptr)
             return RpcResult("Empty Method");
 
-        auto output = generator_->getMethodOutputProto(method);
-        channel_->CallMethod(method, &controller_, input, output, {});
+        MessagePtr output = MessagePtr(generator_->getMethodOutputProto(method)->New());
+
+        std::cout << "output " << output->GetTypeName() << std::endl;
+
+        channel_->CallMethod(method, &controller_, input, output.get(), {});
 
         if (controller_.Failed())
             return RpcResult(controller_.ErrorText());
@@ -148,20 +157,17 @@ public:
         return RpcResult(output);
     }
 
-    bool async_run(const std::string &method, Message *input) {
-        auto method_ = service_->FindMethodByName(method);
+    bool async_run(const std::string &method, const Message *input) {
+        const MethodDescriptor *method_ = service_->FindMethodByName(method);
         return async_run(method_, input);
     }
 
-    ///
-    /// \param service
-    /// \param method
-    /// \param input
-    bool async_run(const google::protobuf::MethodDescriptor *method, Message *input) {
+    bool async_run(const google::protobuf::MethodDescriptor *method, const Message *input) {
 
         timestamp = time(nullptr);
 
         auto output = generator_->getMethodOutputProto(method);
+
         return async_->run(method, input, output);
     }
 
@@ -182,7 +188,7 @@ public:
             return RpcResult(async_->failedReason());
 
         timestamp = time(nullptr);
-        RpcResult(async_->getResponse());
+        return RpcResult(async_->getResponse());
     }
 
     /// Last rpc time. Only function run and async_run of class Session will update last rpc time value.
@@ -195,15 +201,24 @@ public:
         return channel_->ipAddress();
     }
 
+    std::string type(){
+        return service_->name();
+    }
+
 protected:
 
     time_t timestamp; // 上次成功进行rpc的时间
-    std::unique_ptr<RpcAsyncSession> async_;
-    std::shared_ptr<RpcClientChannel> channel_;
-    RpcClientController controller_;
 
-    std::shared_ptr<DynamicGenerator> generator_;
     const google::protobuf::ServiceDescriptor *service_;
+
+    RpcClient *cli_;    // Session 从属的 client
+
+private:
+    std::shared_ptr<RpcClientChannel> channel_; // 通信使用的channel
+    std::unique_ptr<RpcAsyncSession> async_;    // 异步通信使用的 async 处理器
+    RpcClientController controller_;    // 同步rpc的异常处理器
+    std::shared_ptr<DynamicGenerator> generator_;   // 用于生成输出信息
+
 };
 
 #endif //TINYSWARM_SESSION_H

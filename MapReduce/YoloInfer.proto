@@ -8,11 +8,11 @@ message MongoImageOidRange{
 }
 
 message YoloTestResult{
-  float accuracy = 1;
-  float precision = 2;
-  float recall = 3;
-  float AP = 4;
-  float IoU = 5;
+  int32 accuracy = 1;
+  int32 precision = 2;
+  int32 recall = 3;
+  int32 AP = 4;
+  int32 IoU = 5;
 }
 
 service YoloTest{

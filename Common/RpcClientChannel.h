@@ -34,7 +34,7 @@ private:
 
     int sessions_; // the num of sessions
 
-    time_t timestamp; // 上一次成功通信的时间
+    time_t timestamp{}; // 上一次成功通信的时间
 
     IPAddress address;
     int sockfd = 0;
@@ -79,17 +79,22 @@ private:
 
         } while (!buffer.isCatchHTTPEnd() && rd > 0);
 
-
         if (!buffer.isCatchHTTPEnd()) {
+
             if (rd == 0)
                 throw std::runtime_error("No Messages Back");
             else
                 throw std::runtime_error("not catch http end");
+
         }
+
+        auto str = buffer.str();
 
         HTTPData HTTPdata(buffer.str(), HTTP_TYPE::RESPONSE);
 
-        response->ParseFromString(HTTPdata.getParamValue("RPCRESPONSE"));
+        auto rpc_pack = HTTPdata.getParamValue("RPCRESPONSE");
+
+        response->ParseFromString(rpc_pack);
 
 
         std::string space = " ";
@@ -168,22 +173,32 @@ public:
 
         controller->Reset();
 
+
         /// 需要实现数据的封装和通信过程
         /// 按照method: echo 的方式进行封装
         MessagePack pack;
-        pack.set_data(request->SerializeAsString());    /// 将序列化后的数据打包
-        assert(!pack.data().empty());
-        pack.set_packtype(request->GetTypeName());  /// 记录打包前的数据类型
-        pack.set_method(method->name());    /// 需要调用的方法
-        pack.set_service(method->service()->name());    /// 需要调用的方法所在的服务
+
+        try{
+
+            pack.set_data(request->SerializeAsString());    /// 将序列化后的数据打包
+            assert(!pack.data().empty());
+            pack.set_packtype(request->GetTypeName());  /// 记录打包前的数据类型
+            pack.set_method(method->name());    /// 需要调用的方法
+            pack.set_service(method->service()->name());    /// 需要调用的方法所在的服务
+
+        } catch (std::exception &e) {
+            controller->SetFailed("Message Pack Error");
+        }
+      
 
         std::string sss = pack.SerializeAsString();
-
+        //std::cout << sss << std::endl;
 
         try {
             sendMessages(sss);
             waitResponse(response);
             timestamp = time(nullptr);
+
         } catch (std::exception &e) {
             controller->SetFailed(e.what());
         }

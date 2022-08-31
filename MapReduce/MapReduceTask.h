@@ -8,12 +8,13 @@
 
 #include <utility>
 #include "RpcClient.h"
+#include "YoloInfer.pb.h"
 
 
 namespace mapreduce {
 
     using MapFunction = std::function<std::vector<Message *>(Message *, int)>;
-    using ReduceFunction = std::function<Message *(std::vector<Message *>)>;
+    using ReduceFunction = std::function<MessagePtr(std::vector<MessagePtr>)>;
 
     /// The MapReduceTask Created by class MapReduce
     class MapReduceTask {
@@ -32,17 +33,18 @@ namespace mapreduce {
         /// \param reduce Reduce function
         /// \param cli The rpc client
         explicit MapReduceTask(Message *input, int num, const std::string &rpc_method,
-                               const std::vector<IPAddress> &addresses, MapFunction map,
+                               std::vector<IPAddress> addresses, MapFunction map,
                                ReduceFunction reduce, std::shared_ptr<RpcClient> cli)
 
                 : input_(input), output_(nullptr), num_(num), rpc_method_(rpc_method), map_(std::move(map)),
-                  reduce_(std::move(reduce)), cli_(std::move(cli)), addr_status_(num, 0), res_(num, nullptr),
-                  status_(prepare) {
+                  addresses_(std::move(addresses)), reduce_(std::move(reduce)), cli_(std::move(cli)),
+                  addr_status_(num, 0),
+                  res_(num, nullptr), status_(prepare) {
 
             sessions_.reserve(num_);
 
 
-            task_ = std::thread(&MapReduceTask::run, this);
+            // task_ = std::thread(&MapReduceTask::run, this);
 
         }
 
@@ -53,28 +55,34 @@ namespace mapreduce {
 
         /// Get the status of task.
         /// \return Task status
-        Status status() {
+        [[nodiscard]] Status status() const {
             return status_;
         }
 
-        /// Get the result of task.
-        /// \return Task result
-        RpcResult getResult() {
-            if (status_ == Status::finished)
-                return RpcResult(output_);
 
-            return status_ == Status::error ? RpcResult("FAILED") : RpcResult("AGAIN");
+        /// Get the result of task.
+        /// \param block If blocking get result
+        /// \return Task result
+        [[nodiscard]] RpcResult getResult(bool block = true) const {
+            if (!block) {
+                if (status_ == Status::finished)
+                    return RpcResult(output_);
+
+                return status_ == Status::error ? RpcResult("FAILED") : RpcResult("AGAIN");
+            }
+
+            while (status_ != Status::finished && status_ != Status::error) {}
+
+            return status_ == Status::error ? RpcResult("FAILED") : RpcResult(output_);
         }
 
-
-    private:
+    public:
 
         /// start task
         void run() {
 
             // 分割输入参数
             split_inputs_ = map_(input_, num_);
-
 
             // 创建并启动异步rpc
             for (int i = 0; i < num_; i++) {
@@ -87,6 +95,7 @@ namespace mapreduce {
             for (int i = 0; i < num_; i++) {
                 sessions_[i]->async_run(rpc_method_, split_inputs_[i]);
             }
+
 
             status_ = Status::running;
 
@@ -121,7 +130,8 @@ namespace mapreduce {
         }
 
         //FIXME : 函数还没有写完
-        /// Randomly get an address from address pool
+        /// Randomly get an available address from address pool. If there is no available address,
+        /// function returns nullptr.
         /// \return The ptr of address
         IPAddress *getRandomAddress() {
             status_ = Status::error;
@@ -168,20 +178,20 @@ namespace mapreduce {
         std::thread task_;
 
         Message *input_;
-        Message *output_;
+        MessagePtr output_;
         int num_;
         const std::string &rpc_method_;
 
         std::vector<IPAddress> addresses_;
         std::vector<int> addr_status_;   // -1 不可用, 0 可用
 
-        std::function<std::vector<Message *>(Message *, int)> map_;
-        std::function<Message *(std::vector<Message *>)> reduce_;
+        MapFunction map_;
+        ReduceFunction reduce_;
 
 
         std::vector<Message *> split_inputs_;
 
-        std::vector<Message *> res_;
+        std::vector<MessagePtr> res_;
         std::vector<std::shared_ptr<Session>> sessions_;
         std::shared_ptr<RpcClient> cli_;
 

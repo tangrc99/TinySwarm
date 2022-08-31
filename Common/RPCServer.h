@@ -156,8 +156,7 @@ public:
             }
 
             Message *data = service->GetRequestPrototype(method).New();
-            //generator.getMessageProto(method->full_name());
-            //RPC_SERVICE_DESK.getInputPtr(method->input_type()->name());
+
             LOG_DEBUG("%s: %s", "Pack Type", data->GetTypeName().c_str());
 
             if (data == nullptr) {
@@ -178,7 +177,9 @@ public:
             }
             LOG_DEBUG("%s", "Rpc Success");
 
-            auto http_res = HTTPData::makeResponseData(result, echo->SerializeAsString());
+            auto http_res = HTTPData::makeResponseData(result, echo->SerializeAsString(),{});
+            std::cout << echo->SerializeAsString().size() ;
+
 
         } else {
             HTTPData::makeResponseData(result, "ERROR : MessagePack Not Initialize");

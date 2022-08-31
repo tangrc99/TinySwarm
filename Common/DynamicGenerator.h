@@ -23,20 +23,22 @@ using google::protobuf::compiler::Importer;
 namespace pf = google::protobuf;
 namespace fs = std::filesystem;
 
+
+using MessagePtr = std::shared_ptr<Message>;
+
 class DynamicGenerator {
 private:
     const DescriptorPool *pool;
     std::unique_ptr<DynamicMessageFactory> m_factory;
     std::unique_ptr<Importer> importer;
+    google::protobuf::compiler::DiskSourceTree source;
 
 public:
 
     ///
     /// \param disk_path The DynamicGenerator will import all .proto file in disk_path
-    explicit DynamicGenerator(const std::string &disk_path) :
-            m_factory(std::make_unique<google::protobuf::DynamicMessageFactory>()) {
+    explicit DynamicGenerator(const std::string &disk_path) {
 
-        google::protobuf::compiler::DiskSourceTree source;
         source.MapPath("", disk_path);
 
         fs::path path(disk_path);
@@ -45,29 +47,40 @@ public:
 
         for (const auto &file: fs::directory_iterator(path)) {
 
-            if(file.path().extension() == ".proto")
+            if (file.path().extension() == ".proto")
                 files.emplace_back(file.path().filename());
         }
 
-        importer = std::make_unique<Importer>(&source,nullptr);
+        importer = std::make_unique<Importer>(&source, nullptr);
 
         //runtime compile foo.proto
-        for(auto &file : files)
+        for (auto &file: files)
             importer->Import(file);
 
         pool = importer->pool();
+
+        m_factory = std::make_unique<google::protobuf::DynamicMessageFactory>();
+        m_factory->SetDelegateToGeneratedFactory(true);
     }
 
-    const pf::ServiceDescriptor *getServiceDescriptor(const std::string &service){
+    const pf::ServiceDescriptor *getServiceDescriptor(const std::string &service) {
         return pool->FindServiceByName(service);
     }
 
-    Message *getMethodOutputProto(const pf::MethodDescriptor *method) {
+    MessagePtr getMethodInputProto(const pf::MethodDescriptor *method) {
 
         auto *input = method->input_type();
         const Message *tempo = m_factory->GetPrototype(input);
 
-        return tempo->New();
+        return MessagePtr(tempo->New());
+    }
+
+    MessagePtr getMethodOutputProto(const pf::MethodDescriptor *method) {
+
+        auto *output = method->output_type();
+        const Message *tempo = m_factory->GetPrototype(output);
+
+        return MessagePtr(tempo->New());
     }
 
     auto getMethod(const std::string &service_name, const std::string &method_name) {

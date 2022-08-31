@@ -4,9 +4,12 @@ project(TinySwarm)
 set(CMAKE_CXX_STANDARD 17)
 
 aux_source_directory( ${CMAKE_SOURCE_DIR}/Common COMMON_SRCS)
+aux_source_directory( ${CMAKE_SOURCE_DIR}/LogUtils LOG_SRCS)
 
 
-include_directories(logUtils)
+include_directories(${CMAKE_SOURCE_DIR})
+
+include_directories(LogUtils)
 include_directories(TCPServer)
 include_directories(Common)
 link_directories(lib)
@@ -18,3 +21,4 @@ link_directories("/usr/local/lib")
 add_subdirectory(worker)
 add_subdirectory(manager)
 add_subdirectory(MapReduce)
+add_subdirectory(Yolo)

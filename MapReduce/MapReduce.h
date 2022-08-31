@@ -6,15 +6,20 @@
 #define TINYSWARM_MAPREDUCE_H
 
 #include "MongoImg.h"
-#include "RpcClient.h"
+#include "ManagerClient.h"
 #include "MapReduceTask.h"
 #include <mongocxx/client.hpp>
+#include <utility>
 
 namespace mapreduce {
 
     /// User MapReduce Interface
     class MapReduce {
     public:
+
+        explicit MapReduce(std::shared_ptr<ManagerClient> client) : cli(std::move(client)) {
+
+        }
 
         /// Create a MapReduce task using ip address pool.
         /// \param input Mapreduce input
@@ -29,6 +34,10 @@ namespace mapreduce {
                                           const ReduceFunction &reduce) {
 
             return MapReduceTask(input, num, rpc_method, addresses, map, reduce, cli);
+        }
+
+        static bool castMessageType(Message* input,Message *output){
+            return output->ParseFromString(input->SerializeAsString());
         }
 
 
@@ -62,7 +71,7 @@ namespace mapreduce {
     private:
 
         std::unique_ptr<MongoImg> mongo;
-        std::shared_ptr<RpcClient> cli;
+        std::shared_ptr<ManagerClient> cli;
     };
 
 }

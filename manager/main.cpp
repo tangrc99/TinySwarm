@@ -33,41 +33,41 @@ int LogQueueTest(){
 
 std::map<int,std::string> map;
 
-
-auto WorkerRpcTest(){
-    WorkerClient client;
-    auto session = client.createSessionOnNewChannel(IPAddress(AF_INET, 8989));
-
-    ForkInput input;
-    input.set_service(std::string("hello"));
-    input.set_alias(std::string("my_hello"));
-    input.set_owner(std::string("127.0.0.1"));
-    input.set_type(host);
-    input.set_restart(0);
-
-    std::string error;
-    ForkEcho echo;
-    auto res = session->fork(&input,&echo,error);
-
-    std::cout << (echo.sd().alias())<< std::endl;
-
-    sleep(1);
-
-    CheckInput input1;
-    input1.set_user_info("127.0.0.1");
-    input1.set_line(10);
-    DownServices downService;
-
-    session->check(&input1,&downService,error);
-
-    for(int i =0;i<downService.service_size();i++){
-        const auto& err = downService.service(i);
-        std::cout << err.alias() << "\n"<<err.error_text() <<"\n"
-                  <<err.out_file()<<std::endl;
-    }
-
-    return res;
-}
+//
+//auto WorkerRpcTest(){
+//    WorkerClient client;
+//    auto session = client.createSessionOnNewChannel(IPAddress(AF_INET, 8989));
+//
+//    ForkInput input;
+//    input.set_service(std::string("hello"));
+//    input.set_alias(std::string("my_hello"));
+//    input.set_owner(std::string("127.0.0.1"));
+//    input.set_type(host);
+//    input.set_restart(0);
+//
+//    std::string error;
+//    ForkEcho echo;
+//    auto res = session->fork(&input,&echo,error);
+//
+//    std::cout << (echo.sd().alias())<< std::endl;
+//
+//    sleep(1);
+//
+//    CheckInput input1;
+//    input1.set_user_info("127.0.0.1");
+//    input1.set_line(10);
+//    DownServices downService;
+//
+//    session->check(&input1,&downService,error);
+//
+//    for(int i =0;i<downService.service_size();i++){
+//        const auto& err = downService.service(i);
+//        std::cout << err.alias() << "\n"<<err.error_text() <<"\n"
+//                  <<err.out_file()<<std::endl;
+//    }
+//
+//    return res;
+//}
 
 int main(int argc ,char *argv[]){
 

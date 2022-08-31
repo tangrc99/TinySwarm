@@ -5,7 +5,7 @@
 #ifndef RPCSERVER_RPCCLIENTCONTROLLER_H
 #define RPCSERVER_RPCCLIENTCONTROLLER_H
 
-#include "../manager/Closure.h"
+#include "Closure.h"
 #include <google/protobuf/service.h>
 
 

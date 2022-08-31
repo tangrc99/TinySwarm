@@ -20,18 +20,22 @@ public:
         return error_text;
     }
 
-    [[nodiscard]] google::protobuf::Message *Message() const {
+    [[nodiscard]] std::shared_ptr<google::protobuf::Message> Message() const {
         return message;
+    }
+
+    bool castMessageTo(google::protobuf::Message *msg) const {
+        return msg->ParseFromString(message->SerializeAsString());
     }
 
     explicit RpcResult(std::string error) : fail(true), error_text(std::move(error)), message(nullptr) {}
 
-    explicit RpcResult(google::protobuf::Message *message) : fail(false), message(message) {}
+    explicit RpcResult(std::shared_ptr<google::protobuf::Message> msg) : fail(false), message(std::move(msg)) {}
 
 
 private:
 
-    google::protobuf::Message *message;
+    std::shared_ptr<google::protobuf::Message> message;
     bool fail;
     std::string error_text;
 };
