@@ -6,8 +6,7 @@
 #define TINYSWARM_WORKERDESCRIPTOR_H
 
 #include "Session.h"
-
-struct ServiceImplInfo;
+#include "PodDescriptor.h"
 
 struct WorkerDescriptor {
     std::string ip;
@@ -17,17 +16,26 @@ struct WorkerDescriptor {
 
     std::shared_ptr<Session> session;   // 用于通信的连接
 
-    std::list<ServiceImplInfo *> services; // 当前节点上运行的服务
+    std::list<std::string> services;    // 节点上提供的服务
+    std::list<PodDescriptor *> pods; // 当前节点上运行的服务
 
-    void removeService(ServiceImplInfo *service) {
-        for (auto it = services.begin(); it != services.end();) {
+    void removeService(PodDescriptor *service) {
+        for (auto it = pods.begin(); it != pods.end();) {
             if (*it == service) {
-                services.erase(it);
+                pods.erase(it);
                 return;
             } else {
                 it++;
             }
         }
+    }
+
+    bool portAvailable(int p){
+        for(auto &pod : pods){
+            if(pod->port_ == p)
+                return false;
+        }
+        return true;
     }
 };
 

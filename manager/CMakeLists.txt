@@ -3,6 +3,8 @@ project(manager)
 
 set(CMAKE_CXX_STANDARD 17)
 
+aux_source_directory(Proxy PROXY_SRCS)
+
 add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
 
         WorkerClient.h
@@ -11,6 +13,7 @@ add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
 
 
         ${COMMON_SRCS}
+        ${PROXY_SRCS}
 
 
         ../LogUtils/LoggerControl.cpp
@@ -19,9 +22,11 @@ add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
 
 
         #RpcSession.cpp RpcSession.h
-        ServiceImplInfo.h
+        PodDescriptor.h
         LogQueue.cpp LogQueue.h
-        RPCInterface.cpp RPCInterface.h MRManager.cpp GroupManager.h)
+        RPCInterface.cpp RPCInterface.h
+        ServiceManager.h
+        Result.h ManagerError.h ServiceDescriptor.h Scheduler.h CreateResult.h)
 
 
 target_link_libraries(manager protobuf libTCPServer.a log4cxx hiredis redis++)

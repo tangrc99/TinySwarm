@@ -1,0 +1,9 @@
+//
+// Created by 唐仁初 on 2022/9/1.
+//
+
+#ifndef TINYSWARM_MANAGERERROR_H
+#define TINYSWARM_MANAGERERROR_H
+
+#endif //TINYSWARM_MANAGERERROR_H
+

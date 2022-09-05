@@ -3,15 +3,10 @@
 //
 
 #include "WorkerNode.h"
-#include "RPCInterface.h"
-#include <signal.h>
-#include <sys/fcntl.h>
 
-void hello(){
-    std::cout<<"hello world!"<<std::endl;
-}
+using namespace worker;
 
-void rpc_test(){
+void rpc_test() {
 
     auto log_controller = LoggerController::getInstance();
     log_controller.init("../../properties/log4cxx.properties", "fileappender");
@@ -34,10 +29,7 @@ void rpc_test(){
 }
 
 
-
-
-int main(){
-
+int main() {
 
     rpc_test();
     return 0;
@@ -49,14 +41,14 @@ int main(){
     //RPCInterface rpc(&node);
 
 
-    std::string error ;
+    std::string error;
     auto pid = node.createProcess
-            ("hello","123","0",0,{},{},error,0);
+            ("hello", "123", "0", 0, {}, {}, error, 0);
 
 //
     //std::cout << "to kill" << pid <<std::endl;
     sleep(5);
-    node.checkServices();
+    node.checkIfPodsRunning();
 
 
     //node.stopDockerService(pid);
@@ -73,8 +65,8 @@ int main(){
     //kill(pid, SIGKILL);
 
 
-   // node.checkServices();
-   // node.cleanDumpFiles();
+    // node.checkServices();
+    // node.cleanDumpFiles();
 //
 //    for(auto &error : node.down_services){
 //

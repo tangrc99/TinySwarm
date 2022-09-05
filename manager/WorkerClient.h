@@ -14,7 +14,7 @@
 #define SHUTDOWN "shutdown"
 #define CHECK "check"
 
-class WorkerClient : public RpcClient {
+class WorkerClient final: public RpcClient {
 public:
 
     explicit WorkerClient() : RpcClient("WorkerService", "/Users/tangrenchu/CLionProjects/TinySwarm/worker") {

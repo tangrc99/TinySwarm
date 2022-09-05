@@ -40,7 +40,8 @@ constexpr ForkInput::ForkInput(
   , alias_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , type_(0)
 
-  , restart_(0){}
+  , restart_(0)
+  , port_(0){}
 struct ForkInputDefaultTypeInternal {
   constexpr ForkInputDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -130,19 +131,18 @@ struct DownServicesDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT DownServicesDefaultTypeInternal _DownServices_default_instance_;
-constexpr PushInput::PushInput(
+constexpr StatusParam::StatusParam(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : service_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , bin_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
-struct PushInputDefaultTypeInternal {
-  constexpr PushInputDefaultTypeInternal()
+  : status_name_(){}
+struct StatusParamDefaultTypeInternal {
+  constexpr StatusParamDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~PushInputDefaultTypeInternal() {}
+  ~StatusParamDefaultTypeInternal() {}
   union {
-    PushInput _instance;
+    StatusParam _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PushInputDefaultTypeInternal _PushInput_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StatusParamDefaultTypeInternal _StatusParam_default_instance_;
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_WorkerRpcInterface_2eproto[9];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_WorkerRpcInterface_2eproto[1];
 static const ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor* file_level_service_descriptors_WorkerRpcInterface_2eproto[1];
@@ -170,6 +170,7 @@ const uint32_t TableStruct_WorkerRpcInterface_2eproto::offsets[] PROTOBUF_SECTIO
   PROTOBUF_FIELD_OFFSET(::ForkInput, exe_params_),
   PROTOBUF_FIELD_OFFSET(::ForkInput, docker_params_),
   PROTOBUF_FIELD_OFFSET(::ForkInput, restart_),
+  PROTOBUF_FIELD_OFFSET(::ForkInput, port_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ForkEcho, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -221,24 +222,23 @@ const uint32_t TableStruct_WorkerRpcInterface_2eproto::offsets[] PROTOBUF_SECTIO
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::DownServices, service_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::PushInput, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::StatusParam, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::PushInput, service_),
-  PROTOBUF_FIELD_OFFSET(::PushInput, bin_),
+  PROTOBUF_FIELD_OFFSET(::StatusParam, status_name_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::UserServiceDescriptor)},
   { 9, -1, -1, sizeof(::ForkInput)},
-  { 22, -1, -1, sizeof(::ForkEcho)},
-  { 31, -1, -1, sizeof(::ShutdownInput)},
-  { 39, -1, -1, sizeof(::Echo)},
-  { 47, -1, -1, sizeof(::CheckInput)},
-  { 55, -1, -1, sizeof(::DownService)},
-  { 65, -1, -1, sizeof(::DownServices)},
-  { 72, -1, -1, sizeof(::PushInput)},
+  { 23, -1, -1, sizeof(::ForkEcho)},
+  { 32, -1, -1, sizeof(::ShutdownInput)},
+  { 40, -1, -1, sizeof(::Echo)},
+  { 48, -1, -1, sizeof(::CheckInput)},
+  { 56, -1, -1, sizeof(::DownService)},
+  { 66, -1, -1, sizeof(::DownServices)},
+  { 73, -1, -1, sizeof(::StatusParam)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -250,36 +250,37 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_CheckInput_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_DownService_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_DownServices_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_PushInput_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_StatusParam_default_instance_),
 };
 
 const char descriptor_table_protodef_WorkerRpcInterface_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\030WorkerRpcInterface.proto\"S\n\025UserServic"
   "eDescriptor\022\017\n\007service\030\001 \001(\t\022\r\n\005alias\030\002 "
-  "\001(\t\022\032\n\004type\030\003 \001(\0162\014.ServiceType\"\222\001\n\tFork"
+  "\001(\t\022\032\n\004type\030\003 \001(\0162\014.ServiceType\"\240\001\n\tFork"
   "Input\022\017\n\007service\030\001 \001(\t\022\r\n\005owner\030\002 \001(\t\022\032\n"
   "\004type\030\003 \001(\0162\014.ServiceType\022\r\n\005alias\030\004 \001(\t"
   "\022\022\n\nexe_params\030\005 \003(\t\022\025\n\rdocker_params\030\006 "
-  "\003(\t\022\017\n\007restart\030\007 \001(\005\"P\n\010ForkEcho\022\"\n\002sd\030\001"
-  " \001(\0132\026.UserServiceDescriptor\022\014\n\004fail\030\002 \001"
-  "(\010\022\022\n\nerror_text\030\003 \001(\t\"F\n\rShutdownInput\022"
-  "\"\n\002sd\030\001 \001(\0132\026.UserServiceDescriptor\022\021\n\tu"
-  "ser_info\030\002 \001(\t\"(\n\004Echo\022\014\n\004fail\030\001 \001(\010\022\022\n\n"
-  "error_text\030\002 \001(\t\"-\n\nCheckInput\022\021\n\tuser_i"
-  "nfo\030\001 \001(\t\022\014\n\004line\030\002 \001(\005\"T\n\013DownService\022\022"
-  "\n\nerror_text\030\001 \001(\t\022\020\n\010exit_num\030\002 \001(\005\022\r\n\005"
-  "alias\030\003 \001(\t\022\020\n\010out_file\030\004 \001(\t\"-\n\014DownSer"
-  "vices\022\035\n\007service\030\001 \003(\0132\014.DownService\")\n\t"
-  "PushInput\022\017\n\007service\030\001 \001(\t\022\013\n\003bin\030\002 \001(\014*"
-  "#\n\013ServiceType\022\010\n\004host\020\000\022\n\n\006docker\020\0012\221\001\n"
-  "\rWorkerService\022\035\n\004fork\022\n.ForkInput\032\t.For"
-  "kEcho\022!\n\010shutdown\022\016.ShutdownInput\032\005.Echo"
-  "\022#\n\005check\022\013.CheckInput\032\r.DownServices\022\031\n"
-  "\004push\022\n.PushInput\032\005.EchoB\003\200\001\001b\006proto3"
+  "\003(\t\022\017\n\007restart\030\007 \001(\005\022\014\n\004port\030\010 \001(\005\"P\n\010Fo"
+  "rkEcho\022\"\n\002sd\030\001 \001(\0132\026.UserServiceDescript"
+  "or\022\014\n\004fail\030\002 \001(\010\022\022\n\nerror_text\030\003 \001(\t\"F\n\r"
+  "ShutdownInput\022\"\n\002sd\030\001 \001(\0132\026.UserServiceD"
+  "escriptor\022\021\n\tuser_info\030\002 \001(\t\"(\n\004Echo\022\014\n\004"
+  "fail\030\001 \001(\010\022\022\n\nerror_text\030\002 \001(\t\"-\n\nCheckI"
+  "nput\022\021\n\tuser_info\030\001 \001(\t\022\014\n\004line\030\002 \001(\005\"T\n"
+  "\013DownService\022\022\n\nerror_text\030\001 \001(\t\022\020\n\010exit"
+  "_num\030\002 \001(\005\022\r\n\005alias\030\003 \001(\t\022\020\n\010out_file\030\004 "
+  "\001(\t\"-\n\014DownServices\022\035\n\007service\030\001 \003(\0132\014.D"
+  "ownService\"\"\n\013StatusParam\022\023\n\013status_name"
+  "\030\001 \003(\t*#\n\013ServiceType\022\010\n\004host\020\000\022\n\n\006docke"
+  "r\020\0012\237\001\n\rWorkerService\022\035\n\004fork\022\n.ForkInpu"
+  "t\032\t.ForkEcho\022!\n\010shutdown\022\016.ShutdownInput"
+  "\032\005.Echo\022#\n\005check\022\013.CheckInput\032\r.DownServ"
+  "ices\022\'\n\tgetStatus\022\014.StatusParam\032\014.Status"
+  "ParamB\003\200\001\001b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_WorkerRpcInterface_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_WorkerRpcInterface_2eproto = {
-  false, false, 877, descriptor_table_protodef_WorkerRpcInterface_2eproto, "WorkerRpcInterface.proto", 
+  false, false, 898, descriptor_table_protodef_WorkerRpcInterface_2eproto, "WorkerRpcInterface.proto", 
   &descriptor_table_WorkerRpcInterface_2eproto_once, nullptr, 0, 9,
   schemas, file_default_instances, TableStruct_WorkerRpcInterface_2eproto::offsets,
   file_level_metadata_WorkerRpcInterface_2eproto, file_level_enum_descriptors_WorkerRpcInterface_2eproto, file_level_service_descriptors_WorkerRpcInterface_2eproto,
@@ -633,8 +634,8 @@ ForkInput::ForkInput(const ForkInput& from)
       GetArenaForAllocation());
   }
   ::memcpy(&type_, &from.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&restart_) -
-    reinterpret_cast<char*>(&type_)) + sizeof(restart_));
+    static_cast<size_t>(reinterpret_cast<char*>(&port_) -
+    reinterpret_cast<char*>(&type_)) + sizeof(port_));
   // @@protoc_insertion_point(copy_constructor:ForkInput)
 }
 
@@ -653,8 +654,8 @@ alias_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlread
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&type_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&restart_) -
-    reinterpret_cast<char*>(&type_)) + sizeof(restart_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&port_) -
+    reinterpret_cast<char*>(&type_)) + sizeof(port_));
 }
 
 ForkInput::~ForkInput() {
@@ -693,8 +694,8 @@ void ForkInput::Clear() {
   owner_.ClearToEmpty();
   alias_.ClearToEmpty();
   ::memset(&type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&restart_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(restart_));
+      reinterpret_cast<char*>(&port_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(port_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -777,6 +778,14 @@ const char* ForkInput::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
       case 7:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
           restart_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 port = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -873,6 +882,12 @@ uint8_t* ForkInput::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_restart(), target);
   }
 
+  // int32 port = 8;
+  if (this->_internal_port() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(8, this->_internal_port(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -937,6 +952,11 @@ size_t ForkInput::ByteSizeLong() const {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_restart());
   }
 
+  // int32 port = 8;
+  if (this->_internal_port() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_port());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
@@ -976,6 +996,9 @@ void ForkInput::MergeFrom(const ForkInput& from) {
   if (from._internal_restart() != 0) {
     _internal_set_restart(from._internal_restart());
   }
+  if (from._internal_port() != 0) {
+    _internal_set_port(from._internal_port());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1013,8 +1036,8 @@ void ForkInput::InternalSwap(ForkInput* other) {
       &other->alias_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ForkInput, restart_)
-      + sizeof(ForkInput::restart_)
+      PROTOBUF_FIELD_OFFSET(ForkInput, port_)
+      + sizeof(ForkInput::port_)
       - PROTOBUF_FIELD_OFFSET(ForkInput, type_)>(
           reinterpret_cast<char*>(&type_),
           reinterpret_cast<char*>(&other->type_));
@@ -2522,108 +2545,79 @@ void DownServices::InternalSwap(DownServices* other) {
 
 // ===================================================================
 
-class PushInput::_Internal {
+class StatusParam::_Internal {
  public:
 };
 
-PushInput::PushInput(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+StatusParam::StatusParam(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  status_name_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
   }
-  // @@protoc_insertion_point(arena_constructor:PushInput)
+  // @@protoc_insertion_point(arena_constructor:StatusParam)
 }
-PushInput::PushInput(const PushInput& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+StatusParam::StatusParam(const StatusParam& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      status_name_(from.status_name_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  service_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    service_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_service().empty()) {
-    service_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_service(), 
-      GetArenaForAllocation());
-  }
-  bin_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    bin_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_bin().empty()) {
-    bin_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_bin(), 
-      GetArenaForAllocation());
-  }
-  // @@protoc_insertion_point(copy_constructor:PushInput)
+  // @@protoc_insertion_point(copy_constructor:StatusParam)
 }
 
-inline void PushInput::SharedCtor() {
-service_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  service_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-bin_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  bin_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+inline void StatusParam::SharedCtor() {
 }
 
-PushInput::~PushInput() {
-  // @@protoc_insertion_point(destructor:PushInput)
+StatusParam::~StatusParam() {
+  // @@protoc_insertion_point(destructor:StatusParam)
   if (GetArenaForAllocation() != nullptr) return;
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void PushInput::SharedDtor() {
+inline void StatusParam::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  service_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  bin_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void PushInput::ArenaDtor(void* object) {
-  PushInput* _this = reinterpret_cast< PushInput* >(object);
+void StatusParam::ArenaDtor(void* object) {
+  StatusParam* _this = reinterpret_cast< StatusParam* >(object);
   (void)_this;
 }
-void PushInput::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void StatusParam::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void PushInput::SetCachedSize(int size) const {
+void StatusParam::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 
-void PushInput::Clear() {
-// @@protoc_insertion_point(message_clear_start:PushInput)
+void StatusParam::Clear() {
+// @@protoc_insertion_point(message_clear_start:StatusParam)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  service_.ClearToEmpty();
-  bin_.ClearToEmpty();
+  status_name_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* PushInput::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* StatusParam::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string service = 1;
+      // repeated string status_name = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_service();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "PushInput.service"));
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // bytes bin = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_bin();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_status_name();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StatusParam.status_name"));
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -2650,118 +2644,90 @@ failure:
 #undef CHK_
 }
 
-uint8_t* PushInput::_InternalSerialize(
+uint8_t* StatusParam::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:PushInput)
+  // @@protoc_insertion_point(serialize_to_array_start:StatusParam)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string service = 1;
-  if (!this->_internal_service().empty()) {
+  // repeated string status_name = 1;
+  for (int i = 0, n = this->_internal_status_name_size(); i < n; i++) {
+    const auto& s = this->_internal_status_name(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_service().data(), static_cast<int>(this->_internal_service().length()),
+      s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "PushInput.service");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_service(), target);
-  }
-
-  // bytes bin = 2;
-  if (!this->_internal_bin().empty()) {
-    target = stream->WriteBytesMaybeAliased(
-        2, this->_internal_bin(), target);
+      "StatusParam.status_name");
+    target = stream->WriteString(1, s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:PushInput)
+  // @@protoc_insertion_point(serialize_to_array_end:StatusParam)
   return target;
 }
 
-size_t PushInput::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:PushInput)
+size_t StatusParam::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:StatusParam)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string service = 1;
-  if (!this->_internal_service().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_service());
-  }
-
-  // bytes bin = 2;
-  if (!this->_internal_bin().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
-        this->_internal_bin());
+  // repeated string status_name = 1;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(status_name_.size());
+  for (int i = 0, n = status_name_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      status_name_.Get(i));
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PushInput::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData StatusParam::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    PushInput::MergeImpl
+    StatusParam::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PushInput::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*StatusParam::GetClassData() const { return &_class_data_; }
 
-void PushInput::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+void StatusParam::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
                       const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<PushInput *>(to)->MergeFrom(
-      static_cast<const PushInput &>(from));
+  static_cast<StatusParam *>(to)->MergeFrom(
+      static_cast<const StatusParam &>(from));
 }
 
 
-void PushInput::MergeFrom(const PushInput& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:PushInput)
+void StatusParam::MergeFrom(const StatusParam& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:StatusParam)
   GOOGLE_DCHECK_NE(&from, this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_service().empty()) {
-    _internal_set_service(from._internal_service());
-  }
-  if (!from._internal_bin().empty()) {
-    _internal_set_bin(from._internal_bin());
-  }
+  status_name_.MergeFrom(from.status_name_);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void PushInput::CopyFrom(const PushInput& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:PushInput)
+void StatusParam::CopyFrom(const StatusParam& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:StatusParam)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool PushInput::IsInitialized() const {
+bool StatusParam::IsInitialized() const {
   return true;
 }
 
-void PushInput::InternalSwap(PushInput* other) {
+void StatusParam::InternalSwap(StatusParam* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &service_, lhs_arena,
-      &other->service_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &bin_, lhs_arena,
-      &other->bin_, rhs_arena
-  );
+  status_name_.InternalSwap(&other->status_name_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata PushInput::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata StatusParam::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_WorkerRpcInterface_2eproto_getter, &descriptor_table_WorkerRpcInterface_2eproto_once,
       file_level_metadata_WorkerRpcInterface_2eproto[8]);
@@ -2804,11 +2770,11 @@ void WorkerService::check(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
   done->Run();
 }
 
-void WorkerService::push(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                         const ::PushInput*,
-                         ::Echo*,
+void WorkerService::getStatus(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                         const ::StatusParam*,
+                         ::StatusParam*,
                          ::google::protobuf::Closure* done) {
-  controller->SetFailed("Method push() not implemented.");
+  controller->SetFailed("Method getStatus() not implemented.");
   done->Run();
 }
 
@@ -2844,10 +2810,10 @@ void WorkerService::CallMethod(const ::PROTOBUF_NAMESPACE_ID::MethodDescriptor* 
              done);
       break;
     case 3:
-      push(controller,
-             ::PROTOBUF_NAMESPACE_ID::internal::DownCast<const ::PushInput*>(
+      getStatus(controller,
+             ::PROTOBUF_NAMESPACE_ID::internal::DownCast<const ::StatusParam*>(
                  request),
-             ::PROTOBUF_NAMESPACE_ID::internal::DownCast<::Echo*>(
+             ::PROTOBUF_NAMESPACE_ID::internal::DownCast<::StatusParam*>(
                  response),
              done);
       break;
@@ -2868,7 +2834,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message& WorkerService::GetRequestPrototype(
     case 2:
       return ::CheckInput::default_instance();
     case 3:
-      return ::PushInput::default_instance();
+      return ::StatusParam::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
       return *::PROTOBUF_NAMESPACE_ID::MessageFactory::generated_factory()
@@ -2887,7 +2853,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message& WorkerService::GetResponsePrototype(
     case 2:
       return ::DownServices::default_instance();
     case 3:
-      return ::Echo::default_instance();
+      return ::StatusParam::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
       return *::PROTOBUF_NAMESPACE_ID::MessageFactory::generated_factory()
@@ -2927,9 +2893,9 @@ void WorkerService_Stub::check(::PROTOBUF_NAMESPACE_ID::RpcController* controlle
   channel_->CallMethod(descriptor()->method(2),
                        controller, request, response, done);
 }
-void WorkerService_Stub::push(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                              const ::PushInput* request,
-                              ::Echo* response,
+void WorkerService_Stub::getStatus(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                              const ::StatusParam* request,
+                              ::StatusParam* response,
                               ::google::protobuf::Closure* done) {
   channel_->CallMethod(descriptor()->method(3),
                        controller, request, response, done);
@@ -2961,8 +2927,8 @@ template<> PROTOBUF_NOINLINE ::DownService* Arena::CreateMaybeMessage< ::DownSer
 template<> PROTOBUF_NOINLINE ::DownServices* Arena::CreateMaybeMessage< ::DownServices >(Arena* arena) {
   return Arena::CreateMessageInternal< ::DownServices >(arena);
 }
-template<> PROTOBUF_NOINLINE ::PushInput* Arena::CreateMaybeMessage< ::PushInput >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::PushInput >(arena);
+template<> PROTOBUF_NOINLINE ::StatusParam* Arena::CreateMaybeMessage< ::StatusParam >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StatusParam >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

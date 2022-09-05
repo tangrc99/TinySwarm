@@ -22,6 +22,7 @@ message ForkInput{
   repeated string exe_params = 5;
   repeated string docker_params = 6;
   int32 restart = 7;
+  int32 port = 8;
 }
 
 message ForkEcho{
@@ -56,14 +57,13 @@ message DownServices{
   repeated DownService service = 1;
 }
 
-message PushInput{
-  string service = 1;
-  bytes bin = 2;
+message StatusParam{
+  repeated string status_name = 1;
 }
 
 service WorkerService{
   rpc fork(ForkInput) returns(ForkEcho);
   rpc shutdown(ShutdownInput) returns(Echo);
   rpc check(CheckInput) returns(DownServices);
-  rpc push(PushInput) returns(Echo);
+  rpc getStatus(StatusParam) returns(StatusParam);
 }

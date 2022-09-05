@@ -7,9 +7,10 @@
 
 #include "WorkerDescriptor.h"
 #include "WorkerClient.h"
-#include "ServiceImplInfo.h"
+#include "PodDescriptor.h"
 #include "LogQueue.h"
 #include "RPCServer.h"
+#include "Scheduler.h"
 
 #include <sw/redis++/redis++.h>
 #include <list>
@@ -22,20 +23,32 @@ public:
     // 错误处理： 如果是任务出现异常，那么使用check rpc来收集错误信息，并且尝试重启
     //           如果是worker节点出现异常，那么将worker节点上的全部任务调度到其他地方
 
-    WorkerDescriptor *selectWorker() {
-        // 从 redis 里面得到一个合适的 worker 结点
+    WorkerDescriptor *selectWorker(PodDescriptor *pod) const {
 
-        std::string str; // get from redis
-
-        for (auto &worker: workers) {
-            if (worker->ip == str) {
-                return worker;
-            }
-        }
-
+        return scheduler->getBestWorker(pod);
         return {};
     }
 
+    std::pair<bool, std::string> selectWorkerToCreatePod(const std::string &service, const std::string &alias,
+                                                         ServiceType type, int port,
+                                                         const std::vector<char *> &exe_params,
+                                                         const std::vector<char *> &docker_params, int restart = 0) {
+
+        PodDescriptor pod(service, alias, type, 1, port, {}, exe_params, docker_params, restart);
+
+        pod.wd_ = selectWorker(&pod);
+
+        if (pod.wd_ == nullptr)
+            return {false, "Available Worker Not Found"};
+
+        auto [res,error] = createService(pod);
+
+        //FIXME: 这里可以加入一些机制来多次尝试启动服务
+
+        if(res)
+            pods.emplace(alias,pod);
+        return {res,error};
+    }
 
     //FIXME : 由于重试操作，因此所有的rpc 必须在调用rpc 前就将 service 在内存中完成修改
 
@@ -53,8 +66,11 @@ public:
     /// \return [ if created, error info ]
     std::pair<bool, std::string>
     createService(WorkerDescriptor *wd, const std::string &service, const std::string &alias,
-                  ServiceType type, const std::vector<char *> &exe_params,
+                  ServiceType type, int port, const std::vector<char *> &exe_params,
                   const std::vector<char *> &docker_params, int restart = 0) {
+
+        if (wd == nullptr)
+            return {false, "Empty Worker"};
 
         ForkInput input;
         input.set_service(service);
@@ -71,9 +87,9 @@ public:
 
 
         // 提前创建好对应服务的描述量
-        ServiceImplInfo info(service, alias, type, 1, wd, exe_params, docker_params, restart);
+        PodDescriptor info(service, alias, type, 1, port, wd, exe_params, docker_params, restart);
 
-        auto res = services.emplace(alias, info);    // 这里优先操作内存，因为容易恢复
+        auto res = pods.emplace(alias, info);    // 这里优先操作内存，因为容易恢复
 
         if (!res.second) {
             return {false, "services emplace error"};
@@ -88,8 +104,8 @@ public:
 
         if (rpc_res.isFailed()) {
             cur_line = logger->append("CSE " + alias + " Fail");
-            services.erase(res.first);  // 如果失败则进行回退
-            return {false, rpc_res.ErrorText()};
+            pods.erase(res.first);  // 如果失败则进行回退
+            return {false, rpc_res.ErrorText()};    //FIXME: 这里的错误要分层级，否则用户端不知道错误是出在哪次 RPC 上
         }
 
         ForkEcho echo;
@@ -100,19 +116,19 @@ public:
 
                 std::cout << "receive manager down" << std::endl;
 
-                for (auto &serv: wd->services) {
+                for (auto &serv: wd->pods) {
                     serv->alive_ = false;
                     down_services.emplace_back(serv);
                 }
 
-                wd->services = {};  // 将当前 worker 的服务设置为下线
+                wd->pods = {};  // 将当前 worker 的服务设置为下线
 
                 usleep(100);
                 goto retry;     //FIXME: 这里能够正常使用吗？
 
             } else {
                 cur_line = logger->append("CSE " + alias + " Fail");
-                services.erase(res.first);
+                pods.erase(res.first);
                 return {false, echo.error_text()};
             }
         }
@@ -120,18 +136,19 @@ public:
         // FIXME : 这里需要持久化，防止崩溃。
         cur_line = logger->append("CSE " + info.toSnapshotMessage());
 
-        wd->services.emplace_back(&info);
+        wd->pods.emplace_back(&info);
 
         publishMessage(res.first->second);
 
         return {true, echo.sd().alias()};
     }
 
+
     /// RPC, Create a service on a worker node with ServiceInfo. If succeed, current node
     /// will publish message to other manager nodes. The ServiceInfo will be set alive.
     /// \param info ServiceInfo of service to create. Warning This ServiceInfo is in services map.
     /// \return [if created, error info]
-    std::pair<bool, std::string> createService(ServiceImplInfo &info) {
+    std::pair<bool, std::string> createService(PodDescriptor &info) {
 
         ForkInput input;
         input.set_service(info.service_);
@@ -164,11 +181,11 @@ public:
 
             if (echo.error_text() == "Manager Down") {
 
-                for (auto &service: info.wd_->services) {
+                for (auto &service: info.wd_->pods) {
                     service->alive_ = false;
                     down_services.emplace_back(service);
                 }
-                info.wd_->services = {};  // 将当前 worker 的服务设置为下线
+                info.wd_->pods = {};  // 将当前 worker 的服务设置为下线
 
                 goto retry;     //FIXME: 这里能够正常使用吗？
             } else {
@@ -185,22 +202,7 @@ public:
         return {true, echo.sd().alias()};
     }
 
-    std::pair<bool, std::string> createHostService(WorkerDescriptor *wd,
-                                                   const std::string &service,
-                                                   const std::string &alias,
-                                                   const std::vector<char *> &exe_params,
-                                                   int restart = 0) {
-        return createService(wd, service, alias, host, exe_params, {}, restart);
-    }
-
-    std::pair<bool, std::string>
-    createDockerService(WorkerDescriptor *wd, const std::string &service, const std::string &alias,
-                        const std::vector<char *> &exe_params, const std::vector<char *> &docker_params,
-                        int restart = 0) {
-        return createService(wd, service, alias, docker, exe_params, docker_params, restart);
-    }
-
-    /// RPC, Force shutdown a service in worker node.No any other actions.Used by stopService and transferService.
+    /// RPC, Force shutdown a service in worker node.No any other actions.Used by stopPod and transferService.
     /// \param wd WorkerDescriptor of worker node to shutdown service.
     /// \param service The name of service.
     /// \param alias The alias of service.
@@ -233,11 +235,11 @@ public:
             if (echo.error_text() == "Manager Down") {
                 // 这里应该没有问题，外层这个 service 已经被删除掉了，其他的服务转为下线状态
 
-                for (auto &serv: wd->services) {
+                for (auto &serv: wd->pods) {
                     serv->alive_ = false;
                     down_services.emplace_back(serv);
                 }
-                wd->services = {};  // 将当前 worker 的服务设置为下线
+                wd->pods = {};  // 将当前 worker 的服务设置为下线
 
             } else {
                 cur_line = logger->append("DSE " + alias + " Fail");
@@ -254,7 +256,7 @@ public:
     /// Median Interface, force shutdown a service using ServiceInfo.Atomic Function.
     /// \param info
     /// \return
-    std::pair<bool, std::string> shutdownService(ServiceImplInfo &info) {
+    std::pair<bool, std::string> shutdownService(PodDescriptor &info) {
         if (!info.alive_) {
             return {false, "To shutdown a dead service"};
         }
@@ -267,13 +269,13 @@ public:
     /// User Interface, force shutdown a service using ServiceInfo.Atomic Function.
     /// \param info ServiceInfo of service to stop.
     /// \return If Succeed.
-    bool stopService(ServiceImplInfo &info) {
+    std::pair<bool, std::string> stopService(PodDescriptor &info) {
 
-        auto it = services.find(info.alias_);
-        if (it == services.end())
-            return false;
+        auto it = pods.find(info.alias_);
+        if (it == pods.end())
+            return {false, "Alias Not Found"};
 
-        services.erase(it); // 删除 service 本身信息
+        pods.erase(it); // 删除 service 本身信息
         info.wd_->removeService(&info); // 删除 worker 上的指针
 
         auto[rpc_res, error] = shutdownService(info);
@@ -284,17 +286,17 @@ public:
                 removeDownService(&info);
             }
 
-            return true;
+            return {true, info.alias_};
         }
 
-        services.emplace(info.alias_, info);    // 失败则进行恢复
-        info.wd_->services.emplace_back(&info);
+        pods.emplace(info.alias_, info);    // 失败则进行恢复
+        info.wd_->pods.emplace_back(&info);
         std::cerr << error << std::endl;
-        return false;
+        return {false, error};
     }
 
-    ///FIXME: 这个函数不能保证操作的原子性，因为两个都是 RPC，考虑用 2PC？
-    bool transferService(ServiceImplInfo &info, WorkerDescriptor *new_wd) {
+    //FIXME: 这个函数不能保证操作的原子性，因为两个都是 RPC，考虑用 2PC？
+    std::pair<bool, std::string> transferService(PodDescriptor &info, WorkerDescriptor *new_wd) {
 
         auto old_info = info;
         info.wd_ = new_wd;
@@ -304,7 +306,7 @@ public:
         if (!res) {
             std::cerr << error << std::endl;
             info = old_info;
-            return false;
+            return {false, "CREATE FAIL"};
         }
 
         if (old_info.alive_ == 1) {
@@ -319,9 +321,9 @@ public:
         }
 
         //FIXME: 这里如果失败会导致直接崩溃
-        info.wd_->services.emplace_back(&info);
+        info.wd_->pods.emplace_back(&info);
 
-        return true;
+        return {true, info.alias_};
     }
 
     /// Collect Error Information If Service Is Down.
@@ -341,7 +343,7 @@ public:
 
         if (rpc_res.isFailed()) {
             wd->alive = false;  // 如果 worker 没有存活，将所有的服务转为下线
-            for (auto &service: wd->services) {
+            for (auto &service: wd->pods) {
                 service->alive_ = false;
                 down_services.emplace_back(service);
             }
@@ -349,9 +351,9 @@ public:
         }
 
         if (downServices.service(0).alias() == "*") {
-            for (auto &service: wd->services) {
+            for (auto &service: wd->pods) {
                 service->alive_ = false;
-                service->error = new ServiceInfoError();
+                service->error = new PodExitError();
                 service->error->exit = downServices.service(0).exit_num();
                 service->error->out_file = downServices.service(0).out_file();
                 service->error->reason = downServices.service(0).error_text();
@@ -367,7 +369,7 @@ public:
                 continue;
             }
             info->alive_ = false;
-            info->error = new ServiceInfoError();
+            info->error = new PodExitError();
             info->error->exit = downServices.service(i).exit_num();
             info->error->out_file = downServices.service(i).out_file();
             info->error->reason = downServices.service(i).error_text();
@@ -386,7 +388,7 @@ public:
         }
     }
 
-    void publishMessage(const ServiceImplInfo &info) const {
+    void publishMessage(const PodDescriptor &info) const {
         std::string message = info.toGossipMessage();
         return publishMessage(message);
     }
@@ -452,7 +454,7 @@ public:
 
         // 对snapshot的状态进行复制
         auto workers_ = workers;
-        auto services_ = services;
+        auto services_ = pods;
         int cur_line_ = cur_line;
 
         snapshot_thread = std::thread([workers_, services_, cur_line_]() {
@@ -491,21 +493,49 @@ public:
         return nullptr;
     }
 
+//FIXME: 这里必须要返回给用户错误信息
+
+    WorkerDescriptor *findWorkerDescriptor(const std::string &address) {
+        std::string ip, port;
+        std::stringstream ss(address);
+        std::getline(ss, ip, ':');
+        std::getline(ss, port, ':');
+
+        string tmp;
+        ss.clear();
+        ss.str("");
+        ss << ip;
+
+        while (std::getline(ss, tmp, '.')) {
+            int a = stoi(tmp);
+            if (a < 0 || a > 255)
+                return nullptr;
+        }
+
+        for (auto &ch: port) {
+            if (!isnumber(ch))
+                return nullptr;
+        }
+
+        return findWorkerDescriptor(ip, stoi(port));
+    }
+
     /// Find ServiceInfo using alias.
     /// \param alias alias of service
     /// \return ptr of ServiceInfo or nullptr if not found.
-    ServiceImplInfo *getServiceInfoIterByAlias(const std::string &alias) {
-        auto it = services.find(alias);
-        return it == services.end() ? nullptr : &it->second;
+    PodDescriptor *getServiceInfoIterByAlias(const std::string &alias) {
+        auto it = pods.find(alias);
+        return it == pods.end() ? nullptr : &it->second;
     }
 
 
-    void snapshotToServiceInfo(const std::string &snapshot_line, ServiceImplInfo &info) {
+    void snapshotToServiceInfo(const std::string &snapshot_line, PodDescriptor &info) {
         std::stringstream ss(snapshot_line);
         ss >> info.service_ >> info.alias_;
         std::string type;
         ss >> type;
         info.type_ = (type == "host" ? host : docker);
+        ss >> info.port_;
         ss >> info.alive_;
 
         std::string ip;
@@ -548,10 +578,10 @@ public:
             std::string alias, result;
             ss >> alias >> result;
             if (result == "Success")
-                services.erase(alias);
+                pods.erase(alias);
         } else if (word == "CSE") {
             // CSE hello my_hello host 1 127.0.0.1:8989 8989 {} {} 0
-            ServiceImplInfo info;
+            PodDescriptor info;
             std::getline(ss, word, '\n');
 
             std::stringstream stream(word);
@@ -561,7 +591,7 @@ public:
                 return;
 
             snapshotToServiceInfo(word, info);
-            services.emplace(info.alias_, info);
+            pods.emplace(info.alias_, info);
         }
 
     }
@@ -590,9 +620,9 @@ public:
 
             while (std::getline(is, line) && line != "ServiceDescriptorEND") {
                 std::stringstream ss(line);
-                ServiceImplInfo info;
+                PodDescriptor info;
                 snapshotToServiceInfo(line, info);
-                services.emplace(info.alias_, std::move(info));
+                pods.emplace(info.alias_, std::move(info));
             }
         }
 
@@ -614,7 +644,7 @@ public:
             connectToWorker(worker);
         }
 
-        for (auto &service: services) {
+        for (auto &service: pods) {
             auto &info = service.second;
             auto[res, error] = createService(info);    // 无论是否还存活，都发送出fork请求，具体怎么做由worker决定（决策由最底层决定）
             if (!res) {
@@ -676,7 +706,7 @@ public:
 
     /// Delete DownService when it is up again or stopped by user.
     /// \param service Ptr of DownService.
-    void removeDownService(ServiceImplInfo *service) {
+    void removeDownService(PodDescriptor *service) {
         for (auto it = down_services.begin(); it != down_services.end();) {
             if (*it == service) {
                 down_services.erase(it);
@@ -690,13 +720,13 @@ public:
 
     void transferDownService() {
 
-        for (auto service: down_services) {
+        for (auto &service: down_services) {
 
             // 如果没有存活，尝试转移到另外一个地方
             if (!service->wd_->alive) {
 
-                auto wd = selectWorker();
-                auto res = transferService(*service, wd);  // 转移 service 到另外一个 worker 上
+                auto wd = selectWorker(service);
+                auto[res, error] = transferService(*service, wd);  // 转移 service 到另外一个 worker 上
                 if (res) {
                     removeDownService(service);
                 }
@@ -714,7 +744,7 @@ public:
 
 
     auto getServices() {
-        return &services;
+        return &pods;
     }
 
 
@@ -722,16 +752,16 @@ public:
         server->startService();
     }
 
-    std::vector<const ServiceImplInfo *> showServices(const std::string &service) {
+    std::vector<const PodDescriptor *> showServices(const std::string &service) {
 
-        std::vector<const ServiceImplInfo *> servs;
+        std::vector<const PodDescriptor *> servs;
 
         if (service == "*") {
-            for (auto &serv: services)
+            for (auto &serv: pods)
                 servs.emplace_back(&serv.second);
         } else {
-            auto it = services.find(service);
-            if (it != services.end())
+            auto it = pods.find(service);
+            if (it != pods.end())
                 servs.emplace_back(&it->second);
         }
 
@@ -756,10 +786,10 @@ public:
 
 
     /// 所有的服务信息存储在services表中，其余的只是提供指针
-    /// 增加操作: createService,删除操作: stopService,转移操作: transferService
+    /// 增加操作: createService,删除操作: stopPod,转移操作: transferService
     using Alias = std::string;
-    std::map<Alias, ServiceImplInfo> services;  // 用于 Service 的查找(暴露给用户方便)。
-    std::list<ServiceImplInfo *> down_services; // 用于 Manager 内部的重连操作，用户可以定义是否允许迁移等。
+    std::map<Alias, PodDescriptor> pods;  // 用于 Service 的查找(暴露给用户方便)。 std::map 容器的元素在内存中的位置不会变
+    std::list<PodDescriptor *> down_services; // 用于 Manager 内部的重连操作，用户可以定义是否允许迁移等。
 
     std::mutex functor_mtx;
     std::list<std::function<bool()>> failed_functors;    // 失败的
@@ -769,6 +799,8 @@ public:
     std::unique_ptr<RPCServer> server;
 
     time_t check_time;  // 因为底层 TCP 没加计时任务功能，这个是用于计时的
+
+    Scheduler *scheduler;
 };
 
 

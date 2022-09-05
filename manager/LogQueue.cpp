@@ -55,6 +55,11 @@ void LogQueue::LoopFlush() {
 LogQueue::LogQueue(const std::string &file)
         : path_(file), quit(false) {
 
+    if(!exists(path_)){
+        log_file.open(file,std::ios::out);
+    }
+
+
     log_file.open(file, std::ios::app);
 
     if (!log_file.is_open()) {

@@ -12,7 +12,7 @@ add_executable(worker main.cpp WorkerNode.cpp WorkerNode.h PodDescriptor.h RPCIn
         ../Common/RPCServer.h
         ../Common/RPCServer.cpp
         ../Common/HTTPData.cpp
-        ../Common/HTTPData.h WorkerStatus.cpp WorkerStatus.h ManagerDescriptor.h)
+        ../Common/HTTPData.h WorkerStatus.cpp WorkerStatus.h ManagerDescriptor.h PodRecorder.cpp PodRecorder.h WorkerError.h Register.cpp Register.h)
 
 
 target_link_libraries(worker protobuf libTCPServer.a log4cxx)

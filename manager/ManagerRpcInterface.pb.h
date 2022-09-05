@@ -47,7 +47,7 @@ struct TableStruct_ManagerRpcInterface_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[8]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -57,6 +57,9 @@ extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table
 class AddressPool;
 struct AddressPoolDefaultTypeInternal;
 extern AddressPoolDefaultTypeInternal _AddressPool_default_instance_;
+class CreateOrDeleteEcho;
+struct CreateOrDeleteEchoDefaultTypeInternal;
+extern CreateOrDeleteEchoDefaultTypeInternal _CreateOrDeleteEcho_default_instance_;
 class ServiceGroup;
 struct ServiceGroupDefaultTypeInternal;
 extern ServiceGroupDefaultTypeInternal _ServiceGroup_default_instance_;
@@ -72,13 +75,18 @@ extern ServiceListDefaultTypeInternal _ServiceList_default_instance_;
 class ServiceName;
 struct ServiceNameDefaultTypeInternal;
 extern ServiceNameDefaultTypeInternal _ServiceName_default_instance_;
+class TransferInfo;
+struct TransferInfoDefaultTypeInternal;
+extern TransferInfoDefaultTypeInternal _TransferInfo_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::AddressPool* Arena::CreateMaybeMessage<::AddressPool>(Arena*);
+template<> ::CreateOrDeleteEcho* Arena::CreateMaybeMessage<::CreateOrDeleteEcho>(Arena*);
 template<> ::ServiceGroup* Arena::CreateMaybeMessage<::ServiceGroup>(Arena*);
 template<> ::ServiceGroupName* Arena::CreateMaybeMessage<::ServiceGroupName>(Arena*);
 template<> ::ServiceInformation* Arena::CreateMaybeMessage<::ServiceInformation>(Arena*);
 template<> ::ServiceList* Arena::CreateMaybeMessage<::ServiceList>(Arena*);
 template<> ::ServiceName* Arena::CreateMaybeMessage<::ServiceName>(Arena*);
+template<> ::TransferInfo* Arena::CreateMaybeMessage<::TransferInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
@@ -373,6 +381,7 @@ class ServiceInformation final :
     kAliasFieldNumber = 2,
     kTypeFieldNumber = 3,
     kRestartFieldNumber = 6,
+    kPortFieldNumber = 7,
   };
   // repeated string exe_params = 4;
   int exe_params_size() const;
@@ -468,6 +477,15 @@ class ServiceInformation final :
   void _internal_set_restart(int32_t value);
   public:
 
+  // int32 port = 7;
+  void clear_port();
+  int32_t port() const;
+  void set_port(int32_t value);
+  private:
+  int32_t _internal_port() const;
+  void _internal_set_port(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:ServiceInformation)
  private:
   class _Internal;
@@ -481,6 +499,7 @@ class ServiceInformation final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr alias_;
   int32_t type_;
   int32_t restart_;
+  int32_t port_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ManagerRpcInterface_2eproto;
 };
@@ -641,6 +660,335 @@ class ServiceList final :
 };
 // -------------------------------------------------------------------
 
+class CreateOrDeleteEcho final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CreateOrDeleteEcho) */ {
+ public:
+  inline CreateOrDeleteEcho() : CreateOrDeleteEcho(nullptr) {}
+  ~CreateOrDeleteEcho() override;
+  explicit constexpr CreateOrDeleteEcho(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  CreateOrDeleteEcho(const CreateOrDeleteEcho& from);
+  CreateOrDeleteEcho(CreateOrDeleteEcho&& from) noexcept
+    : CreateOrDeleteEcho() {
+    *this = ::std::move(from);
+  }
+
+  inline CreateOrDeleteEcho& operator=(const CreateOrDeleteEcho& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CreateOrDeleteEcho& operator=(CreateOrDeleteEcho&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CreateOrDeleteEcho& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CreateOrDeleteEcho* internal_default_instance() {
+    return reinterpret_cast<const CreateOrDeleteEcho*>(
+               &_CreateOrDeleteEcho_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(CreateOrDeleteEcho& a, CreateOrDeleteEcho& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CreateOrDeleteEcho* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CreateOrDeleteEcho* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CreateOrDeleteEcho* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CreateOrDeleteEcho>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const CreateOrDeleteEcho& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const CreateOrDeleteEcho& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CreateOrDeleteEcho* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CreateOrDeleteEcho";
+  }
+  protected:
+  explicit CreateOrDeleteEcho(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kInfoFieldNumber = 2,
+    kFailFieldNumber = 1,
+  };
+  // string info = 2;
+  void clear_info();
+  const std::string& info() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_info(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_info();
+  PROTOBUF_NODISCARD std::string* release_info();
+  void set_allocated_info(std::string* info);
+  private:
+  const std::string& _internal_info() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_info(const std::string& value);
+  std::string* _internal_mutable_info();
+  public:
+
+  // bool fail = 1;
+  void clear_fail();
+  bool fail() const;
+  void set_fail(bool value);
+  private:
+  bool _internal_fail() const;
+  void _internal_set_fail(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:CreateOrDeleteEcho)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr info_;
+  bool fail_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_ManagerRpcInterface_2eproto;
+};
+// -------------------------------------------------------------------
+
+class TransferInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:TransferInfo) */ {
+ public:
+  inline TransferInfo() : TransferInfo(nullptr) {}
+  ~TransferInfo() override;
+  explicit constexpr TransferInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  TransferInfo(const TransferInfo& from);
+  TransferInfo(TransferInfo&& from) noexcept
+    : TransferInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline TransferInfo& operator=(const TransferInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TransferInfo& operator=(TransferInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TransferInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TransferInfo* internal_default_instance() {
+    return reinterpret_cast<const TransferInfo*>(
+               &_TransferInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(TransferInfo& a, TransferInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TransferInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TransferInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TransferInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TransferInfo>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const TransferInfo& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const TransferInfo& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TransferInfo* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "TransferInfo";
+  }
+  protected:
+  explicit TransferInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAliasFieldNumber = 1,
+    kAddressFieldNumber = 2,
+  };
+  // string alias = 1;
+  void clear_alias();
+  const std::string& alias() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_alias(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_alias();
+  PROTOBUF_NODISCARD std::string* release_alias();
+  void set_allocated_alias(std::string* alias);
+  private:
+  const std::string& _internal_alias() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_alias(const std::string& value);
+  std::string* _internal_mutable_alias();
+  public:
+
+  // string address = 2;
+  void clear_address();
+  const std::string& address() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_address(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_address();
+  PROTOBUF_NODISCARD std::string* release_address();
+  void set_allocated_address(std::string* address);
+  private:
+  const std::string& _internal_address() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_address(const std::string& value);
+  std::string* _internal_mutable_address();
+  public:
+
+  // @@protoc_insertion_point(class_scope:TransferInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr alias_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr address_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_ManagerRpcInterface_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ServiceGroupName final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServiceGroupName) */ {
  public:
@@ -689,7 +1037,7 @@ class ServiceGroupName final :
                &_ServiceGroupName_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    5;
 
   friend void swap(ServiceGroupName& a, ServiceGroupName& b) {
     a.Swap(&b);
@@ -941,7 +1289,7 @@ class ServiceGroup final :
                &_ServiceGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    6;
 
   friend void swap(ServiceGroup& a, ServiceGroup& b) {
     a.Swap(&b);
@@ -1123,7 +1471,7 @@ class AddressPool final :
                &_AddressPool_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    7;
 
   friend void swap(AddressPool& a, AddressPool& b) {
     a.Swap(&b);
@@ -1255,19 +1603,19 @@ class ManagerService : public ::PROTOBUF_NAMESPACE_ID::Service {
                        ::google::protobuf::Closure* done);
   virtual void createService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceInformation* request,
-                       ::ServiceName* response,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
   virtual void stopService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceName* request,
-                       ::ServiceName* response,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
   virtual void transferService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceName* request,
-                       ::ServiceName* response,
+                       const ::TransferInfo* request,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
   virtual void createServiceGroup(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceGroupName* request,
-                       ::ServiceGroup* response,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
   virtual void getServiceGroupInfo(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceGroup* request,
@@ -1279,7 +1627,7 @@ class ManagerService : public ::PROTOBUF_NAMESPACE_ID::Service {
                        ::google::protobuf::Closure* done);
   virtual void stopServiceGroup(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceGroup* request,
-                       ::ServiceGroup* response,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
 
   // implements Service ----------------------------------------------
@@ -1316,19 +1664,19 @@ class ManagerService_Stub : public ManagerService {
                        ::google::protobuf::Closure* done);
   void createService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceInformation* request,
-                       ::ServiceName* response,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
   void stopService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceName* request,
-                       ::ServiceName* response,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
   void transferService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceName* request,
-                       ::ServiceName* response,
+                       const ::TransferInfo* request,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
   void createServiceGroup(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceGroupName* request,
-                       ::ServiceGroup* response,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
   void getServiceGroupInfo(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceGroup* request,
@@ -1340,7 +1688,7 @@ class ManagerService_Stub : public ManagerService {
                        ::google::protobuf::Closure* done);
   void stopServiceGroup(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceGroup* request,
-                       ::ServiceGroup* response,
+                       ::CreateOrDeleteEcho* response,
                        ::google::protobuf::Closure* done);
  private:
   ::PROTOBUF_NAMESPACE_ID::RpcChannel* channel_;
@@ -1727,6 +2075,26 @@ inline void ServiceInformation::set_restart(int32_t value) {
   // @@protoc_insertion_point(field_set:ServiceInformation.restart)
 }
 
+// int32 port = 7;
+inline void ServiceInformation::clear_port() {
+  port_ = 0;
+}
+inline int32_t ServiceInformation::_internal_port() const {
+  return port_;
+}
+inline int32_t ServiceInformation::port() const {
+  // @@protoc_insertion_point(field_get:ServiceInformation.port)
+  return _internal_port();
+}
+inline void ServiceInformation::_internal_set_port(int32_t value) {
+  
+  port_ = value;
+}
+inline void ServiceInformation::set_port(int32_t value) {
+  _internal_set_port(value);
+  // @@protoc_insertion_point(field_set:ServiceInformation.port)
+}
+
 // -------------------------------------------------------------------
 
 // ServiceList
@@ -1769,6 +2137,187 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServiceInformation >&
 ServiceList::services() const {
   // @@protoc_insertion_point(field_list:ServiceList.services)
   return services_;
+}
+
+// -------------------------------------------------------------------
+
+// CreateOrDeleteEcho
+
+// bool fail = 1;
+inline void CreateOrDeleteEcho::clear_fail() {
+  fail_ = false;
+}
+inline bool CreateOrDeleteEcho::_internal_fail() const {
+  return fail_;
+}
+inline bool CreateOrDeleteEcho::fail() const {
+  // @@protoc_insertion_point(field_get:CreateOrDeleteEcho.fail)
+  return _internal_fail();
+}
+inline void CreateOrDeleteEcho::_internal_set_fail(bool value) {
+  
+  fail_ = value;
+}
+inline void CreateOrDeleteEcho::set_fail(bool value) {
+  _internal_set_fail(value);
+  // @@protoc_insertion_point(field_set:CreateOrDeleteEcho.fail)
+}
+
+// string info = 2;
+inline void CreateOrDeleteEcho::clear_info() {
+  info_.ClearToEmpty();
+}
+inline const std::string& CreateOrDeleteEcho::info() const {
+  // @@protoc_insertion_point(field_get:CreateOrDeleteEcho.info)
+  return _internal_info();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void CreateOrDeleteEcho::set_info(ArgT0&& arg0, ArgT... args) {
+ 
+ info_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CreateOrDeleteEcho.info)
+}
+inline std::string* CreateOrDeleteEcho::mutable_info() {
+  std::string* _s = _internal_mutable_info();
+  // @@protoc_insertion_point(field_mutable:CreateOrDeleteEcho.info)
+  return _s;
+}
+inline const std::string& CreateOrDeleteEcho::_internal_info() const {
+  return info_.Get();
+}
+inline void CreateOrDeleteEcho::_internal_set_info(const std::string& value) {
+  
+  info_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* CreateOrDeleteEcho::_internal_mutable_info() {
+  
+  return info_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* CreateOrDeleteEcho::release_info() {
+  // @@protoc_insertion_point(field_release:CreateOrDeleteEcho.info)
+  return info_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void CreateOrDeleteEcho::set_allocated_info(std::string* info) {
+  if (info != nullptr) {
+    
+  } else {
+    
+  }
+  info_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), info,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (info_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    info_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:CreateOrDeleteEcho.info)
+}
+
+// -------------------------------------------------------------------
+
+// TransferInfo
+
+// string alias = 1;
+inline void TransferInfo::clear_alias() {
+  alias_.ClearToEmpty();
+}
+inline const std::string& TransferInfo::alias() const {
+  // @@protoc_insertion_point(field_get:TransferInfo.alias)
+  return _internal_alias();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TransferInfo::set_alias(ArgT0&& arg0, ArgT... args) {
+ 
+ alias_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:TransferInfo.alias)
+}
+inline std::string* TransferInfo::mutable_alias() {
+  std::string* _s = _internal_mutable_alias();
+  // @@protoc_insertion_point(field_mutable:TransferInfo.alias)
+  return _s;
+}
+inline const std::string& TransferInfo::_internal_alias() const {
+  return alias_.Get();
+}
+inline void TransferInfo::_internal_set_alias(const std::string& value) {
+  
+  alias_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* TransferInfo::_internal_mutable_alias() {
+  
+  return alias_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* TransferInfo::release_alias() {
+  // @@protoc_insertion_point(field_release:TransferInfo.alias)
+  return alias_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void TransferInfo::set_allocated_alias(std::string* alias) {
+  if (alias != nullptr) {
+    
+  } else {
+    
+  }
+  alias_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), alias,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (alias_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    alias_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:TransferInfo.alias)
+}
+
+// string address = 2;
+inline void TransferInfo::clear_address() {
+  address_.ClearToEmpty();
+}
+inline const std::string& TransferInfo::address() const {
+  // @@protoc_insertion_point(field_get:TransferInfo.address)
+  return _internal_address();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TransferInfo::set_address(ArgT0&& arg0, ArgT... args) {
+ 
+ address_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:TransferInfo.address)
+}
+inline std::string* TransferInfo::mutable_address() {
+  std::string* _s = _internal_mutable_address();
+  // @@protoc_insertion_point(field_mutable:TransferInfo.address)
+  return _s;
+}
+inline const std::string& TransferInfo::_internal_address() const {
+  return address_.Get();
+}
+inline void TransferInfo::_internal_set_address(const std::string& value) {
+  
+  address_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* TransferInfo::_internal_mutable_address() {
+  
+  return address_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* TransferInfo::release_address() {
+  // @@protoc_insertion_point(field_release:TransferInfo.address)
+  return address_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void TransferInfo::set_allocated_address(std::string* address) {
+  if (address != nullptr) {
+    
+  } else {
+    
+  }
+  address_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), address,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (address_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    address_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:TransferInfo.address)
 }
 
 // -------------------------------------------------------------------
@@ -2334,6 +2883,10 @@ AddressPool::mutable_address() {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

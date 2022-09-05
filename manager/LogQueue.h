@@ -53,7 +53,7 @@ private:
 
     int count = 0;
 
-    std::string path_;
+    std::filesystem::path path_;
     std::ofstream log_file;
 
     std::atomic_flag swp_flag = ATOMIC_FLAG_INIT;

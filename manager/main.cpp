@@ -5,6 +5,7 @@
 #include "Manager.h"
 #include "WorkerClient.h"
 #include "LogQueue.h"
+#include "Result.h"
 
 #include <unistd.h>
 #include <signal.h>
@@ -73,6 +74,9 @@ int main(int argc ,char *argv[]){
 
     Manager manager("127.0.0.1");
 
+    manager.selectWorkerToCreatePod("redis","my_redis",docker,6379,
+                                    {},{"-p","6379:6379"},0);
+
     auto services = manager.showServices("*");
 
     for(auto &r : services)
@@ -80,9 +84,15 @@ int main(int argc ,char *argv[]){
 
     sleep(1);
 
+    manager.connectToWorker(IPAddress("127.0.0.1",AF_INET,8989));
+
     auto wd = manager.findWorkerDescriptor("127.0.0.1",8989);
-    auto [res,error] = manager.createService(wd,"redis","my_redis",docker,
+
+    auto [res,error] = manager.createService(wd,"redis","my_redis",docker,6379,
                                              {},{"-p","6379:6379"},0);
+
+//    manager.pods.emplace("redis",PodDescriptor("redis","my_redis",docker,1,6379,wd,
+//                                               {},{"-p","6379:6379"},0));
 
     if(!res)
         std::cout << error << std::endl;
@@ -92,11 +102,12 @@ int main(int argc ,char *argv[]){
     for(auto &r : services)
         std::cout << r->toSnapshotMessage() << std::endl;
 
+    manager.snapshot();
 //    auto info = manager.getServiceInfoIterByAlias("my_hello1");
 //
 //    manager.publishMessage(*info);
 
-    for(;;);
+    ///for(;;);
 
     return 0;
 //

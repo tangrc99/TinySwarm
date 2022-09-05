@@ -73,12 +73,12 @@ extern ForkEchoDefaultTypeInternal _ForkEcho_default_instance_;
 class ForkInput;
 struct ForkInputDefaultTypeInternal;
 extern ForkInputDefaultTypeInternal _ForkInput_default_instance_;
-class PushInput;
-struct PushInputDefaultTypeInternal;
-extern PushInputDefaultTypeInternal _PushInput_default_instance_;
 class ShutdownInput;
 struct ShutdownInputDefaultTypeInternal;
 extern ShutdownInputDefaultTypeInternal _ShutdownInput_default_instance_;
+class StatusParam;
+struct StatusParamDefaultTypeInternal;
+extern StatusParamDefaultTypeInternal _StatusParam_default_instance_;
 class UserServiceDescriptor;
 struct UserServiceDescriptorDefaultTypeInternal;
 extern UserServiceDescriptorDefaultTypeInternal _UserServiceDescriptor_default_instance_;
@@ -89,8 +89,8 @@ template<> ::DownServices* Arena::CreateMaybeMessage<::DownServices>(Arena*);
 template<> ::Echo* Arena::CreateMaybeMessage<::Echo>(Arena*);
 template<> ::ForkEcho* Arena::CreateMaybeMessage<::ForkEcho>(Arena*);
 template<> ::ForkInput* Arena::CreateMaybeMessage<::ForkInput>(Arena*);
-template<> ::PushInput* Arena::CreateMaybeMessage<::PushInput>(Arena*);
 template<> ::ShutdownInput* Arena::CreateMaybeMessage<::ShutdownInput>(Arena*);
+template<> ::StatusParam* Arena::CreateMaybeMessage<::StatusParam>(Arena*);
 template<> ::UserServiceDescriptor* Arena::CreateMaybeMessage<::UserServiceDescriptor>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
@@ -428,6 +428,7 @@ class ForkInput final :
     kAliasFieldNumber = 4,
     kTypeFieldNumber = 3,
     kRestartFieldNumber = 7,
+    kPortFieldNumber = 8,
   };
   // repeated string exe_params = 5;
   int exe_params_size() const;
@@ -537,6 +538,15 @@ class ForkInput final :
   void _internal_set_restart(int32_t value);
   public:
 
+  // int32 port = 8;
+  void clear_port();
+  int32_t port() const;
+  void set_port(int32_t value);
+  private:
+  int32_t _internal_port() const;
+  void _internal_set_port(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:ForkInput)
  private:
   class _Internal;
@@ -551,6 +561,7 @@ class ForkInput final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr alias_;
   int type_;
   int32_t restart_;
+  int32_t port_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_WorkerRpcInterface_2eproto;
 };
@@ -1582,24 +1593,24 @@ class DownServices final :
 };
 // -------------------------------------------------------------------
 
-class PushInput final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:PushInput) */ {
+class StatusParam final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:StatusParam) */ {
  public:
-  inline PushInput() : PushInput(nullptr) {}
-  ~PushInput() override;
-  explicit constexpr PushInput(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline StatusParam() : StatusParam(nullptr) {}
+  ~StatusParam() override;
+  explicit constexpr StatusParam(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  PushInput(const PushInput& from);
-  PushInput(PushInput&& from) noexcept
-    : PushInput() {
+  StatusParam(const StatusParam& from);
+  StatusParam(StatusParam&& from) noexcept
+    : StatusParam() {
     *this = ::std::move(from);
   }
 
-  inline PushInput& operator=(const PushInput& from) {
+  inline StatusParam& operator=(const StatusParam& from) {
     CopyFrom(from);
     return *this;
   }
-  inline PushInput& operator=(PushInput&& from) noexcept {
+  inline StatusParam& operator=(StatusParam&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1622,20 +1633,20 @@ class PushInput final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const PushInput& default_instance() {
+  static const StatusParam& default_instance() {
     return *internal_default_instance();
   }
-  static inline const PushInput* internal_default_instance() {
-    return reinterpret_cast<const PushInput*>(
-               &_PushInput_default_instance_);
+  static inline const StatusParam* internal_default_instance() {
+    return reinterpret_cast<const StatusParam*>(
+               &_StatusParam_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     8;
 
-  friend void swap(PushInput& a, PushInput& b) {
+  friend void swap(StatusParam& a, StatusParam& b) {
     a.Swap(&b);
   }
-  inline void Swap(PushInput* other) {
+  inline void Swap(StatusParam* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1648,7 +1659,7 @@ class PushInput final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(PushInput* other) {
+  void UnsafeArenaSwap(StatusParam* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1656,13 +1667,13 @@ class PushInput final :
 
   // implements Message ----------------------------------------------
 
-  PushInput* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<PushInput>(arena);
+  StatusParam* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<StatusParam>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const PushInput& from);
+  void CopyFrom(const StatusParam& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const PushInput& from);
+  void MergeFrom(const StatusParam& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -1679,15 +1690,15 @@ class PushInput final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(PushInput* other);
+  void InternalSwap(StatusParam* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "PushInput";
+    return "StatusParam";
   }
   protected:
-  explicit PushInput(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit StatusParam(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -1704,46 +1715,40 @@ class PushInput final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kServiceFieldNumber = 1,
-    kBinFieldNumber = 2,
+    kStatusNameFieldNumber = 1,
   };
-  // string service = 1;
-  void clear_service();
-  const std::string& service() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_service(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_service();
-  PROTOBUF_NODISCARD std::string* release_service();
-  void set_allocated_service(std::string* service);
+  // repeated string status_name = 1;
+  int status_name_size() const;
   private:
-  const std::string& _internal_service() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_service(const std::string& value);
-  std::string* _internal_mutable_service();
+  int _internal_status_name_size() const;
+  public:
+  void clear_status_name();
+  const std::string& status_name(int index) const;
+  std::string* mutable_status_name(int index);
+  void set_status_name(int index, const std::string& value);
+  void set_status_name(int index, std::string&& value);
+  void set_status_name(int index, const char* value);
+  void set_status_name(int index, const char* value, size_t size);
+  std::string* add_status_name();
+  void add_status_name(const std::string& value);
+  void add_status_name(std::string&& value);
+  void add_status_name(const char* value);
+  void add_status_name(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& status_name() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_status_name();
+  private:
+  const std::string& _internal_status_name(int index) const;
+  std::string* _internal_add_status_name();
   public:
 
-  // bytes bin = 2;
-  void clear_bin();
-  const std::string& bin() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_bin(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_bin();
-  PROTOBUF_NODISCARD std::string* release_bin();
-  void set_allocated_bin(std::string* bin);
-  private:
-  const std::string& _internal_bin() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_bin(const std::string& value);
-  std::string* _internal_mutable_bin();
-  public:
-
-  // @@protoc_insertion_point(class_scope:PushInput)
+  // @@protoc_insertion_point(class_scope:StatusParam)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr service_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr bin_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> status_name_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_WorkerRpcInterface_2eproto;
 };
@@ -1774,9 +1779,9 @@ class WorkerService : public ::PROTOBUF_NAMESPACE_ID::Service {
                        const ::CheckInput* request,
                        ::DownServices* response,
                        ::google::protobuf::Closure* done);
-  virtual void push(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::PushInput* request,
-                       ::Echo* response,
+  virtual void getStatus(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                       const ::StatusParam* request,
+                       ::StatusParam* response,
                        ::google::protobuf::Closure* done);
 
   // implements Service ----------------------------------------------
@@ -1819,9 +1824,9 @@ class WorkerService_Stub : public WorkerService {
                        const ::CheckInput* request,
                        ::DownServices* response,
                        ::google::protobuf::Closure* done);
-  void push(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::PushInput* request,
-                       ::Echo* response,
+  void getStatus(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                       const ::StatusParam* request,
+                       ::StatusParam* response,
                        ::google::protobuf::Closure* done);
  private:
   ::PROTOBUF_NAMESPACE_ID::RpcChannel* channel_;
@@ -2308,6 +2313,26 @@ inline void ForkInput::_internal_set_restart(int32_t value) {
 inline void ForkInput::set_restart(int32_t value) {
   _internal_set_restart(value);
   // @@protoc_insertion_point(field_set:ForkInput.restart)
+}
+
+// int32 port = 8;
+inline void ForkInput::clear_port() {
+  port_ = 0;
+}
+inline int32_t ForkInput::_internal_port() const {
+  return port_;
+}
+inline int32_t ForkInput::port() const {
+  // @@protoc_insertion_point(field_get:ForkInput.port)
+  return _internal_port();
+}
+inline void ForkInput::_internal_set_port(int32_t value) {
+  
+  port_ = value;
+}
+inline void ForkInput::set_port(int32_t value) {
+  _internal_set_port(value);
+  // @@protoc_insertion_point(field_set:ForkInput.port)
 }
 
 // -------------------------------------------------------------------
@@ -2993,108 +3018,81 @@ DownServices::service() const {
 
 // -------------------------------------------------------------------
 
-// PushInput
+// StatusParam
 
-// string service = 1;
-inline void PushInput::clear_service() {
-  service_.ClearToEmpty();
+// repeated string status_name = 1;
+inline int StatusParam::_internal_status_name_size() const {
+  return status_name_.size();
 }
-inline const std::string& PushInput::service() const {
-  // @@protoc_insertion_point(field_get:PushInput.service)
-  return _internal_service();
+inline int StatusParam::status_name_size() const {
+  return _internal_status_name_size();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void PushInput::set_service(ArgT0&& arg0, ArgT... args) {
- 
- service_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:PushInput.service)
+inline void StatusParam::clear_status_name() {
+  status_name_.Clear();
 }
-inline std::string* PushInput::mutable_service() {
-  std::string* _s = _internal_mutable_service();
-  // @@protoc_insertion_point(field_mutable:PushInput.service)
+inline std::string* StatusParam::add_status_name() {
+  std::string* _s = _internal_add_status_name();
+  // @@protoc_insertion_point(field_add_mutable:StatusParam.status_name)
   return _s;
 }
-inline const std::string& PushInput::_internal_service() const {
-  return service_.Get();
+inline const std::string& StatusParam::_internal_status_name(int index) const {
+  return status_name_.Get(index);
 }
-inline void PushInput::_internal_set_service(const std::string& value) {
-  
-  service_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+inline const std::string& StatusParam::status_name(int index) const {
+  // @@protoc_insertion_point(field_get:StatusParam.status_name)
+  return _internal_status_name(index);
 }
-inline std::string* PushInput::_internal_mutable_service() {
-  
-  return service_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+inline std::string* StatusParam::mutable_status_name(int index) {
+  // @@protoc_insertion_point(field_mutable:StatusParam.status_name)
+  return status_name_.Mutable(index);
 }
-inline std::string* PushInput::release_service() {
-  // @@protoc_insertion_point(field_release:PushInput.service)
-  return service_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+inline void StatusParam::set_status_name(int index, const std::string& value) {
+  status_name_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:StatusParam.status_name)
 }
-inline void PushInput::set_allocated_service(std::string* service) {
-  if (service != nullptr) {
-    
-  } else {
-    
-  }
-  service_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), service,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (service_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    service_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:PushInput.service)
+inline void StatusParam::set_status_name(int index, std::string&& value) {
+  status_name_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:StatusParam.status_name)
 }
-
-// bytes bin = 2;
-inline void PushInput::clear_bin() {
-  bin_.ClearToEmpty();
+inline void StatusParam::set_status_name(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  status_name_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:StatusParam.status_name)
 }
-inline const std::string& PushInput::bin() const {
-  // @@protoc_insertion_point(field_get:PushInput.bin)
-  return _internal_bin();
+inline void StatusParam::set_status_name(int index, const char* value, size_t size) {
+  status_name_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:StatusParam.status_name)
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void PushInput::set_bin(ArgT0&& arg0, ArgT... args) {
- 
- bin_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:PushInput.bin)
+inline std::string* StatusParam::_internal_add_status_name() {
+  return status_name_.Add();
 }
-inline std::string* PushInput::mutable_bin() {
-  std::string* _s = _internal_mutable_bin();
-  // @@protoc_insertion_point(field_mutable:PushInput.bin)
-  return _s;
+inline void StatusParam::add_status_name(const std::string& value) {
+  status_name_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:StatusParam.status_name)
 }
-inline const std::string& PushInput::_internal_bin() const {
-  return bin_.Get();
+inline void StatusParam::add_status_name(std::string&& value) {
+  status_name_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:StatusParam.status_name)
 }
-inline void PushInput::_internal_set_bin(const std::string& value) {
-  
-  bin_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+inline void StatusParam::add_status_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  status_name_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:StatusParam.status_name)
 }
-inline std::string* PushInput::_internal_mutable_bin() {
-  
-  return bin_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+inline void StatusParam::add_status_name(const char* value, size_t size) {
+  status_name_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:StatusParam.status_name)
 }
-inline std::string* PushInput::release_bin() {
-  // @@protoc_insertion_point(field_release:PushInput.bin)
-  return bin_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+StatusParam::status_name() const {
+  // @@protoc_insertion_point(field_list:StatusParam.status_name)
+  return status_name_;
 }
-inline void PushInput::set_allocated_bin(std::string* bin) {
-  if (bin != nullptr) {
-    
-  } else {
-    
-  }
-  bin_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), bin,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (bin_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    bin_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:PushInput.bin)
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+StatusParam::mutable_status_name() {
+  // @@protoc_insertion_point(field_mutable_list:StatusParam.status_name)
+  return &status_name_;
 }
 
 #ifdef __GNUC__

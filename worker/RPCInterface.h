@@ -11,32 +11,33 @@
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/message.h>
 
+namespace worker {
 
-class WorkerNode;
+    class WorkerNode;
 
-class RPCInterface final : public WorkerService {
+    class RPCInterface final : public WorkerService {
 
-public:
+    public:
 
-    explicit RPCInterface(WorkerNode *node) {
-        owner = node;
-    }
+        explicit RPCInterface(WorkerNode *node) {
+            owner = node;
+        }
 
-    void fork(::google::protobuf::RpcController *controller, const ::ForkInput *request, ::ForkEcho *response,
-              ::google::protobuf::Closure *done) override;
+        void fork(::google::protobuf::RpcController *controller, const ::ForkInput *request, ::ForkEcho *response,
+                  ::google::protobuf::Closure *done) override;
 
-    void
-    shutdown(::google::protobuf::RpcController *controller, const ::ShutdownInput *request, ::Echo *response,
-             ::google::protobuf::Closure *done) override;
+        void
+        shutdown(::google::protobuf::RpcController *controller, const ::ShutdownInput *request, ::Echo *response,
+                 ::google::protobuf::Closure *done) override;
 
-    void check(::google::protobuf::RpcController *controller, const ::CheckInput *request, ::DownServices *response,
-               ::google::protobuf::Closure *done) override;
+        void check(::google::protobuf::RpcController *controller, const ::CheckInput *request, ::DownServices *response,
+                   ::google::protobuf::Closure *done) override;
 
 
-private:
+    private:
 
-    WorkerNode *owner;
-};
-
+        WorkerNode *owner;
+    };
+}
 
 #endif //TINYSWARM_RPCINTERFACE_H

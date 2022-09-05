@@ -3,6 +3,8 @@
 //
 
 #include <iostream>
+#include <nlohmann/json.hpp>
+
 #include "RpcClient.h"
 #include "MapReduce.h"
 
@@ -142,8 +144,16 @@ void protobuf_test() {
 
 int main() {
 
+    using Json = nlohmann::json;
 
-    test();
+    Json json;
+    json["1"] = 1;
+    json["2"] = {1, 0, 2};
+    json["3"] = {{"3.1", "1"},
+                 {"3.2", 3.2}};
+
+    std::cout << json.dump() ;
+    //test();
     return 0;
 
 

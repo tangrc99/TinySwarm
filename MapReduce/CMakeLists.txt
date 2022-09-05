@@ -3,6 +3,7 @@ project(MapReduce)
 
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(nlohmann_json)
 
 add_executable(MapReduce
         main.cpp
@@ -23,4 +24,4 @@ add_executable(MapReduce
         MapReduceTask.cpp MapReduceTask.h AddressPool.cpp AddressPool.h ManagerClient.cpp ManagerClient.h ManagerSession.cpp ManagerSession.h)
 
 
-target_link_libraries(MapReduce mongocxx protobuf)
+target_link_libraries(MapReduce mongocxx protobuf nlohmann_json)

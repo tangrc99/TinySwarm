@@ -9,20 +9,23 @@
 #include <list>
 #include <utility>
 
-struct ManagerDescriptor {
-public:
+namespace worker {
 
-    std::string usr_info; // manager的名称
-    time_t timestamp;   // 上一次产生会话的时间
-    int status; // manager 存活状态 0 存活 -1 掉线
+    struct ManagerDescriptor {
 
-    std::list<PodDescriptor *> services;    // manager启动的 Service
+        std::string usr_info; // manager的名称
+        time_t timestamp;   // 上一次产生会话的时间
+        int status; // manager 存活状态 0 存活 -1 掉线
+
+        std::list<PodDescriptor *> pods;    // manager启动的 Service
 
 
-    explicit ManagerDescriptor(std::string manager) : usr_info(std::move(manager)), timestamp(time(nullptr)),status(0) {
+        explicit ManagerDescriptor(std::string manager) : usr_info(std::move(manager)), timestamp(time(nullptr)),
+                                                          status(0) {
 
-    }
-};
+        }
+    };
+}
 
 
 #endif //TINYSWARM_MANAGERDESCRIPTOR_H
