@@ -6,7 +6,7 @@
 #define TINYSWARM_PODDESCRIPTOR_H
 
 #include <utility>
-
+#include <nlohmann/json.hpp>
 #include "WorkerRpcInterface.pb.h"
 
 struct PodExitError {
@@ -18,6 +18,7 @@ struct PodExitError {
 
 struct WorkerDescriptor;
 
+
 struct PodDescriptor {
 
     std::string service_;   // 服务名称
@@ -27,47 +28,23 @@ struct PodDescriptor {
     WorkerDescriptor *wd_ = nullptr;
     std::vector<char *> exe_params_;
     std::vector<char *> docker_params_;
+    std::string ip; // 被调度到的地址
     int port_;  // 将要工作的端口号
     int restart_;
 
     PodExitError *error = nullptr;
 
-    PodDescriptor(string service, string alias, ServiceType type, int alive, int port, WorkerDescriptor *wd,
+    PodDescriptor(std::string service, std::string alias, ServiceType type, int alive, int port, WorkerDescriptor *wd,
                   std::vector<char *> exe_params,
-                  std::vector<char *> docker_params, int restart)
-            : service_(std::move(service)), alias_(std::move(alias)), type_(type), alive_(alive), port_(port), wd_(wd),
-              exe_params_(std::move(exe_params)), docker_params_(std::move(docker_params)), restart_(restart) {
-
-    }
+                  std::vector<char *> docker_params, int restart);
 
     PodDescriptor() = default;
 
-    [[nodiscard]] std::string toGossipMessage() const {
-        // example "127.0.0.1:8989 hello my_hello"
-        return {wd_->ip + " " + std::to_string(wd_->port) + " " + service_ + " " + alias_ + std::to_string(port_)};
-    }
+    [[nodiscard]] std::string toGossipMessage() const;
 
-    [[nodiscard]] std::string toSnapshotMessage() const {
-        std::string snapshot = service_ + " " + alias_ + " " + (type_ == host ? "host " : "docker ") + std::to_string(port_)
-                + " " + std::to_string(alive_) + " " + wd_->ip + " " + std::to_string(wd_->port);
+    [[nodiscard]] std::string toSnapshotMessage() const;
 
-        snapshot += " {";
-        for (auto &params: exe_params_) {
-            snapshot += params;
-            snapshot += ",";
-        }
-        snapshot += "} {";
-
-        for (auto &params: exe_params_) {
-            snapshot += params;
-            snapshot += ",";
-        }
-        snapshot += "} ";
-
-        snapshot += std::to_string(restart_);
-        return snapshot;
-    }
-
+    nlohmann::json toJson();
 
 };
 

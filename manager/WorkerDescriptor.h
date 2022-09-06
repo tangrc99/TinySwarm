@@ -17,7 +17,9 @@ struct WorkerDescriptor {
     std::shared_ptr<Session> session;   // 用于通信的连接
 
     std::list<std::string> services;    // 节点上提供的服务
-    std::list<PodDescriptor *> pods; // 当前节点上运行的服务
+    std::list<PodDescriptor *> pods; // 当前节点上运行的pod
+
+
 
     void removeService(PodDescriptor *service) {
         for (auto it = pods.begin(); it != pods.end();) {

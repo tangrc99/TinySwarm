@@ -3,13 +3,12 @@ syntax = "proto3";
 option cc_generic_services = true;
 
 message ServiceName{
-  string name_or_alias = 1;
-  int32 type = 2; // -1 代表失败，0 host , 1 docker
+  string token = 1; // 用户可以指定一个，如果未指定，则由 manager 随机指定
 }
 
-message ServiceInformation{
-  string service = 1;
-  string alias = 2 ;  // 当前服务的创建者标识
+message ServiceParams{
+  int32 service_num = 1;
+  string service = 2;
   int32 type = 3;
   repeated string exe_params = 4;
   repeated string docker_params = 5;
@@ -17,48 +16,23 @@ message ServiceInformation{
   int32 port = 7;
 }
 
-message ServiceList{
-  repeated ServiceInformation services = 1;
+message ServiceInfo{
+  ServiceName name = 1;
+  ServiceParams params = 2;
 }
 
-message CreateOrDeleteEcho{
-  bool fail = 1;
-  string info = 2;
-}
-
-message TransferInfo{
-  string alias = 1;
-  string address = 2;
-}
-
-message ServiceGroupName{
-  string token = 1; // 用户可以指定一个，如果未指定，则由 manager 随机指定
-  int32 service_num = 2;
-  string service = 3;
-  int32 type = 4;
-  repeated string exe_params = 5;
-  repeated string docker_params = 6;
-  int32 restart = 7;
-}
-
-message ServiceGroup{
-  string token = 1;
-  int32 service_num = 2;
-  ServiceList service_list = 3;
+message JsonMessage{
+  string content = 1;
 }
 
 message AddressPool{
-  repeated string address = 1;
+  string proxy_address = 1;
+  repeated string pod_address = 2;
 }
 
 service ManagerService{
-  rpc showService(ServiceName) returns(ServiceList); //
-  rpc createService(ServiceInformation) returns(CreateOrDeleteEcho);
-  rpc stopService(ServiceName) returns(CreateOrDeleteEcho);
-  rpc transferService(TransferInfo) returns(CreateOrDeleteEcho);
-
-  rpc createServiceGroup(ServiceGroupName) returns(CreateOrDeleteEcho);
-  rpc getServiceGroupInfo(ServiceGroup) returns(ServiceGroup);
-  rpc getAddressPool(ServiceGroup) returns(AddressPool); // 只返回 ServiceGroup 的地址池
-  rpc stopServiceGroup(ServiceGroup) returns(CreateOrDeleteEcho);
+  rpc createService(ServiceInfo) returns(JsonMessage);
+  rpc getServiceInfo(ServiceName) returns(JsonMessage);
+  rpc getAddressPool(ServiceName) returns(AddressPool); // 只返回 ServiceGroup 的地址池
+  rpc stopService(ServiceName) returns(ServiceName);
 }

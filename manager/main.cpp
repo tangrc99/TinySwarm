@@ -6,7 +6,8 @@
 #include "WorkerClient.h"
 #include "LogQueue.h"
 #include "Result.h"
-
+#include "RPCInterface.h"
+#include "ServiceManager.h"
 #include <unistd.h>
 #include <signal.h>
 #include <cstdlib>
@@ -70,8 +71,7 @@ std::map<int,std::string> map;
 //    return res;
 //}
 
-int main(int argc ,char *argv[]){
-
+void rpc_test(){
     Manager manager("127.0.0.1");
 
     manager.selectWorkerToCreatePod("redis","my_redis",docker,6379,
@@ -88,14 +88,14 @@ int main(int argc ,char *argv[]){
 
     auto wd = manager.findWorkerDescriptor("127.0.0.1",8989);
 
-    auto [res,error] = manager.createService(wd,"redis","my_redis",docker,6379,
-                                             {},{"-p","6379:6379"},0);
+    auto res = manager.createService(wd,"redis","my_redis",docker,6379,
+                                     {},{"-p","6379:6379"},0);
 
 //    manager.pods.emplace("redis",PodDescriptor("redis","my_redis",docker,1,6379,wd,
 //                                               {},{"-p","6379:6379"},0));
 
-    if(!res)
-        std::cout << error << std::endl;
+    if(res.isFail())
+        std::cout << res.reason() << std::endl;
 
     services = manager.showServices("*");
 
@@ -109,7 +109,33 @@ int main(int argc ,char *argv[]){
 
     ///for(;;);
 
+}
+
+void serviceJsonTest(){
+
+    WorkerDescriptor wd;
+    wd.ip = "127.0.0.1";
+
+    PodDescriptor pd1("test", "test_1", docker, true, 8888, &wd,{"1","2"},{"-p","8888"}, 0);
+    PodDescriptor pd2("test", "test_2", docker, true, 8888, &wd,{"1","2"},{"-p","8888"}, 0);
+
+    manager::ServiceDescriptor sd("test",{&pd1,&pd2},2,"127.0.0.1",{});
+
+    auto json = sd.toJson();
+
+    auto string = nlohmann::json::to_bson(json);
+
+    auto json2 = nlohmann::json::from_bson(string);
+
+    std::cout << json2.dump(4);
+}
+
+
+int main(int argc ,char *argv[]){
+    serviceJsonTest();
+
     return 0;
+
 //
 //    sleep(5);
 //

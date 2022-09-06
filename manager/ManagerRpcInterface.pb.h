@@ -47,7 +47,7 @@ struct TableStruct_ManagerRpcInterface_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[8]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -57,36 +57,24 @@ extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table
 class AddressPool;
 struct AddressPoolDefaultTypeInternal;
 extern AddressPoolDefaultTypeInternal _AddressPool_default_instance_;
-class CreateOrDeleteEcho;
-struct CreateOrDeleteEchoDefaultTypeInternal;
-extern CreateOrDeleteEchoDefaultTypeInternal _CreateOrDeleteEcho_default_instance_;
-class ServiceGroup;
-struct ServiceGroupDefaultTypeInternal;
-extern ServiceGroupDefaultTypeInternal _ServiceGroup_default_instance_;
-class ServiceGroupName;
-struct ServiceGroupNameDefaultTypeInternal;
-extern ServiceGroupNameDefaultTypeInternal _ServiceGroupName_default_instance_;
-class ServiceInformation;
-struct ServiceInformationDefaultTypeInternal;
-extern ServiceInformationDefaultTypeInternal _ServiceInformation_default_instance_;
-class ServiceList;
-struct ServiceListDefaultTypeInternal;
-extern ServiceListDefaultTypeInternal _ServiceList_default_instance_;
+class JsonMessage;
+struct JsonMessageDefaultTypeInternal;
+extern JsonMessageDefaultTypeInternal _JsonMessage_default_instance_;
+class ServiceInfo;
+struct ServiceInfoDefaultTypeInternal;
+extern ServiceInfoDefaultTypeInternal _ServiceInfo_default_instance_;
 class ServiceName;
 struct ServiceNameDefaultTypeInternal;
 extern ServiceNameDefaultTypeInternal _ServiceName_default_instance_;
-class TransferInfo;
-struct TransferInfoDefaultTypeInternal;
-extern TransferInfoDefaultTypeInternal _TransferInfo_default_instance_;
+class ServiceParams;
+struct ServiceParamsDefaultTypeInternal;
+extern ServiceParamsDefaultTypeInternal _ServiceParams_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::AddressPool* Arena::CreateMaybeMessage<::AddressPool>(Arena*);
-template<> ::CreateOrDeleteEcho* Arena::CreateMaybeMessage<::CreateOrDeleteEcho>(Arena*);
-template<> ::ServiceGroup* Arena::CreateMaybeMessage<::ServiceGroup>(Arena*);
-template<> ::ServiceGroupName* Arena::CreateMaybeMessage<::ServiceGroupName>(Arena*);
-template<> ::ServiceInformation* Arena::CreateMaybeMessage<::ServiceInformation>(Arena*);
-template<> ::ServiceList* Arena::CreateMaybeMessage<::ServiceList>(Arena*);
+template<> ::JsonMessage* Arena::CreateMaybeMessage<::JsonMessage>(Arena*);
+template<> ::ServiceInfo* Arena::CreateMaybeMessage<::ServiceInfo>(Arena*);
 template<> ::ServiceName* Arena::CreateMaybeMessage<::ServiceName>(Arena*);
-template<> ::TransferInfo* Arena::CreateMaybeMessage<::TransferInfo>(Arena*);
+template<> ::ServiceParams* Arena::CreateMaybeMessage<::ServiceParams>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
@@ -213,30 +201,20 @@ class ServiceName final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kNameOrAliasFieldNumber = 1,
-    kTypeFieldNumber = 2,
+    kTokenFieldNumber = 1,
   };
-  // string name_or_alias = 1;
-  void clear_name_or_alias();
-  const std::string& name_or_alias() const;
+  // string token = 1;
+  void clear_token();
+  const std::string& token() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_name_or_alias(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_name_or_alias();
-  PROTOBUF_NODISCARD std::string* release_name_or_alias();
-  void set_allocated_name_or_alias(std::string* name_or_alias);
+  void set_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_token();
+  PROTOBUF_NODISCARD std::string* release_token();
+  void set_allocated_token(std::string* token);
   private:
-  const std::string& _internal_name_or_alias() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name_or_alias(const std::string& value);
-  std::string* _internal_mutable_name_or_alias();
-  public:
-
-  // int32 type = 2;
-  void clear_type();
-  int32_t type() const;
-  void set_type(int32_t value);
-  private:
-  int32_t _internal_type() const;
-  void _internal_set_type(int32_t value);
+  const std::string& _internal_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_token(const std::string& value);
+  std::string* _internal_mutable_token();
   public:
 
   // @@protoc_insertion_point(class_scope:ServiceName)
@@ -246,31 +224,30 @@ class ServiceName final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_or_alias_;
-  int32_t type_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr token_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ManagerRpcInterface_2eproto;
 };
 // -------------------------------------------------------------------
 
-class ServiceInformation final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServiceInformation) */ {
+class ServiceParams final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServiceParams) */ {
  public:
-  inline ServiceInformation() : ServiceInformation(nullptr) {}
-  ~ServiceInformation() override;
-  explicit constexpr ServiceInformation(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline ServiceParams() : ServiceParams(nullptr) {}
+  ~ServiceParams() override;
+  explicit constexpr ServiceParams(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  ServiceInformation(const ServiceInformation& from);
-  ServiceInformation(ServiceInformation&& from) noexcept
-    : ServiceInformation() {
+  ServiceParams(const ServiceParams& from);
+  ServiceParams(ServiceParams&& from) noexcept
+    : ServiceParams() {
     *this = ::std::move(from);
   }
 
-  inline ServiceInformation& operator=(const ServiceInformation& from) {
+  inline ServiceParams& operator=(const ServiceParams& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ServiceInformation& operator=(ServiceInformation&& from) noexcept {
+  inline ServiceParams& operator=(ServiceParams&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -293,20 +270,20 @@ class ServiceInformation final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const ServiceInformation& default_instance() {
+  static const ServiceParams& default_instance() {
     return *internal_default_instance();
   }
-  static inline const ServiceInformation* internal_default_instance() {
-    return reinterpret_cast<const ServiceInformation*>(
-               &_ServiceInformation_default_instance_);
+  static inline const ServiceParams* internal_default_instance() {
+    return reinterpret_cast<const ServiceParams*>(
+               &_ServiceParams_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  friend void swap(ServiceInformation& a, ServiceInformation& b) {
+  friend void swap(ServiceParams& a, ServiceParams& b) {
     a.Swap(&b);
   }
-  inline void Swap(ServiceInformation* other) {
+  inline void Swap(ServiceParams* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -319,7 +296,7 @@ class ServiceInformation final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(ServiceInformation* other) {
+  void UnsafeArenaSwap(ServiceParams* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -327,13 +304,13 @@ class ServiceInformation final :
 
   // implements Message ----------------------------------------------
 
-  ServiceInformation* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ServiceInformation>(arena);
+  ServiceParams* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ServiceParams>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ServiceInformation& from);
+  void CopyFrom(const ServiceParams& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const ServiceInformation& from);
+  void MergeFrom(const ServiceParams& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -350,15 +327,15 @@ class ServiceInformation final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ServiceInformation* other);
+  void InternalSwap(ServiceParams* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "ServiceInformation";
+    return "ServiceParams";
   }
   protected:
-  explicit ServiceInformation(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit ServiceParams(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -377,8 +354,8 @@ class ServiceInformation final :
   enum : int {
     kExeParamsFieldNumber = 4,
     kDockerParamsFieldNumber = 5,
-    kServiceFieldNumber = 1,
-    kAliasFieldNumber = 2,
+    kServiceFieldNumber = 2,
+    kServiceNumFieldNumber = 1,
     kTypeFieldNumber = 3,
     kRestartFieldNumber = 6,
     kPortFieldNumber = 7,
@@ -431,7 +408,7 @@ class ServiceInformation final :
   std::string* _internal_add_docker_params();
   public:
 
-  // string service = 1;
+  // string service = 2;
   void clear_service();
   const std::string& service() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -445,18 +422,13 @@ class ServiceInformation final :
   std::string* _internal_mutable_service();
   public:
 
-  // string alias = 2;
-  void clear_alias();
-  const std::string& alias() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_alias(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_alias();
-  PROTOBUF_NODISCARD std::string* release_alias();
-  void set_allocated_alias(std::string* alias);
+  // int32 service_num = 1;
+  void clear_service_num();
+  int32_t service_num() const;
+  void set_service_num(int32_t value);
   private:
-  const std::string& _internal_alias() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_alias(const std::string& value);
-  std::string* _internal_mutable_alias();
+  int32_t _internal_service_num() const;
+  void _internal_set_service_num(int32_t value);
   public:
 
   // int32 type = 3;
@@ -486,7 +458,7 @@ class ServiceInformation final :
   void _internal_set_port(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:ServiceInformation)
+  // @@protoc_insertion_point(class_scope:ServiceParams)
  private:
   class _Internal;
 
@@ -496,7 +468,7 @@ class ServiceInformation final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> exe_params_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> docker_params_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr service_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr alias_;
+  int32_t service_num_;
   int32_t type_;
   int32_t restart_;
   int32_t port_;
@@ -505,24 +477,24 @@ class ServiceInformation final :
 };
 // -------------------------------------------------------------------
 
-class ServiceList final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServiceList) */ {
+class ServiceInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServiceInfo) */ {
  public:
-  inline ServiceList() : ServiceList(nullptr) {}
-  ~ServiceList() override;
-  explicit constexpr ServiceList(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline ServiceInfo() : ServiceInfo(nullptr) {}
+  ~ServiceInfo() override;
+  explicit constexpr ServiceInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  ServiceList(const ServiceList& from);
-  ServiceList(ServiceList&& from) noexcept
-    : ServiceList() {
+  ServiceInfo(const ServiceInfo& from);
+  ServiceInfo(ServiceInfo&& from) noexcept
+    : ServiceInfo() {
     *this = ::std::move(from);
   }
 
-  inline ServiceList& operator=(const ServiceList& from) {
+  inline ServiceInfo& operator=(const ServiceInfo& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ServiceList& operator=(ServiceList&& from) noexcept {
+  inline ServiceInfo& operator=(ServiceInfo&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -545,20 +517,20 @@ class ServiceList final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const ServiceList& default_instance() {
+  static const ServiceInfo& default_instance() {
     return *internal_default_instance();
   }
-  static inline const ServiceList* internal_default_instance() {
-    return reinterpret_cast<const ServiceList*>(
-               &_ServiceList_default_instance_);
+  static inline const ServiceInfo* internal_default_instance() {
+    return reinterpret_cast<const ServiceInfo*>(
+               &_ServiceInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     2;
 
-  friend void swap(ServiceList& a, ServiceList& b) {
+  friend void swap(ServiceInfo& a, ServiceInfo& b) {
     a.Swap(&b);
   }
-  inline void Swap(ServiceList* other) {
+  inline void Swap(ServiceInfo* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -571,7 +543,7 @@ class ServiceList final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(ServiceList* other) {
+  void UnsafeArenaSwap(ServiceInfo* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -579,13 +551,13 @@ class ServiceList final :
 
   // implements Message ----------------------------------------------
 
-  ServiceList* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ServiceList>(arena);
+  ServiceInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ServiceInfo>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ServiceList& from);
+  void CopyFrom(const ServiceInfo& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const ServiceList& from);
+  void MergeFrom(const ServiceInfo& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -602,15 +574,15 @@ class ServiceList final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ServiceList* other);
+  void InternalSwap(ServiceInfo* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "ServiceList";
+    return "ServiceInfo";
   }
   protected:
-  explicit ServiceList(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit ServiceInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -627,57 +599,77 @@ class ServiceList final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kServicesFieldNumber = 1,
+    kNameFieldNumber = 1,
+    kParamsFieldNumber = 2,
   };
-  // repeated .ServiceInformation services = 1;
-  int services_size() const;
+  // .ServiceName name = 1;
+  bool has_name() const;
   private:
-  int _internal_services_size() const;
+  bool _internal_has_name() const;
   public:
-  void clear_services();
-  ::ServiceInformation* mutable_services(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServiceInformation >*
-      mutable_services();
+  void clear_name();
+  const ::ServiceName& name() const;
+  PROTOBUF_NODISCARD ::ServiceName* release_name();
+  ::ServiceName* mutable_name();
+  void set_allocated_name(::ServiceName* name);
   private:
-  const ::ServiceInformation& _internal_services(int index) const;
-  ::ServiceInformation* _internal_add_services();
+  const ::ServiceName& _internal_name() const;
+  ::ServiceName* _internal_mutable_name();
   public:
-  const ::ServiceInformation& services(int index) const;
-  ::ServiceInformation* add_services();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServiceInformation >&
-      services() const;
+  void unsafe_arena_set_allocated_name(
+      ::ServiceName* name);
+  ::ServiceName* unsafe_arena_release_name();
 
-  // @@protoc_insertion_point(class_scope:ServiceList)
+  // .ServiceParams params = 2;
+  bool has_params() const;
+  private:
+  bool _internal_has_params() const;
+  public:
+  void clear_params();
+  const ::ServiceParams& params() const;
+  PROTOBUF_NODISCARD ::ServiceParams* release_params();
+  ::ServiceParams* mutable_params();
+  void set_allocated_params(::ServiceParams* params);
+  private:
+  const ::ServiceParams& _internal_params() const;
+  ::ServiceParams* _internal_mutable_params();
+  public:
+  void unsafe_arena_set_allocated_params(
+      ::ServiceParams* params);
+  ::ServiceParams* unsafe_arena_release_params();
+
+  // @@protoc_insertion_point(class_scope:ServiceInfo)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServiceInformation > services_;
+  ::ServiceName* name_;
+  ::ServiceParams* params_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ManagerRpcInterface_2eproto;
 };
 // -------------------------------------------------------------------
 
-class CreateOrDeleteEcho final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CreateOrDeleteEcho) */ {
+class JsonMessage final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:JsonMessage) */ {
  public:
-  inline CreateOrDeleteEcho() : CreateOrDeleteEcho(nullptr) {}
-  ~CreateOrDeleteEcho() override;
-  explicit constexpr CreateOrDeleteEcho(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline JsonMessage() : JsonMessage(nullptr) {}
+  ~JsonMessage() override;
+  explicit constexpr JsonMessage(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  CreateOrDeleteEcho(const CreateOrDeleteEcho& from);
-  CreateOrDeleteEcho(CreateOrDeleteEcho&& from) noexcept
-    : CreateOrDeleteEcho() {
+  JsonMessage(const JsonMessage& from);
+  JsonMessage(JsonMessage&& from) noexcept
+    : JsonMessage() {
     *this = ::std::move(from);
   }
 
-  inline CreateOrDeleteEcho& operator=(const CreateOrDeleteEcho& from) {
+  inline JsonMessage& operator=(const JsonMessage& from) {
     CopyFrom(from);
     return *this;
   }
-  inline CreateOrDeleteEcho& operator=(CreateOrDeleteEcho&& from) noexcept {
+  inline JsonMessage& operator=(JsonMessage&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -700,20 +692,20 @@ class CreateOrDeleteEcho final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const CreateOrDeleteEcho& default_instance() {
+  static const JsonMessage& default_instance() {
     return *internal_default_instance();
   }
-  static inline const CreateOrDeleteEcho* internal_default_instance() {
-    return reinterpret_cast<const CreateOrDeleteEcho*>(
-               &_CreateOrDeleteEcho_default_instance_);
+  static inline const JsonMessage* internal_default_instance() {
+    return reinterpret_cast<const JsonMessage*>(
+               &_JsonMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     3;
 
-  friend void swap(CreateOrDeleteEcho& a, CreateOrDeleteEcho& b) {
+  friend void swap(JsonMessage& a, JsonMessage& b) {
     a.Swap(&b);
   }
-  inline void Swap(CreateOrDeleteEcho* other) {
+  inline void Swap(JsonMessage* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -726,7 +718,7 @@ class CreateOrDeleteEcho final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(CreateOrDeleteEcho* other) {
+  void UnsafeArenaSwap(JsonMessage* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -734,13 +726,13 @@ class CreateOrDeleteEcho final :
 
   // implements Message ----------------------------------------------
 
-  CreateOrDeleteEcho* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<CreateOrDeleteEcho>(arena);
+  JsonMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<JsonMessage>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const CreateOrDeleteEcho& from);
+  void CopyFrom(const JsonMessage& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const CreateOrDeleteEcho& from);
+  void MergeFrom(const JsonMessage& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -757,15 +749,15 @@ class CreateOrDeleteEcho final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(CreateOrDeleteEcho* other);
+  void InternalSwap(JsonMessage* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "CreateOrDeleteEcho";
+    return "JsonMessage";
   }
   protected:
-  explicit CreateOrDeleteEcho(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit JsonMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -782,642 +774,30 @@ class CreateOrDeleteEcho final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kInfoFieldNumber = 2,
-    kFailFieldNumber = 1,
+    kContentFieldNumber = 1,
   };
-  // string info = 2;
-  void clear_info();
-  const std::string& info() const;
+  // string content = 1;
+  void clear_content();
+  const std::string& content() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_info(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_info();
-  PROTOBUF_NODISCARD std::string* release_info();
-  void set_allocated_info(std::string* info);
+  void set_content(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_content();
+  PROTOBUF_NODISCARD std::string* release_content();
+  void set_allocated_content(std::string* content);
   private:
-  const std::string& _internal_info() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_info(const std::string& value);
-  std::string* _internal_mutable_info();
+  const std::string& _internal_content() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_content(const std::string& value);
+  std::string* _internal_mutable_content();
   public:
 
-  // bool fail = 1;
-  void clear_fail();
-  bool fail() const;
-  void set_fail(bool value);
-  private:
-  bool _internal_fail() const;
-  void _internal_set_fail(bool value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:CreateOrDeleteEcho)
+  // @@protoc_insertion_point(class_scope:JsonMessage)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr info_;
-  bool fail_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_ManagerRpcInterface_2eproto;
-};
-// -------------------------------------------------------------------
-
-class TransferInfo final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:TransferInfo) */ {
- public:
-  inline TransferInfo() : TransferInfo(nullptr) {}
-  ~TransferInfo() override;
-  explicit constexpr TransferInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  TransferInfo(const TransferInfo& from);
-  TransferInfo(TransferInfo&& from) noexcept
-    : TransferInfo() {
-    *this = ::std::move(from);
-  }
-
-  inline TransferInfo& operator=(const TransferInfo& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline TransferInfo& operator=(TransferInfo&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const TransferInfo& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const TransferInfo* internal_default_instance() {
-    return reinterpret_cast<const TransferInfo*>(
-               &_TransferInfo_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    4;
-
-  friend void swap(TransferInfo& a, TransferInfo& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(TransferInfo* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(TransferInfo* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  TransferInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TransferInfo>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TransferInfo& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const TransferInfo& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(TransferInfo* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "TransferInfo";
-  }
-  protected:
-  explicit TransferInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kAliasFieldNumber = 1,
-    kAddressFieldNumber = 2,
-  };
-  // string alias = 1;
-  void clear_alias();
-  const std::string& alias() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_alias(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_alias();
-  PROTOBUF_NODISCARD std::string* release_alias();
-  void set_allocated_alias(std::string* alias);
-  private:
-  const std::string& _internal_alias() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_alias(const std::string& value);
-  std::string* _internal_mutable_alias();
-  public:
-
-  // string address = 2;
-  void clear_address();
-  const std::string& address() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_address(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_address();
-  PROTOBUF_NODISCARD std::string* release_address();
-  void set_allocated_address(std::string* address);
-  private:
-  const std::string& _internal_address() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_address(const std::string& value);
-  std::string* _internal_mutable_address();
-  public:
-
-  // @@protoc_insertion_point(class_scope:TransferInfo)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr alias_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr address_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_ManagerRpcInterface_2eproto;
-};
-// -------------------------------------------------------------------
-
-class ServiceGroupName final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServiceGroupName) */ {
- public:
-  inline ServiceGroupName() : ServiceGroupName(nullptr) {}
-  ~ServiceGroupName() override;
-  explicit constexpr ServiceGroupName(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  ServiceGroupName(const ServiceGroupName& from);
-  ServiceGroupName(ServiceGroupName&& from) noexcept
-    : ServiceGroupName() {
-    *this = ::std::move(from);
-  }
-
-  inline ServiceGroupName& operator=(const ServiceGroupName& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ServiceGroupName& operator=(ServiceGroupName&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const ServiceGroupName& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const ServiceGroupName* internal_default_instance() {
-    return reinterpret_cast<const ServiceGroupName*>(
-               &_ServiceGroupName_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    5;
-
-  friend void swap(ServiceGroupName& a, ServiceGroupName& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(ServiceGroupName* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(ServiceGroupName* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  ServiceGroupName* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ServiceGroupName>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ServiceGroupName& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const ServiceGroupName& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ServiceGroupName* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "ServiceGroupName";
-  }
-  protected:
-  explicit ServiceGroupName(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kExeParamsFieldNumber = 5,
-    kDockerParamsFieldNumber = 6,
-    kTokenFieldNumber = 1,
-    kServiceFieldNumber = 3,
-    kServiceNumFieldNumber = 2,
-    kTypeFieldNumber = 4,
-    kRestartFieldNumber = 7,
-  };
-  // repeated string exe_params = 5;
-  int exe_params_size() const;
-  private:
-  int _internal_exe_params_size() const;
-  public:
-  void clear_exe_params();
-  const std::string& exe_params(int index) const;
-  std::string* mutable_exe_params(int index);
-  void set_exe_params(int index, const std::string& value);
-  void set_exe_params(int index, std::string&& value);
-  void set_exe_params(int index, const char* value);
-  void set_exe_params(int index, const char* value, size_t size);
-  std::string* add_exe_params();
-  void add_exe_params(const std::string& value);
-  void add_exe_params(std::string&& value);
-  void add_exe_params(const char* value);
-  void add_exe_params(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& exe_params() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_exe_params();
-  private:
-  const std::string& _internal_exe_params(int index) const;
-  std::string* _internal_add_exe_params();
-  public:
-
-  // repeated string docker_params = 6;
-  int docker_params_size() const;
-  private:
-  int _internal_docker_params_size() const;
-  public:
-  void clear_docker_params();
-  const std::string& docker_params(int index) const;
-  std::string* mutable_docker_params(int index);
-  void set_docker_params(int index, const std::string& value);
-  void set_docker_params(int index, std::string&& value);
-  void set_docker_params(int index, const char* value);
-  void set_docker_params(int index, const char* value, size_t size);
-  std::string* add_docker_params();
-  void add_docker_params(const std::string& value);
-  void add_docker_params(std::string&& value);
-  void add_docker_params(const char* value);
-  void add_docker_params(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& docker_params() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_docker_params();
-  private:
-  const std::string& _internal_docker_params(int index) const;
-  std::string* _internal_add_docker_params();
-  public:
-
-  // string token = 1;
-  void clear_token();
-  const std::string& token() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_token(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_token();
-  PROTOBUF_NODISCARD std::string* release_token();
-  void set_allocated_token(std::string* token);
-  private:
-  const std::string& _internal_token() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_token(const std::string& value);
-  std::string* _internal_mutable_token();
-  public:
-
-  // string service = 3;
-  void clear_service();
-  const std::string& service() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_service(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_service();
-  PROTOBUF_NODISCARD std::string* release_service();
-  void set_allocated_service(std::string* service);
-  private:
-  const std::string& _internal_service() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_service(const std::string& value);
-  std::string* _internal_mutable_service();
-  public:
-
-  // int32 service_num = 2;
-  void clear_service_num();
-  int32_t service_num() const;
-  void set_service_num(int32_t value);
-  private:
-  int32_t _internal_service_num() const;
-  void _internal_set_service_num(int32_t value);
-  public:
-
-  // int32 type = 4;
-  void clear_type();
-  int32_t type() const;
-  void set_type(int32_t value);
-  private:
-  int32_t _internal_type() const;
-  void _internal_set_type(int32_t value);
-  public:
-
-  // int32 restart = 7;
-  void clear_restart();
-  int32_t restart() const;
-  void set_restart(int32_t value);
-  private:
-  int32_t _internal_restart() const;
-  void _internal_set_restart(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:ServiceGroupName)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> exe_params_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> docker_params_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr token_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr service_;
-  int32_t service_num_;
-  int32_t type_;
-  int32_t restart_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_ManagerRpcInterface_2eproto;
-};
-// -------------------------------------------------------------------
-
-class ServiceGroup final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServiceGroup) */ {
- public:
-  inline ServiceGroup() : ServiceGroup(nullptr) {}
-  ~ServiceGroup() override;
-  explicit constexpr ServiceGroup(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  ServiceGroup(const ServiceGroup& from);
-  ServiceGroup(ServiceGroup&& from) noexcept
-    : ServiceGroup() {
-    *this = ::std::move(from);
-  }
-
-  inline ServiceGroup& operator=(const ServiceGroup& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ServiceGroup& operator=(ServiceGroup&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const ServiceGroup& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const ServiceGroup* internal_default_instance() {
-    return reinterpret_cast<const ServiceGroup*>(
-               &_ServiceGroup_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    6;
-
-  friend void swap(ServiceGroup& a, ServiceGroup& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(ServiceGroup* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(ServiceGroup* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  ServiceGroup* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ServiceGroup>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ServiceGroup& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const ServiceGroup& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ServiceGroup* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "ServiceGroup";
-  }
-  protected:
-  explicit ServiceGroup(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kTokenFieldNumber = 1,
-    kServiceListFieldNumber = 3,
-    kServiceNumFieldNumber = 2,
-  };
-  // string token = 1;
-  void clear_token();
-  const std::string& token() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_token(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_token();
-  PROTOBUF_NODISCARD std::string* release_token();
-  void set_allocated_token(std::string* token);
-  private:
-  const std::string& _internal_token() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_token(const std::string& value);
-  std::string* _internal_mutable_token();
-  public:
-
-  // .ServiceList service_list = 3;
-  bool has_service_list() const;
-  private:
-  bool _internal_has_service_list() const;
-  public:
-  void clear_service_list();
-  const ::ServiceList& service_list() const;
-  PROTOBUF_NODISCARD ::ServiceList* release_service_list();
-  ::ServiceList* mutable_service_list();
-  void set_allocated_service_list(::ServiceList* service_list);
-  private:
-  const ::ServiceList& _internal_service_list() const;
-  ::ServiceList* _internal_mutable_service_list();
-  public:
-  void unsafe_arena_set_allocated_service_list(
-      ::ServiceList* service_list);
-  ::ServiceList* unsafe_arena_release_service_list();
-
-  // int32 service_num = 2;
-  void clear_service_num();
-  int32_t service_num() const;
-  void set_service_num(int32_t value);
-  private:
-  int32_t _internal_service_num() const;
-  void _internal_set_service_num(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:ServiceGroup)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr token_;
-  ::ServiceList* service_list_;
-  int32_t service_num_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr content_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ManagerRpcInterface_2eproto;
 };
@@ -1471,7 +851,7 @@ class AddressPool final :
                &_AddressPool_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    4;
 
   friend void swap(AddressPool& a, AddressPool& b) {
     a.Swap(&b);
@@ -1545,30 +925,45 @@ class AddressPool final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kAddressFieldNumber = 1,
+    kPodAddressFieldNumber = 2,
+    kProxyAddressFieldNumber = 1,
   };
-  // repeated string address = 1;
-  int address_size() const;
+  // repeated string pod_address = 2;
+  int pod_address_size() const;
   private:
-  int _internal_address_size() const;
+  int _internal_pod_address_size() const;
   public:
-  void clear_address();
-  const std::string& address(int index) const;
-  std::string* mutable_address(int index);
-  void set_address(int index, const std::string& value);
-  void set_address(int index, std::string&& value);
-  void set_address(int index, const char* value);
-  void set_address(int index, const char* value, size_t size);
-  std::string* add_address();
-  void add_address(const std::string& value);
-  void add_address(std::string&& value);
-  void add_address(const char* value);
-  void add_address(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& address() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_address();
+  void clear_pod_address();
+  const std::string& pod_address(int index) const;
+  std::string* mutable_pod_address(int index);
+  void set_pod_address(int index, const std::string& value);
+  void set_pod_address(int index, std::string&& value);
+  void set_pod_address(int index, const char* value);
+  void set_pod_address(int index, const char* value, size_t size);
+  std::string* add_pod_address();
+  void add_pod_address(const std::string& value);
+  void add_pod_address(std::string&& value);
+  void add_pod_address(const char* value);
+  void add_pod_address(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& pod_address() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_pod_address();
   private:
-  const std::string& _internal_address(int index) const;
-  std::string* _internal_add_address();
+  const std::string& _internal_pod_address(int index) const;
+  std::string* _internal_add_pod_address();
+  public:
+
+  // string proxy_address = 1;
+  void clear_proxy_address();
+  const std::string& proxy_address() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_proxy_address(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_proxy_address();
+  PROTOBUF_NODISCARD std::string* release_proxy_address();
+  void set_allocated_proxy_address(std::string* proxy_address);
+  private:
+  const std::string& _internal_proxy_address() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_proxy_address(const std::string& value);
+  std::string* _internal_mutable_proxy_address();
   public:
 
   // @@protoc_insertion_point(class_scope:AddressPool)
@@ -1578,7 +973,8 @@ class AddressPool final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> address_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> pod_address_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr proxy_address_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ManagerRpcInterface_2eproto;
 };
@@ -1597,37 +993,21 @@ class ManagerService : public ::PROTOBUF_NAMESPACE_ID::Service {
 
   static const ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor* descriptor();
 
-  virtual void showService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceName* request,
-                       ::ServiceList* response,
-                       ::google::protobuf::Closure* done);
   virtual void createService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceInformation* request,
-                       ::CreateOrDeleteEcho* response,
+                       const ::ServiceInfo* request,
+                       ::JsonMessage* response,
+                       ::google::protobuf::Closure* done);
+  virtual void getServiceInfo(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                       const ::ServiceName* request,
+                       ::JsonMessage* response,
+                       ::google::protobuf::Closure* done);
+  virtual void getAddressPool(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                       const ::ServiceName* request,
+                       ::AddressPool* response,
                        ::google::protobuf::Closure* done);
   virtual void stopService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceName* request,
-                       ::CreateOrDeleteEcho* response,
-                       ::google::protobuf::Closure* done);
-  virtual void transferService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::TransferInfo* request,
-                       ::CreateOrDeleteEcho* response,
-                       ::google::protobuf::Closure* done);
-  virtual void createServiceGroup(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceGroupName* request,
-                       ::CreateOrDeleteEcho* response,
-                       ::google::protobuf::Closure* done);
-  virtual void getServiceGroupInfo(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceGroup* request,
-                       ::ServiceGroup* response,
-                       ::google::protobuf::Closure* done);
-  virtual void getAddressPool(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceGroup* request,
-                       ::AddressPool* response,
-                       ::google::protobuf::Closure* done);
-  virtual void stopServiceGroup(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceGroup* request,
-                       ::CreateOrDeleteEcho* response,
+                       ::ServiceName* response,
                        ::google::protobuf::Closure* done);
 
   // implements Service ----------------------------------------------
@@ -1658,37 +1038,21 @@ class ManagerService_Stub : public ManagerService {
 
   // implements ManagerService ------------------------------------------
 
-  void showService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceName* request,
-                       ::ServiceList* response,
-                       ::google::protobuf::Closure* done);
   void createService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceInformation* request,
-                       ::CreateOrDeleteEcho* response,
+                       const ::ServiceInfo* request,
+                       ::JsonMessage* response,
+                       ::google::protobuf::Closure* done);
+  void getServiceInfo(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                       const ::ServiceName* request,
+                       ::JsonMessage* response,
+                       ::google::protobuf::Closure* done);
+  void getAddressPool(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
+                       const ::ServiceName* request,
+                       ::AddressPool* response,
                        ::google::protobuf::Closure* done);
   void stopService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
                        const ::ServiceName* request,
-                       ::CreateOrDeleteEcho* response,
-                       ::google::protobuf::Closure* done);
-  void transferService(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::TransferInfo* request,
-                       ::CreateOrDeleteEcho* response,
-                       ::google::protobuf::Closure* done);
-  void createServiceGroup(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceGroupName* request,
-                       ::CreateOrDeleteEcho* response,
-                       ::google::protobuf::Closure* done);
-  void getServiceGroupInfo(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceGroup* request,
-                       ::ServiceGroup* response,
-                       ::google::protobuf::Closure* done);
-  void getAddressPool(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceGroup* request,
-                       ::AddressPool* response,
-                       ::google::protobuf::Closure* done);
-  void stopServiceGroup(::PROTOBUF_NAMESPACE_ID::RpcController* controller,
-                       const ::ServiceGroup* request,
-                       ::CreateOrDeleteEcho* response,
+                       ::ServiceName* response,
                        ::google::protobuf::Closure* done);
  private:
   ::PROTOBUF_NAMESPACE_ID::RpcChannel* channel_;
@@ -1708,117 +1072,117 @@ class ManagerService_Stub : public ManagerService {
 #endif  // __GNUC__
 // ServiceName
 
-// string name_or_alias = 1;
-inline void ServiceName::clear_name_or_alias() {
-  name_or_alias_.ClearToEmpty();
+// string token = 1;
+inline void ServiceName::clear_token() {
+  token_.ClearToEmpty();
 }
-inline const std::string& ServiceName::name_or_alias() const {
-  // @@protoc_insertion_point(field_get:ServiceName.name_or_alias)
-  return _internal_name_or_alias();
+inline const std::string& ServiceName::token() const {
+  // @@protoc_insertion_point(field_get:ServiceName.token)
+  return _internal_token();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void ServiceName::set_name_or_alias(ArgT0&& arg0, ArgT... args) {
+void ServiceName::set_token(ArgT0&& arg0, ArgT... args) {
  
- name_or_alias_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:ServiceName.name_or_alias)
+ token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServiceName.token)
 }
-inline std::string* ServiceName::mutable_name_or_alias() {
-  std::string* _s = _internal_mutable_name_or_alias();
-  // @@protoc_insertion_point(field_mutable:ServiceName.name_or_alias)
+inline std::string* ServiceName::mutable_token() {
+  std::string* _s = _internal_mutable_token();
+  // @@protoc_insertion_point(field_mutable:ServiceName.token)
   return _s;
 }
-inline const std::string& ServiceName::_internal_name_or_alias() const {
-  return name_or_alias_.Get();
+inline const std::string& ServiceName::_internal_token() const {
+  return token_.Get();
 }
-inline void ServiceName::_internal_set_name_or_alias(const std::string& value) {
+inline void ServiceName::_internal_set_token(const std::string& value) {
   
-  name_or_alias_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+  token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* ServiceName::_internal_mutable_name_or_alias() {
+inline std::string* ServiceName::_internal_mutable_token() {
   
-  return name_or_alias_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+  return token_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* ServiceName::release_name_or_alias() {
-  // @@protoc_insertion_point(field_release:ServiceName.name_or_alias)
-  return name_or_alias_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+inline std::string* ServiceName::release_token() {
+  // @@protoc_insertion_point(field_release:ServiceName.token)
+  return token_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void ServiceName::set_allocated_name_or_alias(std::string* name_or_alias) {
-  if (name_or_alias != nullptr) {
+inline void ServiceName::set_allocated_token(std::string* token) {
+  if (token != nullptr) {
     
   } else {
     
   }
-  name_or_alias_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name_or_alias,
+  token_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), token,
       GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (name_or_alias_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    name_or_alias_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  if (token_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    token_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServiceName.name_or_alias)
-}
-
-// int32 type = 2;
-inline void ServiceName::clear_type() {
-  type_ = 0;
-}
-inline int32_t ServiceName::_internal_type() const {
-  return type_;
-}
-inline int32_t ServiceName::type() const {
-  // @@protoc_insertion_point(field_get:ServiceName.type)
-  return _internal_type();
-}
-inline void ServiceName::_internal_set_type(int32_t value) {
-  
-  type_ = value;
-}
-inline void ServiceName::set_type(int32_t value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:ServiceName.type)
+  // @@protoc_insertion_point(field_set_allocated:ServiceName.token)
 }
 
 // -------------------------------------------------------------------
 
-// ServiceInformation
+// ServiceParams
 
-// string service = 1;
-inline void ServiceInformation::clear_service() {
+// int32 service_num = 1;
+inline void ServiceParams::clear_service_num() {
+  service_num_ = 0;
+}
+inline int32_t ServiceParams::_internal_service_num() const {
+  return service_num_;
+}
+inline int32_t ServiceParams::service_num() const {
+  // @@protoc_insertion_point(field_get:ServiceParams.service_num)
+  return _internal_service_num();
+}
+inline void ServiceParams::_internal_set_service_num(int32_t value) {
+  
+  service_num_ = value;
+}
+inline void ServiceParams::set_service_num(int32_t value) {
+  _internal_set_service_num(value);
+  // @@protoc_insertion_point(field_set:ServiceParams.service_num)
+}
+
+// string service = 2;
+inline void ServiceParams::clear_service() {
   service_.ClearToEmpty();
 }
-inline const std::string& ServiceInformation::service() const {
-  // @@protoc_insertion_point(field_get:ServiceInformation.service)
+inline const std::string& ServiceParams::service() const {
+  // @@protoc_insertion_point(field_get:ServiceParams.service)
   return _internal_service();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void ServiceInformation::set_service(ArgT0&& arg0, ArgT... args) {
+void ServiceParams::set_service(ArgT0&& arg0, ArgT... args) {
  
  service_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:ServiceInformation.service)
+  // @@protoc_insertion_point(field_set:ServiceParams.service)
 }
-inline std::string* ServiceInformation::mutable_service() {
+inline std::string* ServiceParams::mutable_service() {
   std::string* _s = _internal_mutable_service();
-  // @@protoc_insertion_point(field_mutable:ServiceInformation.service)
+  // @@protoc_insertion_point(field_mutable:ServiceParams.service)
   return _s;
 }
-inline const std::string& ServiceInformation::_internal_service() const {
+inline const std::string& ServiceParams::_internal_service() const {
   return service_.Get();
 }
-inline void ServiceInformation::_internal_set_service(const std::string& value) {
+inline void ServiceParams::_internal_set_service(const std::string& value) {
   
   service_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* ServiceInformation::_internal_mutable_service() {
+inline std::string* ServiceParams::_internal_mutable_service() {
   
   return service_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* ServiceInformation::release_service() {
-  // @@protoc_insertion_point(field_release:ServiceInformation.service)
+inline std::string* ServiceParams::release_service() {
+  // @@protoc_insertion_point(field_release:ServiceParams.service)
   return service_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void ServiceInformation::set_allocated_service(std::string* service) {
+inline void ServiceParams::set_allocated_service(std::string* service) {
   if (service != nullptr) {
     
   } else {
@@ -1831,925 +1195,262 @@ inline void ServiceInformation::set_allocated_service(std::string* service) {
     service_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServiceInformation.service)
-}
-
-// string alias = 2;
-inline void ServiceInformation::clear_alias() {
-  alias_.ClearToEmpty();
-}
-inline const std::string& ServiceInformation::alias() const {
-  // @@protoc_insertion_point(field_get:ServiceInformation.alias)
-  return _internal_alias();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ServiceInformation::set_alias(ArgT0&& arg0, ArgT... args) {
- 
- alias_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:ServiceInformation.alias)
-}
-inline std::string* ServiceInformation::mutable_alias() {
-  std::string* _s = _internal_mutable_alias();
-  // @@protoc_insertion_point(field_mutable:ServiceInformation.alias)
-  return _s;
-}
-inline const std::string& ServiceInformation::_internal_alias() const {
-  return alias_.Get();
-}
-inline void ServiceInformation::_internal_set_alias(const std::string& value) {
-  
-  alias_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* ServiceInformation::_internal_mutable_alias() {
-  
-  return alias_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* ServiceInformation::release_alias() {
-  // @@protoc_insertion_point(field_release:ServiceInformation.alias)
-  return alias_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void ServiceInformation::set_allocated_alias(std::string* alias) {
-  if (alias != nullptr) {
-    
-  } else {
-    
-  }
-  alias_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), alias,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (alias_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    alias_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServiceInformation.alias)
+  // @@protoc_insertion_point(field_set_allocated:ServiceParams.service)
 }
 
 // int32 type = 3;
-inline void ServiceInformation::clear_type() {
+inline void ServiceParams::clear_type() {
   type_ = 0;
 }
-inline int32_t ServiceInformation::_internal_type() const {
+inline int32_t ServiceParams::_internal_type() const {
   return type_;
 }
-inline int32_t ServiceInformation::type() const {
-  // @@protoc_insertion_point(field_get:ServiceInformation.type)
+inline int32_t ServiceParams::type() const {
+  // @@protoc_insertion_point(field_get:ServiceParams.type)
   return _internal_type();
 }
-inline void ServiceInformation::_internal_set_type(int32_t value) {
+inline void ServiceParams::_internal_set_type(int32_t value) {
   
   type_ = value;
 }
-inline void ServiceInformation::set_type(int32_t value) {
+inline void ServiceParams::set_type(int32_t value) {
   _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:ServiceInformation.type)
+  // @@protoc_insertion_point(field_set:ServiceParams.type)
 }
 
 // repeated string exe_params = 4;
-inline int ServiceInformation::_internal_exe_params_size() const {
+inline int ServiceParams::_internal_exe_params_size() const {
   return exe_params_.size();
 }
-inline int ServiceInformation::exe_params_size() const {
+inline int ServiceParams::exe_params_size() const {
   return _internal_exe_params_size();
 }
-inline void ServiceInformation::clear_exe_params() {
+inline void ServiceParams::clear_exe_params() {
   exe_params_.Clear();
 }
-inline std::string* ServiceInformation::add_exe_params() {
+inline std::string* ServiceParams::add_exe_params() {
   std::string* _s = _internal_add_exe_params();
-  // @@protoc_insertion_point(field_add_mutable:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_add_mutable:ServiceParams.exe_params)
   return _s;
 }
-inline const std::string& ServiceInformation::_internal_exe_params(int index) const {
+inline const std::string& ServiceParams::_internal_exe_params(int index) const {
   return exe_params_.Get(index);
 }
-inline const std::string& ServiceInformation::exe_params(int index) const {
-  // @@protoc_insertion_point(field_get:ServiceInformation.exe_params)
+inline const std::string& ServiceParams::exe_params(int index) const {
+  // @@protoc_insertion_point(field_get:ServiceParams.exe_params)
   return _internal_exe_params(index);
 }
-inline std::string* ServiceInformation::mutable_exe_params(int index) {
-  // @@protoc_insertion_point(field_mutable:ServiceInformation.exe_params)
+inline std::string* ServiceParams::mutable_exe_params(int index) {
+  // @@protoc_insertion_point(field_mutable:ServiceParams.exe_params)
   return exe_params_.Mutable(index);
 }
-inline void ServiceInformation::set_exe_params(int index, const std::string& value) {
+inline void ServiceParams::set_exe_params(int index, const std::string& value) {
   exe_params_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_set:ServiceParams.exe_params)
 }
-inline void ServiceInformation::set_exe_params(int index, std::string&& value) {
+inline void ServiceParams::set_exe_params(int index, std::string&& value) {
   exe_params_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_set:ServiceParams.exe_params)
 }
-inline void ServiceInformation::set_exe_params(int index, const char* value) {
+inline void ServiceParams::set_exe_params(int index, const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   exe_params_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_set_char:ServiceParams.exe_params)
 }
-inline void ServiceInformation::set_exe_params(int index, const char* value, size_t size) {
+inline void ServiceParams::set_exe_params(int index, const char* value, size_t size) {
   exe_params_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_set_pointer:ServiceParams.exe_params)
 }
-inline std::string* ServiceInformation::_internal_add_exe_params() {
+inline std::string* ServiceParams::_internal_add_exe_params() {
   return exe_params_.Add();
 }
-inline void ServiceInformation::add_exe_params(const std::string& value) {
+inline void ServiceParams::add_exe_params(const std::string& value) {
   exe_params_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_add:ServiceParams.exe_params)
 }
-inline void ServiceInformation::add_exe_params(std::string&& value) {
+inline void ServiceParams::add_exe_params(std::string&& value) {
   exe_params_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_add:ServiceParams.exe_params)
 }
-inline void ServiceInformation::add_exe_params(const char* value) {
+inline void ServiceParams::add_exe_params(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   exe_params_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_add_char:ServiceParams.exe_params)
 }
-inline void ServiceInformation::add_exe_params(const char* value, size_t size) {
+inline void ServiceParams::add_exe_params(const char* value, size_t size) {
   exe_params_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:ServiceInformation.exe_params)
+  // @@protoc_insertion_point(field_add_pointer:ServiceParams.exe_params)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-ServiceInformation::exe_params() const {
-  // @@protoc_insertion_point(field_list:ServiceInformation.exe_params)
+ServiceParams::exe_params() const {
+  // @@protoc_insertion_point(field_list:ServiceParams.exe_params)
   return exe_params_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-ServiceInformation::mutable_exe_params() {
-  // @@protoc_insertion_point(field_mutable_list:ServiceInformation.exe_params)
+ServiceParams::mutable_exe_params() {
+  // @@protoc_insertion_point(field_mutable_list:ServiceParams.exe_params)
   return &exe_params_;
 }
 
 // repeated string docker_params = 5;
-inline int ServiceInformation::_internal_docker_params_size() const {
+inline int ServiceParams::_internal_docker_params_size() const {
   return docker_params_.size();
 }
-inline int ServiceInformation::docker_params_size() const {
+inline int ServiceParams::docker_params_size() const {
   return _internal_docker_params_size();
 }
-inline void ServiceInformation::clear_docker_params() {
+inline void ServiceParams::clear_docker_params() {
   docker_params_.Clear();
 }
-inline std::string* ServiceInformation::add_docker_params() {
+inline std::string* ServiceParams::add_docker_params() {
   std::string* _s = _internal_add_docker_params();
-  // @@protoc_insertion_point(field_add_mutable:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_add_mutable:ServiceParams.docker_params)
   return _s;
 }
-inline const std::string& ServiceInformation::_internal_docker_params(int index) const {
+inline const std::string& ServiceParams::_internal_docker_params(int index) const {
   return docker_params_.Get(index);
 }
-inline const std::string& ServiceInformation::docker_params(int index) const {
-  // @@protoc_insertion_point(field_get:ServiceInformation.docker_params)
+inline const std::string& ServiceParams::docker_params(int index) const {
+  // @@protoc_insertion_point(field_get:ServiceParams.docker_params)
   return _internal_docker_params(index);
 }
-inline std::string* ServiceInformation::mutable_docker_params(int index) {
-  // @@protoc_insertion_point(field_mutable:ServiceInformation.docker_params)
+inline std::string* ServiceParams::mutable_docker_params(int index) {
+  // @@protoc_insertion_point(field_mutable:ServiceParams.docker_params)
   return docker_params_.Mutable(index);
 }
-inline void ServiceInformation::set_docker_params(int index, const std::string& value) {
+inline void ServiceParams::set_docker_params(int index, const std::string& value) {
   docker_params_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_set:ServiceParams.docker_params)
 }
-inline void ServiceInformation::set_docker_params(int index, std::string&& value) {
+inline void ServiceParams::set_docker_params(int index, std::string&& value) {
   docker_params_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_set:ServiceParams.docker_params)
 }
-inline void ServiceInformation::set_docker_params(int index, const char* value) {
+inline void ServiceParams::set_docker_params(int index, const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   docker_params_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_set_char:ServiceParams.docker_params)
 }
-inline void ServiceInformation::set_docker_params(int index, const char* value, size_t size) {
+inline void ServiceParams::set_docker_params(int index, const char* value, size_t size) {
   docker_params_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_set_pointer:ServiceParams.docker_params)
 }
-inline std::string* ServiceInformation::_internal_add_docker_params() {
+inline std::string* ServiceParams::_internal_add_docker_params() {
   return docker_params_.Add();
 }
-inline void ServiceInformation::add_docker_params(const std::string& value) {
+inline void ServiceParams::add_docker_params(const std::string& value) {
   docker_params_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_add:ServiceParams.docker_params)
 }
-inline void ServiceInformation::add_docker_params(std::string&& value) {
+inline void ServiceParams::add_docker_params(std::string&& value) {
   docker_params_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_add:ServiceParams.docker_params)
 }
-inline void ServiceInformation::add_docker_params(const char* value) {
+inline void ServiceParams::add_docker_params(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   docker_params_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_add_char:ServiceParams.docker_params)
 }
-inline void ServiceInformation::add_docker_params(const char* value, size_t size) {
+inline void ServiceParams::add_docker_params(const char* value, size_t size) {
   docker_params_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:ServiceInformation.docker_params)
+  // @@protoc_insertion_point(field_add_pointer:ServiceParams.docker_params)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-ServiceInformation::docker_params() const {
-  // @@protoc_insertion_point(field_list:ServiceInformation.docker_params)
+ServiceParams::docker_params() const {
+  // @@protoc_insertion_point(field_list:ServiceParams.docker_params)
   return docker_params_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-ServiceInformation::mutable_docker_params() {
-  // @@protoc_insertion_point(field_mutable_list:ServiceInformation.docker_params)
+ServiceParams::mutable_docker_params() {
+  // @@protoc_insertion_point(field_mutable_list:ServiceParams.docker_params)
   return &docker_params_;
 }
 
 // int32 restart = 6;
-inline void ServiceInformation::clear_restart() {
+inline void ServiceParams::clear_restart() {
   restart_ = 0;
 }
-inline int32_t ServiceInformation::_internal_restart() const {
+inline int32_t ServiceParams::_internal_restart() const {
   return restart_;
 }
-inline int32_t ServiceInformation::restart() const {
-  // @@protoc_insertion_point(field_get:ServiceInformation.restart)
+inline int32_t ServiceParams::restart() const {
+  // @@protoc_insertion_point(field_get:ServiceParams.restart)
   return _internal_restart();
 }
-inline void ServiceInformation::_internal_set_restart(int32_t value) {
+inline void ServiceParams::_internal_set_restart(int32_t value) {
   
   restart_ = value;
 }
-inline void ServiceInformation::set_restart(int32_t value) {
+inline void ServiceParams::set_restart(int32_t value) {
   _internal_set_restart(value);
-  // @@protoc_insertion_point(field_set:ServiceInformation.restart)
+  // @@protoc_insertion_point(field_set:ServiceParams.restart)
 }
 
 // int32 port = 7;
-inline void ServiceInformation::clear_port() {
+inline void ServiceParams::clear_port() {
   port_ = 0;
 }
-inline int32_t ServiceInformation::_internal_port() const {
+inline int32_t ServiceParams::_internal_port() const {
   return port_;
 }
-inline int32_t ServiceInformation::port() const {
-  // @@protoc_insertion_point(field_get:ServiceInformation.port)
+inline int32_t ServiceParams::port() const {
+  // @@protoc_insertion_point(field_get:ServiceParams.port)
   return _internal_port();
 }
-inline void ServiceInformation::_internal_set_port(int32_t value) {
+inline void ServiceParams::_internal_set_port(int32_t value) {
   
   port_ = value;
 }
-inline void ServiceInformation::set_port(int32_t value) {
+inline void ServiceParams::set_port(int32_t value) {
   _internal_set_port(value);
-  // @@protoc_insertion_point(field_set:ServiceInformation.port)
+  // @@protoc_insertion_point(field_set:ServiceParams.port)
 }
 
 // -------------------------------------------------------------------
 
-// ServiceList
+// ServiceInfo
 
-// repeated .ServiceInformation services = 1;
-inline int ServiceList::_internal_services_size() const {
-  return services_.size();
+// .ServiceName name = 1;
+inline bool ServiceInfo::_internal_has_name() const {
+  return this != internal_default_instance() && name_ != nullptr;
 }
-inline int ServiceList::services_size() const {
-  return _internal_services_size();
+inline bool ServiceInfo::has_name() const {
+  return _internal_has_name();
 }
-inline void ServiceList::clear_services() {
-  services_.Clear();
-}
-inline ::ServiceInformation* ServiceList::mutable_services(int index) {
-  // @@protoc_insertion_point(field_mutable:ServiceList.services)
-  return services_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServiceInformation >*
-ServiceList::mutable_services() {
-  // @@protoc_insertion_point(field_mutable_list:ServiceList.services)
-  return &services_;
-}
-inline const ::ServiceInformation& ServiceList::_internal_services(int index) const {
-  return services_.Get(index);
-}
-inline const ::ServiceInformation& ServiceList::services(int index) const {
-  // @@protoc_insertion_point(field_get:ServiceList.services)
-  return _internal_services(index);
-}
-inline ::ServiceInformation* ServiceList::_internal_add_services() {
-  return services_.Add();
-}
-inline ::ServiceInformation* ServiceList::add_services() {
-  ::ServiceInformation* _add = _internal_add_services();
-  // @@protoc_insertion_point(field_add:ServiceList.services)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServiceInformation >&
-ServiceList::services() const {
-  // @@protoc_insertion_point(field_list:ServiceList.services)
-  return services_;
-}
-
-// -------------------------------------------------------------------
-
-// CreateOrDeleteEcho
-
-// bool fail = 1;
-inline void CreateOrDeleteEcho::clear_fail() {
-  fail_ = false;
-}
-inline bool CreateOrDeleteEcho::_internal_fail() const {
-  return fail_;
-}
-inline bool CreateOrDeleteEcho::fail() const {
-  // @@protoc_insertion_point(field_get:CreateOrDeleteEcho.fail)
-  return _internal_fail();
-}
-inline void CreateOrDeleteEcho::_internal_set_fail(bool value) {
-  
-  fail_ = value;
-}
-inline void CreateOrDeleteEcho::set_fail(bool value) {
-  _internal_set_fail(value);
-  // @@protoc_insertion_point(field_set:CreateOrDeleteEcho.fail)
-}
-
-// string info = 2;
-inline void CreateOrDeleteEcho::clear_info() {
-  info_.ClearToEmpty();
-}
-inline const std::string& CreateOrDeleteEcho::info() const {
-  // @@protoc_insertion_point(field_get:CreateOrDeleteEcho.info)
-  return _internal_info();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void CreateOrDeleteEcho::set_info(ArgT0&& arg0, ArgT... args) {
- 
- info_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:CreateOrDeleteEcho.info)
-}
-inline std::string* CreateOrDeleteEcho::mutable_info() {
-  std::string* _s = _internal_mutable_info();
-  // @@protoc_insertion_point(field_mutable:CreateOrDeleteEcho.info)
-  return _s;
-}
-inline const std::string& CreateOrDeleteEcho::_internal_info() const {
-  return info_.Get();
-}
-inline void CreateOrDeleteEcho::_internal_set_info(const std::string& value) {
-  
-  info_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* CreateOrDeleteEcho::_internal_mutable_info() {
-  
-  return info_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* CreateOrDeleteEcho::release_info() {
-  // @@protoc_insertion_point(field_release:CreateOrDeleteEcho.info)
-  return info_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void CreateOrDeleteEcho::set_allocated_info(std::string* info) {
-  if (info != nullptr) {
-    
-  } else {
-    
+inline void ServiceInfo::clear_name() {
+  if (GetArenaForAllocation() == nullptr && name_ != nullptr) {
+    delete name_;
   }
-  info_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), info,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (info_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    info_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:CreateOrDeleteEcho.info)
-}
-
-// -------------------------------------------------------------------
-
-// TransferInfo
-
-// string alias = 1;
-inline void TransferInfo::clear_alias() {
-  alias_.ClearToEmpty();
-}
-inline const std::string& TransferInfo::alias() const {
-  // @@protoc_insertion_point(field_get:TransferInfo.alias)
-  return _internal_alias();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TransferInfo::set_alias(ArgT0&& arg0, ArgT... args) {
- 
- alias_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:TransferInfo.alias)
-}
-inline std::string* TransferInfo::mutable_alias() {
-  std::string* _s = _internal_mutable_alias();
-  // @@protoc_insertion_point(field_mutable:TransferInfo.alias)
-  return _s;
-}
-inline const std::string& TransferInfo::_internal_alias() const {
-  return alias_.Get();
-}
-inline void TransferInfo::_internal_set_alias(const std::string& value) {
-  
-  alias_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* TransferInfo::_internal_mutable_alias() {
-  
-  return alias_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* TransferInfo::release_alias() {
-  // @@protoc_insertion_point(field_release:TransferInfo.alias)
-  return alias_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void TransferInfo::set_allocated_alias(std::string* alias) {
-  if (alias != nullptr) {
-    
-  } else {
-    
-  }
-  alias_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), alias,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (alias_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    alias_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:TransferInfo.alias)
-}
-
-// string address = 2;
-inline void TransferInfo::clear_address() {
-  address_.ClearToEmpty();
-}
-inline const std::string& TransferInfo::address() const {
-  // @@protoc_insertion_point(field_get:TransferInfo.address)
-  return _internal_address();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TransferInfo::set_address(ArgT0&& arg0, ArgT... args) {
- 
- address_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:TransferInfo.address)
-}
-inline std::string* TransferInfo::mutable_address() {
-  std::string* _s = _internal_mutable_address();
-  // @@protoc_insertion_point(field_mutable:TransferInfo.address)
-  return _s;
-}
-inline const std::string& TransferInfo::_internal_address() const {
-  return address_.Get();
-}
-inline void TransferInfo::_internal_set_address(const std::string& value) {
-  
-  address_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* TransferInfo::_internal_mutable_address() {
-  
-  return address_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* TransferInfo::release_address() {
-  // @@protoc_insertion_point(field_release:TransferInfo.address)
-  return address_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void TransferInfo::set_allocated_address(std::string* address) {
-  if (address != nullptr) {
-    
-  } else {
-    
-  }
-  address_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), address,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (address_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    address_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:TransferInfo.address)
-}
-
-// -------------------------------------------------------------------
-
-// ServiceGroupName
-
-// string token = 1;
-inline void ServiceGroupName::clear_token() {
-  token_.ClearToEmpty();
-}
-inline const std::string& ServiceGroupName::token() const {
-  // @@protoc_insertion_point(field_get:ServiceGroupName.token)
-  return _internal_token();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ServiceGroupName::set_token(ArgT0&& arg0, ArgT... args) {
- 
- token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:ServiceGroupName.token)
-}
-inline std::string* ServiceGroupName::mutable_token() {
-  std::string* _s = _internal_mutable_token();
-  // @@protoc_insertion_point(field_mutable:ServiceGroupName.token)
-  return _s;
-}
-inline const std::string& ServiceGroupName::_internal_token() const {
-  return token_.Get();
-}
-inline void ServiceGroupName::_internal_set_token(const std::string& value) {
-  
-  token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* ServiceGroupName::_internal_mutable_token() {
-  
-  return token_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* ServiceGroupName::release_token() {
-  // @@protoc_insertion_point(field_release:ServiceGroupName.token)
-  return token_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void ServiceGroupName::set_allocated_token(std::string* token) {
-  if (token != nullptr) {
-    
-  } else {
-    
-  }
-  token_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), token,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (token_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    token_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServiceGroupName.token)
-}
-
-// int32 service_num = 2;
-inline void ServiceGroupName::clear_service_num() {
-  service_num_ = 0;
-}
-inline int32_t ServiceGroupName::_internal_service_num() const {
-  return service_num_;
-}
-inline int32_t ServiceGroupName::service_num() const {
-  // @@protoc_insertion_point(field_get:ServiceGroupName.service_num)
-  return _internal_service_num();
-}
-inline void ServiceGroupName::_internal_set_service_num(int32_t value) {
-  
-  service_num_ = value;
-}
-inline void ServiceGroupName::set_service_num(int32_t value) {
-  _internal_set_service_num(value);
-  // @@protoc_insertion_point(field_set:ServiceGroupName.service_num)
-}
-
-// string service = 3;
-inline void ServiceGroupName::clear_service() {
-  service_.ClearToEmpty();
-}
-inline const std::string& ServiceGroupName::service() const {
-  // @@protoc_insertion_point(field_get:ServiceGroupName.service)
-  return _internal_service();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ServiceGroupName::set_service(ArgT0&& arg0, ArgT... args) {
- 
- service_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:ServiceGroupName.service)
-}
-inline std::string* ServiceGroupName::mutable_service() {
-  std::string* _s = _internal_mutable_service();
-  // @@protoc_insertion_point(field_mutable:ServiceGroupName.service)
-  return _s;
-}
-inline const std::string& ServiceGroupName::_internal_service() const {
-  return service_.Get();
-}
-inline void ServiceGroupName::_internal_set_service(const std::string& value) {
-  
-  service_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* ServiceGroupName::_internal_mutable_service() {
-  
-  return service_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* ServiceGroupName::release_service() {
-  // @@protoc_insertion_point(field_release:ServiceGroupName.service)
-  return service_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void ServiceGroupName::set_allocated_service(std::string* service) {
-  if (service != nullptr) {
-    
-  } else {
-    
-  }
-  service_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), service,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (service_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    service_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServiceGroupName.service)
-}
-
-// int32 type = 4;
-inline void ServiceGroupName::clear_type() {
-  type_ = 0;
-}
-inline int32_t ServiceGroupName::_internal_type() const {
-  return type_;
-}
-inline int32_t ServiceGroupName::type() const {
-  // @@protoc_insertion_point(field_get:ServiceGroupName.type)
-  return _internal_type();
-}
-inline void ServiceGroupName::_internal_set_type(int32_t value) {
-  
-  type_ = value;
-}
-inline void ServiceGroupName::set_type(int32_t value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:ServiceGroupName.type)
-}
-
-// repeated string exe_params = 5;
-inline int ServiceGroupName::_internal_exe_params_size() const {
-  return exe_params_.size();
-}
-inline int ServiceGroupName::exe_params_size() const {
-  return _internal_exe_params_size();
-}
-inline void ServiceGroupName::clear_exe_params() {
-  exe_params_.Clear();
-}
-inline std::string* ServiceGroupName::add_exe_params() {
-  std::string* _s = _internal_add_exe_params();
-  // @@protoc_insertion_point(field_add_mutable:ServiceGroupName.exe_params)
-  return _s;
-}
-inline const std::string& ServiceGroupName::_internal_exe_params(int index) const {
-  return exe_params_.Get(index);
-}
-inline const std::string& ServiceGroupName::exe_params(int index) const {
-  // @@protoc_insertion_point(field_get:ServiceGroupName.exe_params)
-  return _internal_exe_params(index);
-}
-inline std::string* ServiceGroupName::mutable_exe_params(int index) {
-  // @@protoc_insertion_point(field_mutable:ServiceGroupName.exe_params)
-  return exe_params_.Mutable(index);
-}
-inline void ServiceGroupName::set_exe_params(int index, const std::string& value) {
-  exe_params_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set:ServiceGroupName.exe_params)
-}
-inline void ServiceGroupName::set_exe_params(int index, std::string&& value) {
-  exe_params_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:ServiceGroupName.exe_params)
-}
-inline void ServiceGroupName::set_exe_params(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  exe_params_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:ServiceGroupName.exe_params)
-}
-inline void ServiceGroupName::set_exe_params(int index, const char* value, size_t size) {
-  exe_params_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:ServiceGroupName.exe_params)
-}
-inline std::string* ServiceGroupName::_internal_add_exe_params() {
-  return exe_params_.Add();
-}
-inline void ServiceGroupName::add_exe_params(const std::string& value) {
-  exe_params_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:ServiceGroupName.exe_params)
-}
-inline void ServiceGroupName::add_exe_params(std::string&& value) {
-  exe_params_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:ServiceGroupName.exe_params)
-}
-inline void ServiceGroupName::add_exe_params(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  exe_params_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:ServiceGroupName.exe_params)
-}
-inline void ServiceGroupName::add_exe_params(const char* value, size_t size) {
-  exe_params_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:ServiceGroupName.exe_params)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-ServiceGroupName::exe_params() const {
-  // @@protoc_insertion_point(field_list:ServiceGroupName.exe_params)
-  return exe_params_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-ServiceGroupName::mutable_exe_params() {
-  // @@protoc_insertion_point(field_mutable_list:ServiceGroupName.exe_params)
-  return &exe_params_;
-}
-
-// repeated string docker_params = 6;
-inline int ServiceGroupName::_internal_docker_params_size() const {
-  return docker_params_.size();
-}
-inline int ServiceGroupName::docker_params_size() const {
-  return _internal_docker_params_size();
-}
-inline void ServiceGroupName::clear_docker_params() {
-  docker_params_.Clear();
-}
-inline std::string* ServiceGroupName::add_docker_params() {
-  std::string* _s = _internal_add_docker_params();
-  // @@protoc_insertion_point(field_add_mutable:ServiceGroupName.docker_params)
-  return _s;
-}
-inline const std::string& ServiceGroupName::_internal_docker_params(int index) const {
-  return docker_params_.Get(index);
-}
-inline const std::string& ServiceGroupName::docker_params(int index) const {
-  // @@protoc_insertion_point(field_get:ServiceGroupName.docker_params)
-  return _internal_docker_params(index);
-}
-inline std::string* ServiceGroupName::mutable_docker_params(int index) {
-  // @@protoc_insertion_point(field_mutable:ServiceGroupName.docker_params)
-  return docker_params_.Mutable(index);
-}
-inline void ServiceGroupName::set_docker_params(int index, const std::string& value) {
-  docker_params_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set:ServiceGroupName.docker_params)
-}
-inline void ServiceGroupName::set_docker_params(int index, std::string&& value) {
-  docker_params_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:ServiceGroupName.docker_params)
-}
-inline void ServiceGroupName::set_docker_params(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  docker_params_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:ServiceGroupName.docker_params)
-}
-inline void ServiceGroupName::set_docker_params(int index, const char* value, size_t size) {
-  docker_params_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:ServiceGroupName.docker_params)
-}
-inline std::string* ServiceGroupName::_internal_add_docker_params() {
-  return docker_params_.Add();
-}
-inline void ServiceGroupName::add_docker_params(const std::string& value) {
-  docker_params_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:ServiceGroupName.docker_params)
-}
-inline void ServiceGroupName::add_docker_params(std::string&& value) {
-  docker_params_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:ServiceGroupName.docker_params)
-}
-inline void ServiceGroupName::add_docker_params(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  docker_params_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:ServiceGroupName.docker_params)
-}
-inline void ServiceGroupName::add_docker_params(const char* value, size_t size) {
-  docker_params_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:ServiceGroupName.docker_params)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-ServiceGroupName::docker_params() const {
-  // @@protoc_insertion_point(field_list:ServiceGroupName.docker_params)
-  return docker_params_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-ServiceGroupName::mutable_docker_params() {
-  // @@protoc_insertion_point(field_mutable_list:ServiceGroupName.docker_params)
-  return &docker_params_;
-}
-
-// int32 restart = 7;
-inline void ServiceGroupName::clear_restart() {
-  restart_ = 0;
-}
-inline int32_t ServiceGroupName::_internal_restart() const {
-  return restart_;
-}
-inline int32_t ServiceGroupName::restart() const {
-  // @@protoc_insertion_point(field_get:ServiceGroupName.restart)
-  return _internal_restart();
-}
-inline void ServiceGroupName::_internal_set_restart(int32_t value) {
-  
-  restart_ = value;
-}
-inline void ServiceGroupName::set_restart(int32_t value) {
-  _internal_set_restart(value);
-  // @@protoc_insertion_point(field_set:ServiceGroupName.restart)
-}
-
-// -------------------------------------------------------------------
-
-// ServiceGroup
-
-// string token = 1;
-inline void ServiceGroup::clear_token() {
-  token_.ClearToEmpty();
-}
-inline const std::string& ServiceGroup::token() const {
-  // @@protoc_insertion_point(field_get:ServiceGroup.token)
-  return _internal_token();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ServiceGroup::set_token(ArgT0&& arg0, ArgT... args) {
- 
- token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:ServiceGroup.token)
-}
-inline std::string* ServiceGroup::mutable_token() {
-  std::string* _s = _internal_mutable_token();
-  // @@protoc_insertion_point(field_mutable:ServiceGroup.token)
-  return _s;
-}
-inline const std::string& ServiceGroup::_internal_token() const {
-  return token_.Get();
-}
-inline void ServiceGroup::_internal_set_token(const std::string& value) {
-  
-  token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* ServiceGroup::_internal_mutable_token() {
-  
-  return token_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* ServiceGroup::release_token() {
-  // @@protoc_insertion_point(field_release:ServiceGroup.token)
-  return token_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void ServiceGroup::set_allocated_token(std::string* token) {
-  if (token != nullptr) {
-    
-  } else {
-    
-  }
-  token_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), token,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (token_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    token_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServiceGroup.token)
-}
-
-// int32 service_num = 2;
-inline void ServiceGroup::clear_service_num() {
-  service_num_ = 0;
-}
-inline int32_t ServiceGroup::_internal_service_num() const {
-  return service_num_;
-}
-inline int32_t ServiceGroup::service_num() const {
-  // @@protoc_insertion_point(field_get:ServiceGroup.service_num)
-  return _internal_service_num();
-}
-inline void ServiceGroup::_internal_set_service_num(int32_t value) {
-  
-  service_num_ = value;
-}
-inline void ServiceGroup::set_service_num(int32_t value) {
-  _internal_set_service_num(value);
-  // @@protoc_insertion_point(field_set:ServiceGroup.service_num)
-}
-
-// .ServiceList service_list = 3;
-inline bool ServiceGroup::_internal_has_service_list() const {
-  return this != internal_default_instance() && service_list_ != nullptr;
-}
-inline bool ServiceGroup::has_service_list() const {
-  return _internal_has_service_list();
-}
-inline void ServiceGroup::clear_service_list() {
-  if (GetArenaForAllocation() == nullptr && service_list_ != nullptr) {
-    delete service_list_;
-  }
-  service_list_ = nullptr;
-}
-inline const ::ServiceList& ServiceGroup::_internal_service_list() const {
-  const ::ServiceList* p = service_list_;
-  return p != nullptr ? *p : reinterpret_cast<const ::ServiceList&>(
-      ::_ServiceList_default_instance_);
-}
-inline const ::ServiceList& ServiceGroup::service_list() const {
-  // @@protoc_insertion_point(field_get:ServiceGroup.service_list)
-  return _internal_service_list();
-}
-inline void ServiceGroup::unsafe_arena_set_allocated_service_list(
-    ::ServiceList* service_list) {
+  name_ = nullptr;
+}
+inline const ::ServiceName& ServiceInfo::_internal_name() const {
+  const ::ServiceName* p = name_;
+  return p != nullptr ? *p : reinterpret_cast<const ::ServiceName&>(
+      ::_ServiceName_default_instance_);
+}
+inline const ::ServiceName& ServiceInfo::name() const {
+  // @@protoc_insertion_point(field_get:ServiceInfo.name)
+  return _internal_name();
+}
+inline void ServiceInfo::unsafe_arena_set_allocated_name(
+    ::ServiceName* name) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(service_list_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(name_);
   }
-  service_list_ = service_list;
-  if (service_list) {
+  name_ = name;
+  if (name) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServiceGroup.service_list)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServiceInfo.name)
 }
-inline ::ServiceList* ServiceGroup::release_service_list() {
+inline ::ServiceName* ServiceInfo::release_name() {
   
-  ::ServiceList* temp = service_list_;
-  service_list_ = nullptr;
+  ::ServiceName* temp = name_;
+  name_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -2761,134 +1462,324 @@ inline ::ServiceList* ServiceGroup::release_service_list() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::ServiceList* ServiceGroup::unsafe_arena_release_service_list() {
-  // @@protoc_insertion_point(field_release:ServiceGroup.service_list)
+inline ::ServiceName* ServiceInfo::unsafe_arena_release_name() {
+  // @@protoc_insertion_point(field_release:ServiceInfo.name)
   
-  ::ServiceList* temp = service_list_;
-  service_list_ = nullptr;
+  ::ServiceName* temp = name_;
+  name_ = nullptr;
   return temp;
 }
-inline ::ServiceList* ServiceGroup::_internal_mutable_service_list() {
+inline ::ServiceName* ServiceInfo::_internal_mutable_name() {
   
-  if (service_list_ == nullptr) {
-    auto* p = CreateMaybeMessage<::ServiceList>(GetArenaForAllocation());
-    service_list_ = p;
+  if (name_ == nullptr) {
+    auto* p = CreateMaybeMessage<::ServiceName>(GetArenaForAllocation());
+    name_ = p;
   }
-  return service_list_;
+  return name_;
 }
-inline ::ServiceList* ServiceGroup::mutable_service_list() {
-  ::ServiceList* _msg = _internal_mutable_service_list();
-  // @@protoc_insertion_point(field_mutable:ServiceGroup.service_list)
+inline ::ServiceName* ServiceInfo::mutable_name() {
+  ::ServiceName* _msg = _internal_mutable_name();
+  // @@protoc_insertion_point(field_mutable:ServiceInfo.name)
   return _msg;
 }
-inline void ServiceGroup::set_allocated_service_list(::ServiceList* service_list) {
+inline void ServiceInfo::set_allocated_name(::ServiceName* name) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete service_list_;
+    delete name_;
   }
-  if (service_list) {
+  if (name) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::ServiceList>::GetOwningArena(service_list);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::ServiceName>::GetOwningArena(name);
     if (message_arena != submessage_arena) {
-      service_list = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, service_list, submessage_arena);
+      name = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, name, submessage_arena);
     }
     
   } else {
     
   }
-  service_list_ = service_list;
-  // @@protoc_insertion_point(field_set_allocated:ServiceGroup.service_list)
+  name_ = name;
+  // @@protoc_insertion_point(field_set_allocated:ServiceInfo.name)
+}
+
+// .ServiceParams params = 2;
+inline bool ServiceInfo::_internal_has_params() const {
+  return this != internal_default_instance() && params_ != nullptr;
+}
+inline bool ServiceInfo::has_params() const {
+  return _internal_has_params();
+}
+inline void ServiceInfo::clear_params() {
+  if (GetArenaForAllocation() == nullptr && params_ != nullptr) {
+    delete params_;
+  }
+  params_ = nullptr;
+}
+inline const ::ServiceParams& ServiceInfo::_internal_params() const {
+  const ::ServiceParams* p = params_;
+  return p != nullptr ? *p : reinterpret_cast<const ::ServiceParams&>(
+      ::_ServiceParams_default_instance_);
+}
+inline const ::ServiceParams& ServiceInfo::params() const {
+  // @@protoc_insertion_point(field_get:ServiceInfo.params)
+  return _internal_params();
+}
+inline void ServiceInfo::unsafe_arena_set_allocated_params(
+    ::ServiceParams* params) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(params_);
+  }
+  params_ = params;
+  if (params) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ServiceInfo.params)
+}
+inline ::ServiceParams* ServiceInfo::release_params() {
+  
+  ::ServiceParams* temp = params_;
+  params_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::ServiceParams* ServiceInfo::unsafe_arena_release_params() {
+  // @@protoc_insertion_point(field_release:ServiceInfo.params)
+  
+  ::ServiceParams* temp = params_;
+  params_ = nullptr;
+  return temp;
+}
+inline ::ServiceParams* ServiceInfo::_internal_mutable_params() {
+  
+  if (params_ == nullptr) {
+    auto* p = CreateMaybeMessage<::ServiceParams>(GetArenaForAllocation());
+    params_ = p;
+  }
+  return params_;
+}
+inline ::ServiceParams* ServiceInfo::mutable_params() {
+  ::ServiceParams* _msg = _internal_mutable_params();
+  // @@protoc_insertion_point(field_mutable:ServiceInfo.params)
+  return _msg;
+}
+inline void ServiceInfo::set_allocated_params(::ServiceParams* params) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete params_;
+  }
+  if (params) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::ServiceParams>::GetOwningArena(params);
+    if (message_arena != submessage_arena) {
+      params = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, params, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  params_ = params;
+  // @@protoc_insertion_point(field_set_allocated:ServiceInfo.params)
+}
+
+// -------------------------------------------------------------------
+
+// JsonMessage
+
+// string content = 1;
+inline void JsonMessage::clear_content() {
+  content_.ClearToEmpty();
+}
+inline const std::string& JsonMessage::content() const {
+  // @@protoc_insertion_point(field_get:JsonMessage.content)
+  return _internal_content();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void JsonMessage::set_content(ArgT0&& arg0, ArgT... args) {
+ 
+ content_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:JsonMessage.content)
+}
+inline std::string* JsonMessage::mutable_content() {
+  std::string* _s = _internal_mutable_content();
+  // @@protoc_insertion_point(field_mutable:JsonMessage.content)
+  return _s;
+}
+inline const std::string& JsonMessage::_internal_content() const {
+  return content_.Get();
+}
+inline void JsonMessage::_internal_set_content(const std::string& value) {
+  
+  content_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* JsonMessage::_internal_mutable_content() {
+  
+  return content_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* JsonMessage::release_content() {
+  // @@protoc_insertion_point(field_release:JsonMessage.content)
+  return content_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void JsonMessage::set_allocated_content(std::string* content) {
+  if (content != nullptr) {
+    
+  } else {
+    
+  }
+  content_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), content,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (content_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    content_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:JsonMessage.content)
 }
 
 // -------------------------------------------------------------------
 
 // AddressPool
 
-// repeated string address = 1;
-inline int AddressPool::_internal_address_size() const {
-  return address_.size();
+// string proxy_address = 1;
+inline void AddressPool::clear_proxy_address() {
+  proxy_address_.ClearToEmpty();
 }
-inline int AddressPool::address_size() const {
-  return _internal_address_size();
+inline const std::string& AddressPool::proxy_address() const {
+  // @@protoc_insertion_point(field_get:AddressPool.proxy_address)
+  return _internal_proxy_address();
 }
-inline void AddressPool::clear_address() {
-  address_.Clear();
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void AddressPool::set_proxy_address(ArgT0&& arg0, ArgT... args) {
+ 
+ proxy_address_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:AddressPool.proxy_address)
 }
-inline std::string* AddressPool::add_address() {
-  std::string* _s = _internal_add_address();
-  // @@protoc_insertion_point(field_add_mutable:AddressPool.address)
+inline std::string* AddressPool::mutable_proxy_address() {
+  std::string* _s = _internal_mutable_proxy_address();
+  // @@protoc_insertion_point(field_mutable:AddressPool.proxy_address)
   return _s;
 }
-inline const std::string& AddressPool::_internal_address(int index) const {
-  return address_.Get(index);
+inline const std::string& AddressPool::_internal_proxy_address() const {
+  return proxy_address_.Get();
 }
-inline const std::string& AddressPool::address(int index) const {
-  // @@protoc_insertion_point(field_get:AddressPool.address)
-  return _internal_address(index);
+inline void AddressPool::_internal_set_proxy_address(const std::string& value) {
+  
+  proxy_address_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* AddressPool::mutable_address(int index) {
-  // @@protoc_insertion_point(field_mutable:AddressPool.address)
-  return address_.Mutable(index);
+inline std::string* AddressPool::_internal_mutable_proxy_address() {
+  
+  return proxy_address_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline void AddressPool::set_address(int index, const std::string& value) {
-  address_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set:AddressPool.address)
+inline std::string* AddressPool::release_proxy_address() {
+  // @@protoc_insertion_point(field_release:AddressPool.proxy_address)
+  return proxy_address_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void AddressPool::set_address(int index, std::string&& value) {
-  address_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:AddressPool.address)
+inline void AddressPool::set_allocated_proxy_address(std::string* proxy_address) {
+  if (proxy_address != nullptr) {
+    
+  } else {
+    
+  }
+  proxy_address_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), proxy_address,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (proxy_address_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    proxy_address_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AddressPool.proxy_address)
 }
-inline void AddressPool::set_address(int index, const char* value) {
+
+// repeated string pod_address = 2;
+inline int AddressPool::_internal_pod_address_size() const {
+  return pod_address_.size();
+}
+inline int AddressPool::pod_address_size() const {
+  return _internal_pod_address_size();
+}
+inline void AddressPool::clear_pod_address() {
+  pod_address_.Clear();
+}
+inline std::string* AddressPool::add_pod_address() {
+  std::string* _s = _internal_add_pod_address();
+  // @@protoc_insertion_point(field_add_mutable:AddressPool.pod_address)
+  return _s;
+}
+inline const std::string& AddressPool::_internal_pod_address(int index) const {
+  return pod_address_.Get(index);
+}
+inline const std::string& AddressPool::pod_address(int index) const {
+  // @@protoc_insertion_point(field_get:AddressPool.pod_address)
+  return _internal_pod_address(index);
+}
+inline std::string* AddressPool::mutable_pod_address(int index) {
+  // @@protoc_insertion_point(field_mutable:AddressPool.pod_address)
+  return pod_address_.Mutable(index);
+}
+inline void AddressPool::set_pod_address(int index, const std::string& value) {
+  pod_address_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:AddressPool.pod_address)
+}
+inline void AddressPool::set_pod_address(int index, std::string&& value) {
+  pod_address_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:AddressPool.pod_address)
+}
+inline void AddressPool::set_pod_address(int index, const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  address_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:AddressPool.address)
+  pod_address_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:AddressPool.pod_address)
 }
-inline void AddressPool::set_address(int index, const char* value, size_t size) {
-  address_.Mutable(index)->assign(
+inline void AddressPool::set_pod_address(int index, const char* value, size_t size) {
+  pod_address_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:AddressPool.address)
+  // @@protoc_insertion_point(field_set_pointer:AddressPool.pod_address)
 }
-inline std::string* AddressPool::_internal_add_address() {
-  return address_.Add();
+inline std::string* AddressPool::_internal_add_pod_address() {
+  return pod_address_.Add();
 }
-inline void AddressPool::add_address(const std::string& value) {
-  address_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:AddressPool.address)
+inline void AddressPool::add_pod_address(const std::string& value) {
+  pod_address_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:AddressPool.pod_address)
 }
-inline void AddressPool::add_address(std::string&& value) {
-  address_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:AddressPool.address)
+inline void AddressPool::add_pod_address(std::string&& value) {
+  pod_address_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:AddressPool.pod_address)
 }
-inline void AddressPool::add_address(const char* value) {
+inline void AddressPool::add_pod_address(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  address_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:AddressPool.address)
+  pod_address_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:AddressPool.pod_address)
 }
-inline void AddressPool::add_address(const char* value, size_t size) {
-  address_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:AddressPool.address)
+inline void AddressPool::add_pod_address(const char* value, size_t size) {
+  pod_address_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:AddressPool.pod_address)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-AddressPool::address() const {
-  // @@protoc_insertion_point(field_list:AddressPool.address)
-  return address_;
+AddressPool::pod_address() const {
+  // @@protoc_insertion_point(field_list:AddressPool.pod_address)
+  return pod_address_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-AddressPool::mutable_address() {
-  // @@protoc_insertion_point(field_mutable_list:AddressPool.address)
-  return &address_;
+AddressPool::mutable_pod_address() {
+  // @@protoc_insertion_point(field_mutable_list:AddressPool.pod_address)
+  return &pod_address_;
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

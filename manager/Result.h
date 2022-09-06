@@ -1,35 +1,60 @@
-#include <utility>
-
 //
-// Created by 唐仁初 on 2022/8/31.
+// Created by 唐仁初 on 2022/9/5.
 //
 
 #ifndef TINYSWARM_RESULT_H
 #define TINYSWARM_RESULT_H
 
-template<class T>
+#include <string>
+#include <utility>
+
+struct PodDescriptor;
+
 class Result {
 public:
-    [[nodiscard]] bool succeed() const {
-        return succeed_;
+
+    [[nodiscard]] bool isFail() const {
+        return fail_;
     }
 
-    [[nodiscard]] std::string ErrorText() const {
-        return error_text;
+    std::string reason() {
+        return reason_;
     }
 
-    [[nodiscard]] T content() const {
-        return message;
-    }
+    explicit Result() : fail_(false) {}
 
-
-    Result(bool res, T msg, std::string error = {}) : succeed_(res), message(std::move(msg)), error_text(std::move(error)) {}
-
+    explicit Result(std::string reason) : fail_(true), reason_(std::move(reason)) {}
 
 private:
-    T message;
-    bool succeed_{};
-    std::string error_text{};
+    bool fail_;
+    std::string reason_;
+};
+
+
+class CreateResult {
+
+public:
+
+    [[nodiscard]] bool isFail() const {
+        return fail_;
+    }
+
+    std::string reason() {
+        return reason_;
+    }
+
+    PodDescriptor *podDescriptor() {
+        return pod_;
+    }
+
+    explicit CreateResult(PodDescriptor *pod) : fail_(false), pod_(pod) {}
+
+    explicit CreateResult(std::string reason) : fail_(true), reason_(std::move(reason)), pod_(nullptr) {}
+
+private:
+    bool fail_;
+    std::string reason_;
+    PodDescriptor *pod_;
 };
 
 

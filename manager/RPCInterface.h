@@ -6,12 +6,11 @@
 #define TINYSWARM_RPCINTERFACE_H
 
 #include "Manager.h"
-#include "Proxy/NginxProxy.h"
 #include "ServiceManager.h"
 #include "ManagerRpcInterface.pb.h"
-#include <google/protobuf/service.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/message.h>
+//#include <google/protobuf/service.h>
+//#include <google/protobuf/descriptor.h>
+//#include <google/protobuf/message.h>
 
 
 using google::protobuf::RpcController;
@@ -23,142 +22,71 @@ namespace manager {
     class RPCInterface final : public ManagerService {
     public:
 
-        explicit RPCInterface(Manager *manager) : manager_(manager),
-                                                  g_manager_(new ServiceManager(manager_, new NginxProxy("path"))) {
+        explicit RPCInterface(Manager *manager) : manager_(new ServiceManager(manager, {})) {
 
         }
 
 
-        void createService(RpcController *controller, const ServiceInformation *request, CreateOrDeleteEcho *response,
+        void createService(RpcController *controller, const ServiceInfo *request, JsonMessage *response,
                            Closure *done) override {
 
-          ///  auto worker = manager_->selectWorker();
+            const auto &params = request->params();
 
-            std::vector<char *> exe_params(request->exe_params_size());
-            for (int i = 0; i < request->exe_params_size(); i++) {
-                exe_params.emplace_back(const_cast<char *>(request->exe_params(i).c_str()));
+            std::vector<char *> exe_params(params.exe_params_size());
+            for (int i = 0; i < params.exe_params_size(); i++) {
+                exe_params.emplace_back(const_cast<char *>(params.exe_params(i).c_str()));
             }
 
-            std::vector<char *> docker_params(request->docker_params_size());
-            for (int i = 0; i < request->docker_params_size(); i++) {
-                docker_params.emplace_back(const_cast<char *>(request->docker_params(i).c_str()));
+            std::vector<char *> docker_params(params.docker_params_size());
+            for (int i = 0; i < params.docker_params_size(); i++) {
+                docker_params.emplace_back(const_cast<char *>(params.docker_params(i).c_str()));
             }
 
-//            auto[res, error] = manager_->createService(worker, request->service(), request->alias(),
-//                                                       request->type() == 0 ? host : docker, request->port(),
-//                                                       exe_params,
-//                                                       docker_params, request->restart());
+            auto json = manager_->createService(request->name().token(), params.service_num(), params.service(),
+                                                params.type() == 0 ? host : docker, params.port(), exe_params,
+                                                docker_params,
+                                                params.restart());
 
-//            response->set_fail(res);
-//            response->set_info(error);
+            response->set_content(json.dump());
         }
 
-        void
-        showService(RpcController *controller, const ::ServiceName *request, ::ServiceList *response,
-                    Closure *done) override {
+        void stopService(RpcController *controller, const ::ServiceName *request, ::ServiceName *response,
+                         Closure *done) override {
 
-            // 显示全部的服务
-            if (request->name_or_alias() == "*") {
-                auto services = manager_->getServices();
+            manager_->deleteService(request->token());
 
-                for (auto &pair: *services) {
-                    auto serv = response->add_services();
-                    serv->set_service(pair.second.service_);
-                    serv->set_alias(pair.second.alias_);
-                    serv->set_type(pair.second.type_ == host ? 0 : 1);
+            response->set_token(request->token());
+        }
 
-                    for (auto &param: pair.second.exe_params_) {
-                        std::string *exe_param = serv->add_exe_params();
-                        *exe_param = param;
-                    }
-                    for (auto &param: pair.second.docker_params_) {
-                        std::string *docker_param = serv->add_docker_params();
-                        *docker_param = param;
-                    }
-                    serv->set_restart(pair.second.restart_);
-                }
 
+        void getAddressPool(RpcController *controller, const ::ServiceName *request, ::AddressPool *response,
+                            Closure *done) override {
+
+            auto json = manager_->getAccessAddress(request->token());
+
+            if (json.empty()) {
+                response->set_proxy_address("");
                 return;
             }
 
-            auto service = manager_->getServiceInfoIterByAlias(request->name_or_alias());
-            auto serv = response->add_services();
-            serv->set_service(service->service_);
-            serv->set_alias(service->alias_);
-            serv->set_type(service->type_ == host ? 0 : 1);
+            response->set_proxy_address(json["proxy_address"]);
 
-            for (auto &param: service->exe_params_) {
-                std::string *exe_param = serv->add_exe_params();
-                *exe_param = param;
-            }
-            for (auto &param: service->docker_params_) {
-                std::string *docker_param = serv->add_docker_params();
-                *docker_param = param;
-            }
-            serv->set_restart(service->restart_);
+            for (auto &addr: json["pods_address"])
+                response->add_pod_address(addr);
 
         }
 
-        void
-        stopService(RpcController *controller, const ::ServiceName *request, ::CreateOrDeleteEcho *response,
-                    Closure *done) override {
+        void getServiceInfo(RpcController *controller, const ::ServiceName *request, ::JsonMessage *response,
+                            Closure *done) override {
 
-            auto service = manager_->getServiceInfoIterByAlias(request->name_or_alias());
+            auto json = manager_->getServiceInformation(request->token());
 
-            auto[res, error] = manager_->stopService(*service);
-
-            response->set_fail(res);
-            response->set_info(error);
+            response->set_content(json.dump());
         }
-
-        void transferService(RpcController *controller, const ::TransferInfo *request,
-                             ::CreateOrDeleteEcho *response, Closure *done) override {
-
-            auto service = manager_->getServiceInfoIterByAlias(request->alias());
-            auto wd = manager_->findWorkerDescriptor(request->address());
-            auto[res, error] =manager_->transferService(*service, wd);
-
-            response->set_fail(res);
-            response->set_info(error);
-        }
-
-        void
-        createServiceGroup(RpcController *controller, const ServiceGroupName *request, CreateOrDeleteEcho *response,
-                           Closure *done) override {
-
-            std::vector<char *> exe_params(request->exe_params_size());
-            for (int i = 0; i < request->exe_params_size(); i++) {
-                exe_params.emplace_back(const_cast<char *>(request->exe_params(i).c_str()));
-            }
-
-            std::vector<char *> docker_params(request->docker_params_size());
-            for (int i = 0; i < request->docker_params_size(); i++) {
-                docker_params.emplace_back(const_cast<char *>(request->docker_params(i).c_str()));
-            }
-
-//            g_manager_->createServiceGroup(request->token(), request->service_num(), request->service(),
-//                                           request->type() == 0 ? host : docker, request.,exe_params, docker_params,
-//                                           request->restart());
-
-//        response->set_fail();
-//        response->set_info();
-        }
-
-        void getServiceGroupInfo(RpcController *controller, const ::ServiceGroup *request,
-                                 ::ServiceGroup *response, Closure *done) override {
-
-        }
-
-        void getAddressPool(RpcController *controller, const ::ServiceGroup *request,
-                            ::AddressPool *response, Closure *done) override {}
-
-        void stopServiceGroup(RpcController *controller, const ::ServiceGroup *request,
-                              ::CreateOrDeleteEcho *response, Closure *done) override {}
 
 
     private:
-        Manager *manager_;
-        ServiceManager *g_manager_;
+        ServiceManager *manager_;
     };
 
 }

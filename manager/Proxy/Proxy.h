@@ -10,6 +10,8 @@
 #include <string>
 
 namespace manager {
+
+    /// 要求底层的负载均衡机制必须为轮询，不能为ip hash，
     class Proxy {
     public:
 
@@ -18,6 +20,8 @@ namespace manager {
         virtual std::string insertAddressPool(const std::string &pool_name, const AddressPool &pool) = 0;
 
         virtual bool deleteAddressPool(const std::string &pool_name) = 0;
+
+        virtual bool updateAddressPool(const std::string &pool_name, const AddressPool &pool) = 0;
 
         virtual AddressPool findAddressPool(const std::string &pool_name) = 0;
 

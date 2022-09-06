@@ -15,9 +15,7 @@
 
 namespace manager {
 
-    using Json = nlohmann::json;
-
-/// 负责处理与用户之间的逻辑，防止都写在manager里面
+/// 负责处理与用户之间的逻辑，防止都写在manager里面，此处只留给用户文本信息，而不留指向内部的指针等
     class ServiceManager {
     public:
 
@@ -26,9 +24,9 @@ namespace manager {
         explicit ServiceManager(Manager *manager, Proxy *proxy) : manager_(manager), proxy_(proxy) {}
 
 
-        int createServiceGroup(std::string token, int num, const std::string &service,
-                               ServiceType type, int port, const std::vector<char *> &exe_params,
-                               const std::vector<char *> &docker_params, int restart = 0) {
+        Json createService(std::string token, int num, const std::string &service,
+                          ServiceType type, int port, const std::vector<char *> &exe_params,
+                          const std::vector<char *> &docker_params, int restart = 0) {
 
             if (token.empty())
                 token = generateToken(9);
@@ -41,21 +39,20 @@ namespace manager {
                 if (num > 1)
                     alias += "_" + std::to_string(i);
 
-                auto[res_, error] = manager_->selectWorkerToCreatePod(service, alias, type, port, exe_params,
-                                                                      docker_params,
-                                                                      restart);
+                auto res = manager_->selectWorkerToCreatePod(service, alias, type, port, exe_params,
+                                                             docker_params,
+                                                             restart);
 
-                if (res_) {
-                    auto serv = manager_->getServiceInfoIterByAlias(error);
-                    group.emplace_back(serv);
+                if (!res.isFail()) {
+                    group.emplace_back(res.podDescriptor());
                 }
-
             }
 
             // 创建其代理地址
             auto addr = proxy_->insertAddressPool(token, getPodGroupAddressPool(group));
 
-            ServiceDescriptor sd(token, group, num, addr);
+
+            ServiceDescriptor sd(token, group, num, addr, manager_);
 
 
             if (!group.empty()) {
@@ -65,64 +62,68 @@ namespace manager {
                     start_list_.emplace_back(ptr);
             }
 
-            return static_cast<int>(group.size());
+            return sd.toJson();
         }
 
-        bool deleteServiceGroup(const std::string &token) {
+        bool deleteService(const std::string &token) {
 
-            auto group = getPodsInService(token);
+            auto sd = getServiceDescriptor(token);
 
-            for (auto &pod: group) {
-                manager_->stopService(*pod);
+            if (sd == nullptr)
+                return false;
+
+            sd->stopPodsInService();
+
+            if (sd->status != ServiceStatus::close) {
+                end_list_.emplace_back(sd);
+            } else {
+                removeService(sd);
             }
 
+            // 无论关闭的状态是什么，都要关闭在代理处的注册
             return proxy_->deleteAddressPool(token);
         }
 
-        PodGroup getPodsInService(const std::string &token) {
+        Json getServiceInformation(const std::string &token){
+
             auto sd = getServiceDescriptor(token);
-            return sd == nullptr ? PodGroup{} : sd->pods_;
+
+            if(sd == nullptr)
+                return {};
+
+            return sd->toJson();
         }
+
+        Json getAccessAddress(const std::string &token){
+
+            auto sd = getServiceDescriptor(token);
+
+            if(sd == nullptr)
+                return {};
+
+            return sd->getAccessAddress();
+        }
+
+    private:
 
         manager::ServiceDescriptor *getServiceDescriptor(const std::string &token) {
             auto it = map_.find(token);
             return it == map_.end() ? nullptr : (&it->second);
         }
 
+        /// Generate a token contains num and alpha. Guarantee the token is different from tokens in map_
+        /// \param length The length of token
+        /// \return Generated token
+        Token generateToken(int length);
 
-    private:
-
-        Token generateToken(int length) {
-            char tmp;
-            std::string str;
-
-            std::random_device rd;
-            std::default_random_engine random(rd());
-
-            for (int i = 0; i < length; i++) {
-                tmp = static_cast<char>(random() % 36);
-                if (tmp < 10)
-                    tmp += '0';
-                else
-                    tmp += ('A' - 10);
-                str += tmp;
-            }
-
-            if (map_.find(str) != map_.end())
-                return generateToken(length);
-
-            return str;
-        }
-
-        // 用来启动未成功的pod
-        void startFailedPod() {
-
-        }
+        /// Try to create new pods in the first service. If failed, the service will be move to the last.
+        void startFailedPod();
 
         // 用来关闭未成功的pod
-        void shutdownFailedPod() {
+        void shutdownFailedPod();
 
-        }
+        /// Inner Interface. Used to remove ServiceDescriptor safely.
+        void removeService(manager::ServiceDescriptor *sd);
 
     private:
 
@@ -132,9 +133,9 @@ namespace manager {
         std::list<manager::ServiceDescriptor *> end_list_;  // 用来解决用户关闭多个pod可能失败的问题
 
 
-
         Manager *manager_;
         Proxy *proxy_;
+
     };
 }
 

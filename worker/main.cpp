@@ -43,7 +43,7 @@ int main() {
 
     std::string error;
     auto pid = node.createProcess
-            ("hello", "123", "0", 0, {}, {}, error, 0);
+            ("hello", "123", "0", 0, -1, {}, {}, error, 0);
 
 //
     //std::cout << "to kill" << pid <<std::endl;

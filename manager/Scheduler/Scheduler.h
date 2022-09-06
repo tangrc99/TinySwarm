@@ -5,7 +5,7 @@
 #ifndef TINYSWARM_SCHEDULER_H
 #define TINYSWARM_SCHEDULER_H
 
-#include "WorkerDescriptor.h"
+#include "../WorkerDescriptor.h"
 
 class Scheduler {
 public:

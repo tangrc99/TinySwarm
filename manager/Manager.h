@@ -5,12 +5,14 @@
 #ifndef TINYSWARM_MANAGER_H
 #define TINYSWARM_MANAGER_H
 
+#include "Result.h"
+
 #include "WorkerDescriptor.h"
 #include "WorkerClient.h"
 #include "PodDescriptor.h"
 #include "LogQueue.h"
 #include "RPCServer.h"
-#include "Scheduler.h"
+#include "Scheduler/Scheduler.h"
 
 #include <sw/redis++/redis++.h>
 #include <list>
@@ -26,28 +28,28 @@ public:
     WorkerDescriptor *selectWorker(PodDescriptor *pod) const {
 
         return scheduler->getBestWorker(pod);
-        return {};
     }
 
-    std::pair<bool, std::string> selectWorkerToCreatePod(const std::string &service, const std::string &alias,
-                                                         ServiceType type, int port,
-                                                         const std::vector<char *> &exe_params,
-                                                         const std::vector<char *> &docker_params, int restart = 0) {
+    CreateResult selectWorkerToCreatePod(const std::string &service, const std::string &alias,
+                                         ServiceType type, int port,
+                                         const std::vector<char *> &exe_params,
+                                         const std::vector<char *> &docker_params, int restart = 0) {
 
         PodDescriptor pod(service, alias, type, 1, port, {}, exe_params, docker_params, restart);
 
         pod.wd_ = selectWorker(&pod);
 
         if (pod.wd_ == nullptr)
-            return {false, "Available Worker Not Found"};
+            return CreateResult("Available Worker Not Found");
 
-        auto [res,error] = createService(pod);
+        auto res = createService(pod);
 
         //FIXME: 这里可以加入一些机制来多次尝试启动服务
 
-        if(res)
-            pods.emplace(alias,pod);
-        return {res,error};
+        if (!res.isFail())
+            pods.emplace(alias, pod);
+
+        return res;
     }
 
     //FIXME : 由于重试操作，因此所有的rpc 必须在调用rpc 前就将 service 在内存中完成修改
@@ -64,13 +66,12 @@ public:
     /// \param docker_params The docker start params, if service run in docker, th
     /// \param restart The time service will restart, -1 means whenever.
     /// \return [ if created, error info ]
-    std::pair<bool, std::string>
-    createService(WorkerDescriptor *wd, const std::string &service, const std::string &alias,
-                  ServiceType type, int port, const std::vector<char *> &exe_params,
-                  const std::vector<char *> &docker_params, int restart = 0) {
+    CreateResult createService(WorkerDescriptor *wd, const std::string &service, const std::string &alias,
+                               ServiceType type, int port, const std::vector<char *> &exe_params,
+                               const std::vector<char *> &docker_params, int restart = 0) {
 
         if (wd == nullptr)
-            return {false, "Empty Worker"};
+            return CreateResult("Empty Worker");
 
         ForkInput input;
         input.set_service(service);
@@ -92,7 +93,7 @@ public:
         auto res = pods.emplace(alias, info);    // 这里优先操作内存，因为容易恢复
 
         if (!res.second) {
-            return {false, "services emplace error"};
+            return CreateResult("services emplace error");
         }
 
         // log << create service ...
@@ -105,7 +106,7 @@ public:
         if (rpc_res.isFailed()) {
             cur_line = logger->append("CSE " + alias + " Fail");
             pods.erase(res.first);  // 如果失败则进行回退
-            return {false, rpc_res.ErrorText()};    //FIXME: 这里的错误要分层级，否则用户端不知道错误是出在哪次 RPC 上
+            return CreateResult(rpc_res.ErrorText());    //FIXME: 这里的错误要分层级，否则用户端不知道错误是出在哪次 RPC 上
         }
 
         ForkEcho echo;
@@ -129,7 +130,7 @@ public:
             } else {
                 cur_line = logger->append("CSE " + alias + " Fail");
                 pods.erase(res.first);
-                return {false, echo.error_text()};
+                return CreateResult(echo.error_text());
             }
         }
 
@@ -140,7 +141,7 @@ public:
 
         publishMessage(res.first->second);
 
-        return {true, echo.sd().alias()};
+        return CreateResult(&res.first->second);
     }
 
 
@@ -148,7 +149,7 @@ public:
     /// will publish message to other manager nodes. The ServiceInfo will be set alive.
     /// \param info ServiceInfo of service to create. Warning This ServiceInfo is in services map.
     /// \return [if created, error info]
-    std::pair<bool, std::string> createService(PodDescriptor &info) {
+    CreateResult createService(PodDescriptor &info) {
 
         ForkInput input;
         input.set_service(info.service_);
@@ -171,7 +172,7 @@ public:
 
         if (rpc_res.isFailed()) {
             cur_line = logger->append("CSE " + info.alias_ + " Fail");
-            return {false, rpc_res.ErrorText()};
+            return CreateResult(rpc_res.ErrorText());
         }
 
         ForkEcho echo;
@@ -190,7 +191,7 @@ public:
                 goto retry;     //FIXME: 这里能够正常使用吗？
             } else {
                 cur_line = logger->append("CSE " + info.alias_ + " Fail");
-                return {false, echo.error_text()};
+                return CreateResult(echo.error_text());
             }
         }
         // log << create success
@@ -199,7 +200,7 @@ public:
         publishMessage(info);
 
         info.alive_ = true;
-        return {true, echo.sd().alias()};
+        return CreateResult(&info);
     }
 
     /// RPC, Force shutdown a service in worker node.No any other actions.Used by stopPod and transferService.
@@ -295,16 +296,17 @@ public:
         return {false, error};
     }
 
-    //FIXME: 这个函数不能保证操作的原子性，因为两个都是 RPC，考虑用 2PC？
+
     std::pair<bool, std::string> transferService(PodDescriptor &info, WorkerDescriptor *new_wd) {
 
         auto old_info = info;
         info.wd_ = new_wd;
+        info.ip = new_wd->ip;
 
-        auto[res, error] = createService(info);
+        auto res = createService(info);
 
-        if (!res) {
-            std::cerr << error << std::endl;
+        if (res.isFail()) {
+            std::cerr << res.reason() << std::endl;
             info = old_info;
             return {false, "CREATE FAIL"};
         }
@@ -316,7 +318,7 @@ public:
             auto[res1, error1] = shutdownService(old_info);
 
             if (!res1) {
-                std::cerr << error << std::endl;    // 这里失败的话，直接将service从manager 去除，一段时间后worker也会去除
+                std::cerr << error1 << std::endl;    // 这里失败的话，直接将service从manager 去除，一段时间后worker也会去除
             }
         }
 
@@ -350,6 +352,7 @@ public:
             return;
         }
 
+        // 代表 manager 长时间未与 worker 连接，所有的服务都已经被下线
         if (downServices.service(0).alias() == "*") {
             for (auto &service: wd->pods) {
                 service->alive_ = false;
@@ -646,8 +649,8 @@ public:
 
         for (auto &service: pods) {
             auto &info = service.second;
-            auto[res, error] = createService(info);    // 无论是否还存活，都发送出fork请求，具体怎么做由worker决定（决策由最底层决定）
-            if (!res) {
+            auto res = createService(info);    // 无论是否还存活，都发送出fork请求，具体怎么做由worker决定（决策由最底层决定）
+            if (res.isFail()) {
                 info.alive_ = false;
                 down_services.emplace_back(&info);
             }
@@ -720,22 +723,23 @@ public:
 
     void transferDownService() {
 
-        for (auto &service: down_services) {
+        for (auto &pod: down_services) {
 
             // 如果没有存活，尝试转移到另外一个地方
-            if (!service->wd_->alive) {
+            if (!pod->wd_->alive) {
 
-                auto wd = selectWorker(service);
-                auto[res, error] = transferService(*service, wd);  // 转移 service 到另外一个 worker 上
+                auto wd = selectWorker(pod);
+                auto[res, error] = transferService(*pod, wd);  // 转移 service 到另外一个 worker 上
                 if (res) {
-                    removeDownService(service);
+                    removeDownService(pod);
                 }
 
             } else {
 
-                auto[res, error] = createService(*service);    // 当前节点如果还存活，则直接对服务进行重启
-                if (res)
-                    removeDownService(service);
+                auto res = createService(*pod);    // 当前节点如果还存活，则直接对服务进行重启
+
+                if (!res.isFail())
+                    removeDownService(pod);
             }
         }
 
