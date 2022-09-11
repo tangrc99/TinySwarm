@@ -17,6 +17,8 @@
 
 #define SERV_NOT_RUN "SERV NOT RUN" // 当前服务已经停止
 
+#define SAME_SERV "SAME SERV" // 重复创建服务
+#define SAME_ALIAS "SAME ALIAS" // 重复创建服务
 
 #define ALIAS_NOT_FOUND "ALIAS_NOT_FOUND"
 #define KILL_ERROR "KILL_ERROR"

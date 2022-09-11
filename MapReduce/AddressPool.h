@@ -9,25 +9,28 @@
 #include <map>
 #include <vector>
 
-class AddressPool {
-public:
+namespace mapreduce {
 
-    using AddressVector = std::vector<IPAddress>;
+// 这里的本意应该是给manager做一个本地的缓存
+    class AddressPool {
+    public:
 
-    void addAddresses(const std::string &token, const std::vector<IPAddress> &addresses) {
-        pool_.emplace(token, addresses);
-    }
+        using AddressVector = std::vector<IPAddress>;
 
-    AddressVector findAddresses(const std::string &token) {
-        auto it = pool_.find(token);
-        return it == pool_.end() ? AddressVector{} : it->second;
-    }
+        void addAddresses(const std::string &token, const std::vector<IPAddress> &addresses) {
+            pool_.emplace(token, addresses);
+        }
 
-
-private:
-
-    std::map<std::string, AddressVector> pool_;
-};
+        AddressVector findAddresses(const std::string &token) {
+            auto it = pool_.find(token);
+            return it == pool_.end() ? AddressVector{} : it->second;
+        }
 
 
+    private:
+
+        std::map<std::string, AddressVector> pool_;
+    };
+
+}
 #endif //TINYSWARM_ADDRESSPOOL_H

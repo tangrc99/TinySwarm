@@ -13,7 +13,6 @@
 
 namespace manager {
 
-
     using Json = nlohmann::json;
     using PodGroup = std::vector<PodDescriptor *>;
 
@@ -22,7 +21,7 @@ namespace manager {
         pool.reserve(group.size());
 
         for (auto &pod: group) {
-            pool.emplace_back(pod->wd_->ip + ":" + std::to_string(pod->port_));
+            pool.emplace_back(pod->ip + ":" + std::to_string(pod->port_));
         }
 
         return pool;
@@ -137,19 +136,40 @@ namespace manager {
             json["status"] = status;
             json["exe_param"] = exe_params_;
             json["docker_param"] = docker_params_;
-            json["type"] = type_;
+            json["type"] = type_ == host ? "host" : "docker";
 
             std::vector<Json> vec;
             vec.reserve(pods_.size());
 
             //FIXME : 这里会与底层的manager发生冲突吗？
             auto pods = pods_;
-
             for(auto pod:pods)
                 vec.emplace_back(pod->toJson());
 
             json["pod"] = vec;
             return json;
+        }
+
+        ///
+        /// \return
+        std::string toSnapshot(){
+
+            std::string snapshot = token_;
+
+            snapshot += " " + std::to_string(num_);
+
+            snapshot += " " + proxy_address_;
+
+            snapshot += " " + std::to_string(status);
+
+            snapshot += " {";
+
+            for(auto &pod : pods_)
+                snapshot += " " + pod->alias_ ;
+
+            snapshot += " }";
+
+            return snapshot;
         }
 
     private:

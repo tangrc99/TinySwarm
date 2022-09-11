@@ -40,6 +40,10 @@ struct PodDescriptor {
 
     PodDescriptor() = default;
 
+    ~PodDescriptor();
+
+    void bindWorker(WorkerDescriptor *wd);
+
     [[nodiscard]] std::string toGossipMessage() const;
 
     [[nodiscard]] std::string toSnapshotMessage() const;

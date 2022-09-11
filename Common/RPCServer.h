@@ -140,15 +140,14 @@ public:
                 return;
             }
 
-            //assert(!mp.service().empty());
             LOG_DEBUG("%s: %s", "Calling service", &mp.service())
-            Service *service = servMap.find(mp.service())->second;
+            Service *service = getService(mp.service());
 
             if (service == nullptr) {
                 HTTPData::makeResponseData(result, "ERROR : Undefined Service");
             }
 
-            LOG_DEBUG("%s: %s", "Calling service", &mp.method())
+            LOG_DEBUG("%s: %s", "Calling method", &mp.method())
             auto method = service->GetDescriptor()->FindMethodByName(mp.method());
 
             if (method == nullptr) {
@@ -163,10 +162,14 @@ public:
                 HTTPData::makeResponseData(result, "ERROR : Undefined Packtype");
             }
 
+            std::cout << "1" << std::endl;
+
             data->ParseFromString(mp.data());
             Message *echo = service->GetResponsePrototype(method).New();
 
             RpcServerController controller;
+
+            std::cout << "2" << std::endl;
 
             service->CallMethod(method, &controller, data, echo, {});
 
@@ -177,8 +180,8 @@ public:
             }
             LOG_DEBUG("%s", "Rpc Success");
 
-            auto http_res = HTTPData::makeResponseData(result, echo->SerializeAsString(),{});
-            std::cout << echo->SerializeAsString().size() ;
+            auto http_res = HTTPData::makeResponseData(result, echo->SerializeAsString(), {});
+            std::cout << echo->SerializeAsString().size();
 
 
         } else {
@@ -188,6 +191,11 @@ public:
 
     }
 
+    Service *getService(const std::string &name) {
+        auto it = servMap.find(name);
+
+        return it == servMap.end() ? nullptr : it->second;
+    }
 
     void addService(Service *service) {
         servMap.emplace(service->GetDescriptor()->name(), service);
@@ -198,7 +206,6 @@ public:
     };
 
     ~RPCServer() {
-        std::cout << "NORMALLY EXIT\n";
         heart_beat = false;
     }
 

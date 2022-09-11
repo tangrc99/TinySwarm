@@ -11,11 +11,26 @@ PodDescriptor::PodDescriptor(std::string service, std::string alias, ServiceType
         : service_(std::move(service)), alias_(std::move(alias)), type_(type), alive_(alive), port_(port), wd_(wd),
           exe_params_(std::move(exe_params)), docker_params_(std::move(docker_params)), restart_(restart) {
 
-    ip = wd->ip;
+    if (wd != nullptr)
+        ip = wd->ip;
+}
+
+PodDescriptor::~PodDescriptor(){
+    if(wd_ != nullptr)
+        wd_->removePodDescriptor(this);
+};
+
+void PodDescriptor::bindWorker(WorkerDescriptor *wd) {
+    wd_ = wd;
+    if (wd != nullptr){
+        ip = wd->ip;
+        wd->pods.emplace_back(this);
+    }
+
 }
 
 std::string PodDescriptor::toGossipMessage() const {
-    // example "127.0.0.1:8989 hello my_hello"
+    // example "127.0.0.1:8989 hello my_hello -1"
     return {wd_->ip + " " + std::to_string(wd_->port) + " " + service_ + " " + alias_ + std::to_string(port_)};
 }
 
@@ -43,9 +58,11 @@ std::string PodDescriptor::toSnapshotMessage() const {
 nlohmann::json PodDescriptor::toJson() {
     nlohmann::json json;
     json["alias"] = alias_;
-    json["alive"] = alive_;
-    json["ip"] = ip;   //FIXME : 这里会出现问题吗
+    json["connected"] = alive_ ;
+    json["ip"] = ip;
     json["port"] = port_;
     json["restart"] = restart_;
+
     return json;
 }
+

@@ -25,7 +25,7 @@ add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
 
         ManagerRpcInterface.pb.cc ManagerRpcInterface.pb.h
 
-        #RpcSession.cpp RpcSession.h
+
         PodDescriptor.h
         LogQueue.cpp LogQueue.h
         RPCInterface.cpp RPCInterface.h

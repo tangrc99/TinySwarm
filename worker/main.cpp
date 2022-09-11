@@ -10,6 +10,7 @@ void rpc_test() {
 
     auto log_controller = LoggerController::getInstance();
     log_controller.init("../../properties/log4cxx.properties", "fileappender");
+
     WorkerNode node("/Users/tangrenchu/CLionProjects/TinySwarm/Services");
 
 

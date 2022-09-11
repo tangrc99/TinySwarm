@@ -44,12 +44,22 @@ namespace worker {
         void readPodRecord();
 
 
+
     private:
+
+        /// Update the timestamp to the last record time.
+        void updateRecordTimestamp();
+
+        /// Remove all records when the records are timeout.
+        void removeAllRecords();
 
         std::list<::ForkInput> records; // 重启时，用于读取崩溃前的启动信息
 
-        const std::string work_dir_;
+        std::filesystem::path work_dir_;
         RPCInterface *rpc_; // 用来回调使用
+
+        std::ofstream t_os;
+        time_t timestamp{};
     };
 }
 

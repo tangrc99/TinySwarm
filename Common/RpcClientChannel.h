@@ -27,91 +27,26 @@ using google::protobuf::RpcChannel;
 using google::protobuf::Message;
 using google::protobuf::MethodDescriptor;
 using google::protobuf::RpcController;
-//using namespace google::protobuf::compiler;
 
+
+/// Class RpcClientChannel is based on Class google::protobuf::RpcChannel, provides serialize and web socket
 class RpcClientChannel : public google::protobuf::RpcChannel {
-private:
-
-    std::atomic<int> sessions_; // the num of sessions
-
-    time_t timestamp{}; // 上一次成功通信的时间
-
-    IPAddress address;
-    int sockfd = 0;
-    bool connected = false;
-
-    std::mutex mtx;
-
-    void sendMessages(const std::string &str) const {
-        std::string str_to_send;
-
-        HTTPParser::getReqMessage(str_to_send, {"POST", "", "1.1"}, {{"1", "1"}}, str);
-
-//        std::cout << "write" <<
-//                  ::write(sockfd, str_to_send.c_str(), str_to_send.size());
-
-        auto total = str_to_send.size();
-        size_t pos = 0;
-
-        while (pos < total) {
-            pos += ::write(sockfd, str_to_send.substr(pos).c_str(), total - pos);
-
-            if (pos == -1) {
-                std::cerr << errno << std::endl;
-                throw std::runtime_error("Write Error " + std::to_string(errno));
-            }
-        }
-
-    }
-
-    void waitResponse(google::protobuf::Message *response) const {
-
-        std::cout << "waiting for response\n";
-        std::cout << "-------------\n";
-
-        Buffer buffer;
-
-        size_t rd;
-
-        do {
-
-            rd = buffer.readToBuffer(sockfd);   // 如果数据还没到，这里会阻塞
-
-        } while (!buffer.isCatchHTTPEnd() && rd > 0);
-
-        if (!buffer.isCatchHTTPEnd()) {
-
-            if (rd == 0)
-                throw std::runtime_error("No Messages Back");
-            else
-                throw std::runtime_error("not catch http end");
-
-        }
-
-        auto str = buffer.str();
-
-        HTTPData HTTPdata(buffer.str(), HTTP_TYPE::RESPONSE);
-
-        auto rpc_pack = HTTPdata.getParamValue("RPCRESPONSE");
-
-        response->ParseFromString(rpc_pack);
-
-
-        std::string space = " ";
-        ::write(sockfd, space.c_str(), 1);
-
-    }
-
-
 public:
+
 
     explicit RpcClientChannel(IPAddress ipAddress) : address(ipAddress), sockfd(::socket(AF_INET, SOCK_STREAM, 0)),
                                                      sessions_(0) {
 
+//        // non-block
+//        int flags = ::fcntl(sockfd, F_GETFL, 0);  ///得到文件状态标记
+//        flags |= O_NONBLOCK;
+//        int ret = ::fcntl(sockfd, F_SETFL, flags);    ///设置文件状态标记
+//        (void) ret;
+
         auto res = ::connect(sockfd, address.toSockAddrPtr(), address.addrlen());
 
         if (0 != res) {
-            connected = false;
+            setDisconnected();
             std::cerr << "Socket Disconnected!\n";
             return;
         }        //exit(1);
@@ -119,47 +54,67 @@ public:
         std::cout << "Socket Connected!\n";
     }
 
-    bool reconnect() {
-        if (0 != ::connect(sockfd, address.toSockAddrPtr(), address.addrlen())) {
-            connected = false;
-        }        //exit(1);
-        connected = true;
-
-        return connected;
-    }
 
     ~RpcClientChannel() override {
         ::close(sockfd);
     }
 
+    /// Try to reconnect peer if channel is down.
+    /// \return If reconnect succeed.
+    bool reconnect() {
+
+        // 被系统检测到关闭的 socket_fd 不能再重复使用
+        sockfd = ::socket(AF_INET, SOCK_STREAM, 0);
+
+        if (0 != ::connect(sockfd, address.toSockAddrPtr(), address.addrlen())) {
+            setDisconnected();
+        } else
+            connected = true;
+
+        return connected;
+    }
+
+
+    /// Check if channel is connected.
+    /// \return Is connected
     [[nodiscard]] bool isConnected() const {
         return connected;
     }
 
-    // Every new session on channel should call this function
+    /// @note Every new session on channel should call this function
     void sessionCreateNotify() {
         sessions_.fetch_add(1);
     }
 
+    /// @note Every session should call this function when call its destruction.
     void sessionDestroyNotify() {
         sessions_.fetch_sub(1);
     }
 
+    /// Get the nums of sessions on this channel, thread safety.
+    /// \return The num of sessions
     [[nodiscard]] int sessions() const {
         return sessions_.load();
     }
 
+    /// Get the ipAddress of this rpc channel
+    /// \return IPAddress
     IPAddress ipAddress() {
         return address;
     }
 
-    [[nodiscard]] time_t getLastTimestamp() const{
+    /// Get last rpc called timestamp of this rpc channel
+    /// \return Last rpc timestamp
+    [[nodiscard]] time_t getLastTimestamp() const {
         return timestamp;
     }
 
-    // 同步调用:传入 response 指针后会阻塞等待结果的返回
-    // 异步调用:传入 response 指针后，对象不会立刻构造，调用 getAsyncRes 来获取结果
-    // FIXME::内部需要进行错误处理，利用 controller 将错误传递出去
+    /// Call rpc method, this function is based on protobuf rpc.
+    /// \param method The method to be called
+    /// \param controller The rpc controller
+    /// \param request The rpc input
+    /// \param response The rpc output
+    /// \param done Not used
     void CallMethod(const MethodDescriptor *method,
                     google::protobuf::RpcController *controller, const google::protobuf::Message *request,
                     google::protobuf::Message *response, google::protobuf::Closure *done) override {
@@ -178,7 +133,7 @@ public:
         /// 按照method: echo 的方式进行封装
         MessagePack pack;
 
-        try{
+        try {
 
             pack.set_data(request->SerializeAsString());    /// 将序列化后的数据打包
             assert(!pack.data().empty());
@@ -189,7 +144,7 @@ public:
         } catch (std::exception &e) {
             controller->SetFailed("Message Pack Error");
         }
-      
+
 
         std::string sss = pack.SerializeAsString();
         //std::cout << sss << std::endl;
@@ -203,6 +158,110 @@ public:
             controller->SetFailed(e.what());
         }
 
+    }
+
+private:
+
+    static int alarm_flag;
+
+    std::atomic<int> sessions_; // the num of sessions
+
+    time_t timestamp{}; // 上一次成功通信的时间
+
+    IPAddress address;
+    int sockfd = 0;
+    bool connected = false;
+
+    std::mutex mtx;
+
+    void sendMessages(const std::string &str) {
+        std::string str_to_send;
+
+        HTTPParser::getReqMessage(str_to_send, {"POST", "", "1.1"}, {{"1", "1"}}, str);
+
+//        std::cout << "write" <<
+//                  ::write(sockfd, str_to_send.c_str(), str_to_send.size());
+
+        auto total = str_to_send.size();
+        size_t pos = 0;
+
+        while (pos < total) {
+            pos += ::write(sockfd, str_to_send.substr(pos).c_str(), total - pos);
+
+            if (pos == -1) {
+                setDisconnected();
+                std::cerr << errno << std::endl;
+                throw std::runtime_error("Write Error " + std::to_string(errno));
+            }
+        }
+
+    }
+
+    static void Alarm(int) {
+        alarm_flag = 1;
+    }
+
+    void waitResponse(google::protobuf::Message *response) {
+
+        std::cout << "waiting for response\n";
+        std::cout << "-------------\n";
+
+        Buffer buffer;
+
+        size_t rd;
+
+        // 定时三十秒，防止读操作一直被阻塞
+        signal(SIGALRM, Alarm);
+        alarm_flag = 0;
+        alarm(30);
+
+        // 读取数据
+        do {
+
+            rd = buffer.readToBuffer(sockfd);   // 如果数据还没到，这里会阻塞
+
+            std::cout << "wait" << rd << std::endl;
+
+        } while (!buffer.isCatchHTTPEnd() && rd > 0);
+
+        // 如果长时间没有收到回复
+        if (alarm_flag == 1) {
+            setDisconnected();
+            throw std::runtime_error("RPC TIMEOUT");
+        }
+
+        std::cout << "end wait" << std::endl;
+
+        // 判断数据包是否是完整的
+        if (!buffer.isCatchHTTPEnd()) {
+
+            if (rd == 0) {
+                setDisconnected();
+                throw std::runtime_error("DisConnected");
+            } else {
+
+                throw std::runtime_error("Message Error");
+            }
+
+        }
+
+        auto str = buffer.str();
+
+        HTTPData HTTPdata(buffer.str(), HTTP_TYPE::RESPONSE);
+
+        auto rpc_pack = HTTPdata.getParamValue("RPCRESPONSE");
+
+        response->ParseFromString(rpc_pack);
+
+
+        std::string space = " ";
+        ::write(sockfd, space.c_str(), 1);
+    }
+
+    /// Set this channel disconnected.
+    void setDisconnected() {
+        connected = false;
+        ::close(sockfd);
     }
 
 };

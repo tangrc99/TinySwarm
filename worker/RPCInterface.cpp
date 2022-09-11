@@ -11,6 +11,31 @@ namespace worker {
     RPCInterface::fork(::google::protobuf::RpcController *controller, const ::ForkInput *request, ::ForkEcho *response,
                        ::google::protobuf::Closure *done) {
 
+
+        std::string error_text;
+
+        // 如果当前 worker 节点不提供该服务
+        if (!owner->isServiceExist(request->service())) {
+            auto sd = response->sd().New();
+            sd->set_service(request->service().c_str());
+            sd->set_alias(request->alias().c_str());
+            sd->set_type(request->type());
+            response->set_fail(true);
+            response->set_error_text(SERV_NOT_FOUND);
+            return;
+        }
+
+        // 检查服务是否是重复创建的，以及alias是否可用
+        if(owner->checkIfAliasOK(request->owner(),request->alias(),error_text)){
+            auto sd = response->sd().New();
+            sd->set_service(request->service().c_str());
+            sd->set_alias(request->alias().c_str());
+            sd->set_type(request->type());
+            response->set_fail(true);
+            response->set_error_text(error_text);
+            return;
+        }
+
         // 判断端口是否可用
         {
             int port = request->port();
@@ -29,6 +54,7 @@ namespace worker {
             }
         }
 
+        //FIXME : 这里要判断之前是否已经有过记录的文件
 
         std::cout << request->owner();
 
@@ -44,18 +70,9 @@ namespace worker {
             return;
         }
 
-        std::cout << "calling fork" << std::endl;
+        std::cout << " calling fork" << std::endl;
 
-        // 如果当前 worker 节点不提供该服务
-        if (!owner->isServiceExist(request->service())) {
-            auto sd = response->sd().New();
-            sd->set_service(request->service().c_str());
-            sd->set_alias(request->alias().c_str());
-            sd->set_type(request->type());
-            response->set_fail(true);
-            response->set_error_text(SERV_NOT_FOUND);
-            return;
-        }
+
 
         // 进行命令的格式转换
         std::vector<char *> exe_params;
@@ -70,7 +87,6 @@ namespace worker {
             docker_params.emplace_back(const_cast<char *>(request->docker_params(i).c_str()));
         }
 
-        std::string error_text;
 
         std::cout << request->service() << " " << request->alias() << std::endl;
 

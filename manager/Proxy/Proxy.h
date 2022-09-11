@@ -17,6 +17,8 @@ namespace manager {
 
         using AddressPool = std::vector<const std::string>;
 
+        virtual ~Proxy() = default;
+
         virtual std::string insertAddressPool(const std::string &pool_name, const AddressPool &pool) = 0;
 
         virtual bool deleteAddressPool(const std::string &pool_name) = 0;

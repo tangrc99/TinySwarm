@@ -32,12 +32,16 @@ namespace manager{
 
             std::string start = nginx_exec_.string() + " -c " + nginx_conf_.string();
             int res = system(start.c_str());
-            std::cout << res ;
+
+            if(res == -1)
+                throw std::runtime_error("Nginx Start Error");
         }
 
-        ~NginxProxy(){
-            std::string quit = nginx_exec_.string() + " -s quit";
+        ~NginxProxy() override{
+
+            std::string quit = nginx_exec_.string() + " -s stop";
             system(quit.c_str());
+
         }
 
         std::string insertAddressPool(const std::string &pool_name, const AddressPool &pool) override {
@@ -50,6 +54,17 @@ namespace manager{
             updateNginxStatus();
 
             return "127.0.0.1:" + std::to_string(port_++);
+        }
+
+        bool updateAddressPool(const std::string &pool_name, const AddressPool &pool) override{
+            if (pools_.find(pool_name) != pools_.end())
+                return false;
+
+            int port = pools_[pool_name].second;
+
+            pools_[pool_name] = {pool , port};
+
+            return true;
         }
 
         bool deleteAddressPool(const std::string &pool_name) override {
@@ -129,7 +144,7 @@ namespace manager{
 
         const std::string basic_conf = "\n"
                                        "#user  nobody;\n"
-                                       "worker_processes  5;\n"
+                                       "worker_processes  2;\n"
                                        "\n"
                                        "#error_log  logs/error.log;\n"
                                        "#error_log  logs/error.log  notice;\n"

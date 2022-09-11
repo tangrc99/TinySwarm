@@ -28,6 +28,9 @@ manager::ServiceManager::Token manager::ServiceManager::generateToken(int length
 
 void manager::ServiceManager::startFailedPod() {
 
+    if(start_list_.empty())
+        return ;
+
     auto serv = start_list_.front();
 
     int start_num = serv->restartFailedPods();
@@ -44,6 +47,10 @@ void manager::ServiceManager::startFailedPod() {
 }
 
 void manager::ServiceManager::shutdownFailedPod() {
+
+    if(end_list_.empty())
+        return ;
+
     auto serv = end_list_.front();
 
     serv->stopPodsInService();

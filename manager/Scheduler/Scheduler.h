@@ -12,6 +12,8 @@ public:
 
     explicit Scheduler(const std::list<WorkerDescriptor *> &workers) : workers_(workers) {}
 
+    virtual ~Scheduler() = default;
+
     virtual WorkerDescriptor *getBestWorker(PodDescriptor *pod) = 0;
 
 protected:
@@ -19,19 +21,21 @@ protected:
 };
 
 
-class RoundRobin final : Scheduler {
+class RoundRobin final : public Scheduler {
 public:
+
+    explicit RoundRobin(const std::list<WorkerDescriptor *> &workers) : Scheduler(workers) {}
 
     [[nodiscard]] WorkerDescriptor *getBestWorker(PodDescriptor *pod) override {
 
         int i = 0;
 
-        for(auto &worker : workers_){
+        for (auto &worker: workers_) {
 
             // 检查 worker 的服务和端口是否符合
-            if(worker->alive && worker->portAvailable(pod->port_))
+            if (worker->alive && worker->portAvailable(pod->port_))
                 return worker;
-
+          //  return worker;
         }
 
         return nullptr;

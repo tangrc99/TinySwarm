@@ -27,7 +27,7 @@ public:
         th_ = std::thread([this] { loop(); });
     }
 
-    ~RpcClient(){
+    virtual ~RpcClient(){
         quit = true;
 
         if(th_.joinable())

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="manager"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\MapReduce\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\usr\local\share\cmake\;CMake Files\..\..\..\..\usr\local\share\cmake\nlohmann_json\;CMake Files\worker\;CMake Files\manager\;CMake Files\Yolo\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="manager">
+				<Option output="/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/manager" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/tangrenchu/CLionProjects/TinySwarm"/>
+					<Add directory="/Users/tangrenchu/CLionProjects/TinySwarm/LogUtils"/>
+					<Add directory="/Users/tangrenchu/CLionProjects/TinySwarm/TCPServer"/>
+					<Add directory="/Users/tangrenchu/CLionProjects/TinySwarm/Common"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 manager"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="manager/fast">
+				<Option output="/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/manager" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/tangrenchu/CLionProjects/TinySwarm"/>
+					<Add directory="/Users/tangrenchu/CLionProjects/TinySwarm/LogUtils"/>
+					<Add directory="/Users/tangrenchu/CLionProjects/TinySwarm/TCPServer"/>
+					<Add directory="/Users/tangrenchu/CLionProjects/TinySwarm/Common"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 manager/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/tangrenchu/CLionProjects/TinySwarm/cmake-build-debug/manager/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/Common/HTTPData.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/Common/HTTPData.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/Common/IPAddress.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/Common/IPAddress.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/Common/MsgPack.pb.cc">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/Common/RPCServer.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/Common/RPCServer.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/LogUtils/LoggerControl.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/LogUtils/LoggerControl.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/LogUtils/Logging.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/LogQueue.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/LogQueue.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Manager.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Manager.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/ManagerError.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/ManagerRpcInterface.pb.cc">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/ManagerRpcInterface.pb.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/PodDescriptor.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/PodDescriptor.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Proxy/NginxProxy.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Proxy/NginxProxy.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Proxy/NoProxy.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Proxy/Proxy.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Proxy/Proxy.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/RPCInterface.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/RPCInterface.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Result.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/Scheduler/Scheduler.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/ServiceDescriptor.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/ServiceManager.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/ServiceManager.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/WorkerClient.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/WorkerDescriptor.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/WorkerRpcInterface.pb.cc">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/WorkerRpcInterface.pb.h">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/main.cpp">
+			<Option target="manager"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/MapReduce/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\MapReduce\"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/../../../../usr/local/share/cmake/nlohmann_json/nlohmann_jsonConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\cmake\nlohmann_json\"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/../../../../usr/local/share/cmake/nlohmann_json/nlohmann_jsonConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\cmake\nlohmann_json\"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/../../../../usr/local/share/cmake/nlohmann_json/nlohmann_jsonTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\cmake\nlohmann_json\"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/worker/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\worker\"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/manager/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\manager\"/>
+		</Unit>
+		<Unit filename="/Users/tangrenchu/CLionProjects/TinySwarm/Yolo/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Yolo\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

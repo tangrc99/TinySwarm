@@ -6,7 +6,9 @@
 #define TINYSWARM_SERVICEMANAGER_H
 
 #include "Proxy/Proxy.h"
+#include "Proxy/NoProxy.h"
 #include "ServiceDescriptor.h"
+#include "RPCInterface.h"
 #include "Manager.h"
 #include <vector>
 #include <random>
@@ -21,12 +23,34 @@ namespace manager {
 
         using Token = std::string;
 
-        explicit ServiceManager(Manager *manager, Proxy *proxy) : manager_(manager), proxy_(proxy) {}
 
+        explicit ServiceManager(IPAddress address) : manager_(std::make_unique<Manager>("trc")),
+                                                     proxy_(std::make_unique<NoProxy>()) {
+
+            std::vector<std::function<void()>> functors = {
+                    [this] {
+                        startFailedPod();
+                        shutdownFailedPod();
+                    },
+                    [this] { manager_->transferDownService(); }
+            };
+
+            server_ = std::make_unique<RPCServer>(address, functors, 1, -1);
+            service_ = new RPCInterface(this);
+            server_->addService(service_);
+        }
+
+        ~ServiceManager() {
+            delete service_;
+        }
+
+        void run() const {
+            server_->startService();
+        }
 
         Json createService(std::string token, int num, const std::string &service,
-                          ServiceType type, int port, const std::vector<char *> &exe_params,
-                          const std::vector<char *> &docker_params, int restart = 0) {
+                           ServiceType type, int port, const std::vector<char *> &exe_params,
+                           const std::vector<char *> &docker_params, int restart = 0) {
 
             if (token.empty())
                 token = generateToken(9);
@@ -48,19 +72,25 @@ namespace manager {
                 }
             }
 
-            // 创建其代理地址
-            auto addr = proxy_->insertAddressPool(token, getPodGroupAddressPool(group));
+            if (group.empty())
+                return {};
 
+            std::string addr;
 
-            ServiceDescriptor sd(token, group, num, addr, manager_);
-
-
-            if (!group.empty()) {
-                auto ptr = &map_.emplace(token, sd).first->second;
-                //FIXME: 这里如果一个都没有创建完成，那么则返回用户失败，若有创建完成的，则暂时不返回失败，尝试继续创建
-                if (group.size() < num)
-                    start_list_.emplace_back(ptr);
+            if (port > 0) {
+                // 创建其代理地址
+                addr = proxy_->insertAddressPool(token, getPodGroupAddressPool(group));
             }
+
+            ServiceDescriptor sd(token, group, num, addr, manager_.get());
+
+            auto res = map_.emplace(token, sd).first;
+
+            manager::ServiceDescriptor *sd_ptr = &res->second;
+
+            //FIXME: 这里如果一个都没有创建完成，那么则返回用户失败，若有创建完成的，则暂时不返回失败，尝试继续创建
+            if (group.size() < num)
+                start_list_.emplace_back(sd_ptr);
 
             return sd.toJson();
         }
@@ -84,24 +114,32 @@ namespace manager {
             return proxy_->deleteAddressPool(token);
         }
 
-        Json getServiceInformation(const std::string &token){
+        Json getServiceInformation(const std::string &token) {
 
             auto sd = getServiceDescriptor(token);
 
-            if(sd == nullptr)
+            if (sd == nullptr)
                 return {};
 
             return sd->toJson();
         }
 
-        Json getAccessAddress(const std::string &token){
+        Json getAccessAddress(const std::string &token) {
 
             auto sd = getServiceDescriptor(token);
 
-            if(sd == nullptr)
+            if (sd == nullptr)
                 return {};
 
             return sd->getAccessAddress();
+        }
+
+        Json showWorkerNodes() {
+            return manager_->showWorkerNodes();
+        }
+
+        void connectToWorker(const IPAddress &address) {
+            manager_->connectToWorker(address);
         }
 
     private:
@@ -133,9 +171,11 @@ namespace manager {
         std::list<manager::ServiceDescriptor *> end_list_;  // 用来解决用户关闭多个pod可能失败的问题
 
 
-        Manager *manager_;
-        Proxy *proxy_;
+        RPCInterface *service_;
 
+        std::unique_ptr<Manager> manager_;
+        std::unique_ptr<Proxy> proxy_;
+        std::unique_ptr<RPCServer> server_;
     };
 }
 

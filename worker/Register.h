@@ -13,7 +13,7 @@ public:
 
     Register() = default;
 
-    ~Register() = default;
+    virtual ~Register() = default;
 
     virtual bool registry(const std::string &address) = 0;
 };

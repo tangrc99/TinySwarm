@@ -7,9 +7,11 @@
 
 #include "RpcClient.h"
 #include "MapReduce.h"
-
+#include "ManagerRpcInterface.pb.h"
 #include "DynamicGenerator.h"
 #include "YoloInfer.pb.h"
+#include <nlohmann/json.hpp>
+#include "MongoImg.h"
 
 
 using namespace mapreduce;
@@ -92,24 +94,95 @@ void test() {
     double m_HE = 6.6904924e-27;
     double q_HE = 3.204e-19;
 
+
     double B0 = 2.1;
     double B = 2.1;
-    double ne = 3e18;   // 1e19
-    double o_D = -q_D * B / m_D;
+    double ne = 3e19;   // 1e19
+    double o_D = q_D * B / m_D;
     double o_H = -q_H * B / m_H;
     double o_HE = -q_HE * B / m_HE;
     double w_D = sqrt((q_D * q_D) * ne / (e0 * m_D));
     double w_H = sqrt((q_H * q_H) * ne / (e0 * m_H));
     double w_HE = sqrt((q_HE * q_HE) * ne / (e0 * m_HE));
-    double e_x = -(w_D * w_D) * o_D / (((w * w) - (o_D * o_D)) * w) - (w_H * w_H) * o_H / (((w * w) - (o_H * o_H)) * w);
 
-    double e_pingxing = 1 - (w_D * w_D) / (w * w) - (w_H * w_H) / (w * w);
-    double e_chuizhi = 1 - (w_D * w_D) / ((w * w) - (o_D * o_D)) - (w_H * w_H) / (w * w - o_H * o_H);
+    double e_x = (w_D * w_D) * o_D / ((w * w - o_D * o_D) * w);
+
+    double q_dianzi = -1.602e-19;
+    double m_dianzi = 9.10956e-31;
+    double w_dianzi = sqrt((q_dianzi * q_dianzi) * ne / (e0 * m_dianzi));
+    double o_dianzi = q_dianzi * B / m_dianzi;
+    double e_pingxing = 1.0 - (w_dianzi * w_dianzi) / (w * w);
+
+    double R = 1.0 + (w_D * w_D) / (o_D * (w + o_D));
+    double L = 1.0 - (w_D * w_D) / (o_D * (w - o_D));
+
+    // double e_pingxing = 1.0 - (w_D * w_D) / (w * w) - (w_H * w_H) / (w * w);
+    double e_chuizhi = 1.0 / (2 * (R + L));
+    double e_chuizhi2 =
+            1.0 - (w_D * w_D) / ((w * w) - (o_D * o_D)) - (w_dianzi * w_dianzi) / (w * w - o_dianzi * o_dianzi);
 
     std::cout << "w_D: " << w_D << std::endl
+              << "o_D: " << o_D << std::endl
               << "e_x: " << e_x << std::endl
+              << "w_dianzi: " << w_dianzi << std::endl
               << "e_pingxing: " << e_pingxing << std::endl
-              << "e_chuizhi: " << e_chuizhi << std::endl;
+              << "e_chuizhi: " << e_chuizhi << std::endl
+              << "e_chuizhi2: " << e_chuizhi2 << std::endl
+              << "R: " << R << std::endl
+              << "L: " << L << std::endl;
+}
+
+void testNew() {
+
+
+    double e0 = 8.85e-12;
+    double f = 55e6;
+    double w = 213.628e6;  // 345.4
+    double m_H = 1.6726231e-27;
+    double q_H = 1.602e-19;
+    double m_D = 3.3452462e-27;
+    double q_D = 1.602e-19;
+    double m_HE = 6.6904924e-27;
+    double q_HE = 3.204e-19;
+
+    double B0 = 2.25;
+    double B = 2.25;
+    double ne = 3e19;   // 1e19
+    double o_D = q_D * B / m_D;
+    double o_H = -q_H * B / m_H;
+    double o_HE = -q_HE * B / m_HE;
+    double w_D = sqrt((q_D * q_D) * ne / (e0 * m_D));
+    double w_H = sqrt((q_H * q_H) * ne / (e0 * m_H));
+    double w_HE = sqrt((q_HE * q_HE) * ne / (e0 * m_HE));
+
+    double q_dianzi = -1.602e-19;
+    double m_dianzi = 9.10956e-31;
+    double w_dianzi = sqrt((q_dianzi * q_dianzi) * ne / (e0 * m_dianzi));
+
+    double o_dianzi = q_dianzi * ( B / m_dianzi );
+
+    double e_pingxing = 1.0 - (w_dianzi * w_dianzi) / (w * w);
+
+    double e_x = (w_D * w_D) * o_D / ((w * w - o_D * o_D) * w) + (w_dianzi * w_dianzi) *o_dianzi/((w*w-o_dianzi*o_dianzi)*w);
+
+    double R = 1.0 - (w_D * w_D) / (w * (w + o_D)) -
+               (w_dianzi * w_dianzi) / (w * (w + o_dianzi));// 1.0 + (w_D * w_D) / ( o_D * (w + o_D) );
+    double L = 1.0 - (w_D * w_D) / (w * (w - o_D)) -
+               (w_dianzi * w_dianzi) / (w * (w - o_dianzi));//1.0 - (w_D * w_D) / ( o_D * (w - o_D) );
+    double e_chuizhi = 0.5 * (R + L) ;
+    double e_chuizhi2 =
+            1.0 - (w_D * w_D) / ((w * w) - (o_D * o_D)) - (w_dianzi * w_dianzi) / (w * w - o_dianzi * o_dianzi);
+
+    std::cout << "w_D: " << w_D << std::endl
+              << "o_D: " << o_D << std::endl
+              << "e_x: " << e_x << std::endl
+              << "o_dianzi: " << o_dianzi << std::endl
+              << "w_dianzi: " << w_dianzi << std::endl
+              << "e_pingxing: " << e_pingxing << std::endl
+              << "e_chuizhi: " << e_chuizhi << std::endl
+              << "e_chuizhi2: " << e_chuizhi2 << std::endl
+              << "R: " << R << std::endl
+              << "L: " << L << std::endl;
 }
 
 void cast(Message *in, Message *out) {
@@ -144,16 +217,28 @@ void protobuf_test() {
 
 int main() {
 
-    using Json = nlohmann::json;
+    ManagerClient cli("ManagerService", "/Users/tangrenchu/CLionProjects/TinySwarm/manager");
 
-    Json json;
-    json["1"] = 1;
-    json["2"] = {1, 0, 2};
-    json["3"] = {{"3.1", "1"},
-                 {"3.2", 3.2}};
+    auto session = cli.createSession(IPAddress(AF_INET, 8888));
 
-    std::cout << json.dump() ;
-    //test();
+    ServiceName name;
+    name.set_token("my_redis");
+
+    auto res = session->run("getServiceInfo", &name);
+
+    JsonMessage jsonMessage;
+
+    if (res.isFailed()) {
+        std::cerr << res.ErrorText();
+        return -1;
+    }
+
+    res.castMessageTo(&jsonMessage);
+
+    auto json = nlohmann::json::parse(jsonMessage.content());
+
+    std::cout << json.dump(4);
+
     return 0;
 
 

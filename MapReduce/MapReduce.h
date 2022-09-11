@@ -40,6 +40,13 @@ namespace mapreduce {
             return output->ParseFromString(input->SerializeAsString());
         }
 
+        std::vector<IPAddress> getServiceAddresses(){
+            std::vector<IPAddress> addresses;
+
+
+            return addresses;
+        }
+
 
 //        void run(int num) {
 //
@@ -69,7 +76,8 @@ namespace mapreduce {
 
 
     private:
-        std::shared_ptr<RpcClient> cli;
+        std::shared_ptr<RpcClient> cli; // 这个是用户访问服务的client
+        std::unique_ptr<ManagerClient> manager_;    // 这个是连接manager的 client
     };
 
 }

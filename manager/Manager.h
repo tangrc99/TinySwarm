@@ -17,6 +17,7 @@
 #include <sw/redis++/redis++.h>
 #include <list>
 #include <sstream>
+#include <utility>
 
 class Manager {
 
@@ -27,7 +28,7 @@ public:
 
     WorkerDescriptor *selectWorker(PodDescriptor *pod) const {
 
-        return scheduler->getBestWorker(pod);
+        return scheduler_->getBestWorker(pod);
     }
 
     CreateResult selectWorkerToCreatePod(const std::string &service, const std::string &alias,
@@ -35,20 +36,25 @@ public:
                                          const std::vector<char *> &exe_params,
                                          const std::vector<char *> &docker_params, int restart = 0) {
 
-        PodDescriptor pod(service, alias, type, 1, port, {}, exe_params, docker_params, restart);
+        PodDescriptor &pod = pods.emplace(alias,
+                                          PodDescriptor(service, alias, type, false, port, {}, exe_params,
+                                                        docker_params, restart)).first->second;
 
-        pod.wd_ = selectWorker(&pod);
+        auto wd = selectWorker(&pod);
+        pod.bindWorker(wd);
 
-        if (pod.wd_ == nullptr)
+//        auto r = pods.emplace(alias, pod);
+//        return CreateResult(&(r.first->second));
+
+        if (pod.wd_ == nullptr){
+            pods.erase(alias);
             return CreateResult("Available Worker Not Found");
+        }
 
         auto res = createService(pod);
 
-        //FIXME: 这里可以加入一些机制来多次尝试启动服务
-
-        if (!res.isFail())
-            pods.emplace(alias, pod);
-
+        if(res.isFail())
+            pods.erase(alias);
         return res;
     }
 
@@ -146,7 +152,7 @@ public:
 
 
     /// RPC, Create a service on a worker node with ServiceInfo. If succeed, current node
-    /// will publish message to other manager nodes. The ServiceInfo will be set alive.
+    /// will publish message to other manager nodes. The ServiceInfo will be set connected.
     /// \param info ServiceInfo of service to create. Warning This ServiceInfo is in services map.
     /// \return [if created, error info]
     CreateResult createService(PodDescriptor &info) {
@@ -200,6 +206,12 @@ public:
         publishMessage(info);
 
         info.alive_ = true;
+
+        if (pods.find(info.alias_) == pods.end()) {
+            PodDescriptor &ref = pods.emplace(info.alias_, info).first->second;
+            return CreateResult(&ref);
+        }
+
         return CreateResult(&info);
     }
 
@@ -277,7 +289,7 @@ public:
             return {false, "Alias Not Found"};
 
         pods.erase(it); // 删除 service 本身信息
-        info.wd_->removeService(&info); // 删除 worker 上的指针
+        info.wd_->removePodDescriptor(&info); // 删除 worker 上的指针
 
         auto[rpc_res, error] = shutdownService(info);
 
@@ -300,8 +312,7 @@ public:
     std::pair<bool, std::string> transferService(PodDescriptor &info, WorkerDescriptor *new_wd) {
 
         auto old_info = info;
-        info.wd_ = new_wd;
-        info.ip = new_wd->ip;
+        info.bindWorker(new_wd);
 
         auto res = createService(info);
 
@@ -313,7 +324,7 @@ public:
 
         if (old_info.alive_ == 1) {
             // 如果还存活的话，需要先关闭。
-            old_info.wd_->removeService(&info);
+            old_info.wd_->removePodDescriptor(&info);
 
             auto[res1, error1] = shutdownService(old_info);
 
@@ -344,6 +355,7 @@ public:
         auto rpc_res = wd->session->run(CHECK, &input);
 
         if (rpc_res.isFailed()) {
+            std::cout << "worker is down" << std::endl;
             wd->alive = false;  // 如果 worker 没有存活，将所有的服务转为下线
             for (auto &service: wd->pods) {
                 service->alive_ = false;
@@ -351,6 +363,12 @@ public:
             }
             return;
         }
+
+        rpc_res.castMessageTo(&downServices);
+
+        // 如果没有服务下线，那么直接返回即可
+        if(downServices.service_size() == 0)
+            return ;
 
         // 代表 manager 长时间未与 worker 连接，所有的服务都已经被下线
         if (downServices.service(0).alias() == "*") {
@@ -382,6 +400,9 @@ public:
         }
     }
 
+    /// Communicate withe all workers and check pods' status. If any of worker is unconnected, manager will try to reconnect.
+    /// If a pod was exit, the worker will return its exit num, reason and log file.
+    /// \param line The num of log file lines worker will returned
     void checkServicesOnAllWorker(int line) {
         for (auto worker: workers) {
             if (worker->alive)
@@ -415,7 +436,7 @@ public:
         wd->ip = ipAddress.getAddressWithoutPort();
         wd->port = std::stoi(ipAddress.getPort());
         wd->session = session;
-        wd->alive = true;
+        wd->alive = session->connected();
 
         workers.emplace_back(wd);
         return wd;
@@ -423,7 +444,7 @@ public:
 
     WorkerDescriptor *connectToWorker(WorkerDescriptor *wd) {
         wd->session = cli.createSessionOnNewChannel(IPAddress(wd->ip.c_str(), AF_INET, wd->port));
-        wd->alive = wd->session->alive();
+        wd->alive = wd->session->connected();
 
         return wd;
     }
@@ -670,7 +691,8 @@ public:
             snapshot_thread.join();
     }
 
-    explicit Manager(const std::string &usr) : usr_info(usr), cur_line(0) {
+    explicit Manager(std::string usr) : usr_info(std::move(usr)), cur_line(0),
+                                        scheduler_(new RoundRobin(workers)) {
 
         logger = std::make_unique<LogQueue>("./manager.log");
         logger->start();
@@ -678,32 +700,9 @@ public:
         // 从snapshot 和 log 中恢复之前的信息
         recover();
 
-
-
-
-
         // 创建一个redis实例以及redis的客户端
         redis = std::make_unique<sw::redis::Redis>("tcp://127.0.0.1:6379");
-//        // 向注册中心得到当前存活的节点
-//
-//
-//
-//
-//        IPAddress ipAddress(AF_INET, 8989);
 
-        // 周期任务，用来定时跟worker通信，以及查找是否有失活的服务
-        std::vector<std::function<void()>> functors = {
-                [this] {
-                    auto now = time_t(nullptr);
-                    if (now > check_time) {
-                        checkServicesOnAllWorker(10);
-                        check_time = now + 5;
-                    }
-
-                    transferDownService();
-                }
-        };
-//        server = std::make_unique<RPCServer>(ipAddress, functors, 1, -1);
     }
 
 
@@ -722,6 +721,13 @@ public:
 
 
     void transferDownService() {
+
+        auto now = time(nullptr);
+
+        if (now > check_time) {
+            checkServicesOnAllWorker(10);
+            check_time = now + 5;
+        }
 
         for (auto &pod: down_services) {
 
@@ -742,18 +748,19 @@ public:
                     removeDownService(pod);
             }
         }
-
-
     }
 
+    nlohmann::json showWorkerNodes() {
+        nlohmann::json result;
+        std::vector<nlohmann::json> worker_list;
+        worker_list.reserve(workers.size());
 
-    auto getServices() {
-        return &pods;
-    }
+        for (auto worker: workers)
+            worker_list.emplace_back(worker->toJson());
 
+        result["workers"] = worker_list;
 
-    void run() const {
-        server->startService();
+        return result;
     }
 
     std::vector<const PodDescriptor *> showServices(const std::string &service) {
@@ -788,7 +795,6 @@ public:
 
     WorkerClient cli;
 
-
     /// 所有的服务信息存储在services表中，其余的只是提供指针
     /// 增加操作: createService,删除操作: stopPod,转移操作: transferService
     using Alias = std::string;
@@ -800,11 +806,10 @@ public:
 
     std::string usr_info;
 
-    std::unique_ptr<RPCServer> server;
 
-    time_t check_time;  // 因为底层 TCP 没加计时任务功能，这个是用于计时的
+    time_t check_time = 0;  // 因为底层 TCP 没加计时任务功能，这个是用于计时的
 
-    Scheduler *scheduler;
+    Scheduler *scheduler_;
 };
 
 

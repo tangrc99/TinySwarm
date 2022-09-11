@@ -54,10 +54,13 @@ namespace worker {
                 exit(1);
             }
 
-            if (work_dir.back() == '/')
+            if (work_dir.back() == '/') {
                 status = new WorkerStatus(work_dir, work_dir + "WorkerInformation");
-            else
+                recorder = std::make_unique<PodRecorder>(work_dir + "ServiceRecord", rpc_service);
+            } else {
                 status = new WorkerStatus(work_dir, work_dir + "/WorkerInformation");
+                recorder = std::make_unique<PodRecorder>(work_dir + "/ServiceRecord", rpc_service);
+            }
 
 
             // 这里要进行docker的注册，防止后面pull失败
@@ -77,7 +80,6 @@ namespace worker {
             rpc_server = new RPCServer(IPAddress(AF_INET, 8989), functors);
             rpc_server->addService(rpc_service);
 
-            recorder = std::make_unique<PodRecorder>(work_dir, rpc_service);
 
         }
 
@@ -408,6 +410,15 @@ namespace worker {
             return -2;
         }
 
+        bool checkIfAliasOK(const std::string &manager, const std::string &alias, std::string &reason) {
+            for (auto &pod: pods) {
+                if (pod.alias == alias) {
+                    reason = (pod.manager == manager) ? SAME_SERV : SAME_ALIAS;
+                    return false;
+                }
+            }
+            return true;
+        }
 
         /// Check services. If service is down, collect the reason and put it in down_services.
         /// If the service is marked restart, try to restart it.
@@ -527,7 +538,7 @@ namespace worker {
             return status->isServiceExist(service);
         }
 
-        /// Worker RPC Interface. Check whether a manager is down. If manager is alive or not connected, it is described NOT DOWN.
+        /// Worker RPC Interface. Check whether a manager is down. If manager is connected or not connected, it is described NOT DOWN.
         /// \param manager The name of manager
         /// \return True, if manager is down. False, else
         bool isManagerDown(const std::string &manager) {

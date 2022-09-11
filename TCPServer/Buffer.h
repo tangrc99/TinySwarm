@@ -35,7 +35,7 @@ public:
     }
 
     //FIXME
-    size_t readToBuffer(const int &fd) {
+    ssize_t readToBuffer(const int &fd) {
         if ((buffer.capacity() - end) <= 2000) {
             buffer.reserve(buff_len * 2);
             buff_len = buffer.capacity();
@@ -48,8 +48,7 @@ public:
             end = 0;
         }
 
-        //这样修改会导致 std::string 的 size()没有改变
-        size_t n = ::read(fd, &buffer[end], buff_len - end);
+        ssize_t n = ::read(fd, &buffer[end], buff_len - end);
 
         // 丢弃心跳(写入位置不增长)
         if (n == 1 && buffer[end] == ' ') {

@@ -27,6 +27,11 @@ public:
 
     }
 
+    ~RpcAsyncSession() {
+        if (th_.joinable())
+            th_.join();
+    }
+
     /// Create an async rpc. There is only one async rpc running.
     /// \param method The method descriptor of rpc.
     /// \param req The input of rpc.
@@ -82,10 +87,7 @@ public:
         return controller.ErrorText();
     }
 
-    ~RpcAsyncSession() {
-        if (th_.joinable())
-            th_.join();
-    }
+
 
 protected:
     std::shared_ptr<RpcClientChannel> channel_;
@@ -130,12 +132,11 @@ public:
         channel_->sessionCreateNotify();
     }
 
-    ~Session() {
+    virtual ~Session() {
         channel_->sessionDestroyNotify();
     }
 
-
-    bool alive() {
+    bool connected() {
         return channel_->isConnected();
     }
 

@@ -12,7 +12,7 @@ namespace manager {
     public:
 
         std::string insertAddressPool(const std::string &pool_name, const AddressPool &pool) override {
-            return {}
+            return {};
         }
 
         bool deleteAddressPool(const std::string &pool_name) override {

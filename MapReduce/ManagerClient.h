@@ -8,27 +8,29 @@
 #include "Common/RpcClient.h"
 #include "AddressPool.h"
 
-using AddressVector = AddressPool::AddressVector;
+namespace mapreduce {
 
-class ManagerClient : public RpcClient {
-public:
+    using AddressVector = AddressPool::AddressVector;
 
-    explicit ManagerClient(const std::string &service, const std::string &proto_path)
-            : RpcClient(service, proto_path), pool_(std::make_unique<AddressPool>()) {}
+    class ManagerClient : public RpcClient {
+    public:
 
-    AddressVector getAddressVec(const std::string &token) {
-        return pool_->findAddresses(token);
-    }
+        explicit ManagerClient(const std::string &service, const std::string &proto_path)
+                : RpcClient(service, proto_path), pool_(std::make_unique<AddressPool>()) {}
 
-    bool SessionCallBack() override{
+        AddressVector getAddressVec(const std::string &token) {
+            return pool_->findAddresses(token);
+        }
 
-    }
+        bool SessionCallBack() override {
 
-private:
+        }
 
-    std::unique_ptr<AddressPool> pool_;
+    private:
 
-};
+        std::unique_ptr<AddressPool> pool_;
 
+    };
 
+}
 #endif //TINYSWARM_MANAGERCLIENT_H

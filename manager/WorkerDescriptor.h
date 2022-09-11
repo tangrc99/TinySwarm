@@ -21,9 +21,9 @@ struct WorkerDescriptor {
 
 
 
-    void removeService(PodDescriptor *service) {
+    void removePodDescriptor(PodDescriptor *pd) {
         for (auto it = pods.begin(); it != pods.end();) {
-            if (*it == service) {
+            if (*it == pd) {
                 pods.erase(it);
                 return;
             } else {
@@ -39,6 +39,24 @@ struct WorkerDescriptor {
         }
         return true;
     }
+
+    nlohmann::json toJson(){
+        nlohmann::json json;
+
+        json["ip"] = ip;
+        json["port"] = port;
+        json["status"] = (alive ? "connected" : "down" );
+        json["service"] = services;
+        std::vector<std::string> pod_names;
+        pod_names.reserve(pods.size());
+        for(auto pod : pods){
+            pod_names.emplace_back(pod->alias_);
+        }
+        json["pods"] = pod_names;
+
+        return json;
+    }
+
 };
 
 #endif //TINYSWARM_WORKERDESCRIPTOR_H
