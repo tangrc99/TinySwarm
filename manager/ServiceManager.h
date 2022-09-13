@@ -32,7 +32,10 @@ namespace manager {
                         startFailedPod();
                         shutdownFailedPod();
                     },
-                    [this] { manager_->transferDownService(); }
+                    [this] {
+                        manager_->checkPodsOnAllWorker(10);
+                        manager_->transferDownPod();
+                    }
             };
 
             server_ = std::make_unique<RPCServer>(address, functors, 1, -1);
@@ -52,19 +55,20 @@ namespace manager {
                            ServiceType type, int port, const std::vector<char *> &exe_params,
                            const std::vector<char *> &docker_params, int restart = 0) {
 
+            // 如果没有指定名称，则需要随机指定
             if (token.empty())
                 token = generateToken(9);
 
             PodGroup group;
 
+            // 创建服务所指定数量的pod，pod名称为 service_xx
             for (int i = 0; i < num; i++) {
 
                 auto alias = token;
                 if (num > 1)
                     alias += "_" + std::to_string(i);
 
-                auto res = manager_->selectWorkerToCreatePod(service, alias, type, port, exe_params,
-                                                             docker_params,
+                auto res = manager_->selectWorkerToCreatePod(service, alias, type, port, exe_params, docker_params,
                                                              restart);
 
                 if (!res.isFail()) {
@@ -88,7 +92,6 @@ namespace manager {
 
             manager::ServiceDescriptor *sd_ptr = &res->second;
 
-            //FIXME: 这里如果一个都没有创建完成，那么则返回用户失败，若有创建完成的，则暂时不返回失败，尝试继续创建
             if (group.size() < num)
                 start_list_.emplace_back(sd_ptr);
 

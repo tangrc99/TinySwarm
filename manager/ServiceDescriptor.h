@@ -69,7 +69,7 @@ namespace manager {
         void stopPodsInService() {
 
             for (auto pod = pods_.begin(); pod != pods_.end();) {
-                auto[res, error] = manager_->stopService(*(*pod));
+                auto[res, error] = manager_->stopPod((*pod));
                 if (res) {
                     pod = pods_.erase(pod);
                 } else {

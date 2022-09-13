@@ -7,15 +7,17 @@
 
 
 ## 做到一半没有做完的
-- manager/Result.h 还没有写完
-- manager 部分，将用户rpc与manager节点中加入一个 中间类 ServiceManager 用来处理用户逻辑中的服务概念，并且进行多个rpc的分布式操作
+- 不确定 rpc 的超时部分能不能正常工作
+- 所有的配置都是直接写入程序的，应该提取出来
+- 为什么 manager 节点需要用 gossip 来进行同步？ 可以给gossip安装分布式搜索的功能，这样client可以搜索其他地方所启动的服务。
 
 ## 比较困难，但是打算进行完善的
 - manager 节点处的 proxy 代理
-- manager 节点的抽象还不够，需要加入pod - service - service_group 的抽象；一个service可以具有多个pod，一个service_group可以有多个 service
+- 对 worker 和 manager 节点注册信号，以防止退出的时候可以正常退出: 这个可能要放到tcp服务中来完成了
+- 如何实现rpc的pipeline操作？ 在调用callmethod的时候，直接返回一个message包含系列号，然后用另外的方法来获得异步结果即可。
+
 
 ## 未来需要加入的新功能
-- 节点内部的各个功能需要进行分块处理，防止某个.cpp文件过大，不方便阅读
 - 存活探针机制，如果 worker 节点发现某个进程陷入死循环等，需要主动将其退出，并且报告错误；需要参考k8s的具体实现
 - worker 节点需要具备自己的信息，如本地部署服务的信息，版本号；自身 CPU 的利用率；物理分区等情况
 - worker 上的服务需要进行状态的区分，就绪，正在运行，掉线等状态 --- 就绪是发起创建，但没有fork 只要在 manager 处更新就可以了

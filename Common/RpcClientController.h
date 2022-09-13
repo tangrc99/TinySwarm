@@ -5,8 +5,20 @@
 #ifndef RPCSERVER_RPCCLIENTCONTROLLER_H
 #define RPCSERVER_RPCCLIENTCONTROLLER_H
 
-#include "Closure.h"
 #include <google/protobuf/service.h>
+#include <google/protobuf/stubs/callback.h>
+#include <csignal>
+#include <thread>
+
+
+class ClosureImpl : public google::protobuf::Closure {
+public:
+
+    void Run() override{
+
+    }
+
+};
 
 
 class RpcClientController : public google::protobuf::RpcController {
@@ -42,12 +54,22 @@ public:
     }
 
     void SetFailed(const std::string &reason) override {
+        if(canceled)    // 如果已经取消了，防止覆盖error_text
+            return ;
+
         failed = true;
         error_text = reason;
     }
 
+    void Cancel(std::thread &th){
+        StartCancel();
+        pthread_kill(th.native_handle(), SIGALRM);
+    }
+
     void StartCancel() override {
         canceled = true;
+        failed = true;
+        error_text = "RPC TIMEOUT";
     }
 
     RpcClientController() : canceled(false), failed(false), error_text({}) {}

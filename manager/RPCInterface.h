@@ -6,9 +6,6 @@
 #define TINYSWARM_RPCINTERFACE_H
 
 #include "ManagerRpcInterface.pb.h"
-//#include <google/protobuf/service.h>
-//#include <google/protobuf/descriptor.h>
-//#include <google/protobuf/message.h>
 
 
 using google::protobuf::RpcController;

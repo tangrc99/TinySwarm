@@ -18,7 +18,6 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/dynamic_message.h>
 #include <google/protobuf/compiler/importer.h>
-#include <sw/redis++/redis.h>
 #include <memory>
 #include <utility>
 
@@ -29,6 +28,9 @@ using google::protobuf::MethodDescriptor;
 using google::protobuf::RpcController;
 
 
+static void emptyFunction(int) {
+}
+
 /// Class RpcClientChannel is based on Class google::protobuf::RpcChannel, provides serialize and web socket
 class RpcClientChannel : public google::protobuf::RpcChannel {
 public:
@@ -36,12 +38,6 @@ public:
 
     explicit RpcClientChannel(IPAddress ipAddress) : address(ipAddress), sockfd(::socket(AF_INET, SOCK_STREAM, 0)),
                                                      sessions_(0) {
-
-//        // non-block
-//        int flags = ::fcntl(sockfd, F_GETFL, 0);  ///得到文件状态标记
-//        flags |= O_NONBLOCK;
-//        int ret = ::fcntl(sockfd, F_SETFL, flags);    ///设置文件状态标记
-//        (void) ret;
 
         auto res = ::connect(sockfd, address.toSockAddrPtr(), address.addrlen());
 
@@ -73,7 +69,6 @@ public:
 
         return connected;
     }
-
 
     /// Check if channel is connected.
     /// \return Is connected
@@ -119,15 +114,18 @@ public:
                     google::protobuf::RpcController *controller, const google::protobuf::Message *request,
                     google::protobuf::Message *response, google::protobuf::Closure *done) override {
 
+        // 准备好数据包，然后对 fd 加锁进行写
+        // 收到数据包后进行匹配，如果不匹配则放入缓冲区
+
         std::lock_guard<std::mutex> lg(mtx);
 
         if (!connected) {
             controller->SetFailed("Not Connect");
             return;
         }
-
         controller->Reset();
 
+        setAlarm();
 
         /// 需要实现数据的封装和通信过程
         /// 按照method: echo 的方式进行封装
@@ -137,14 +135,16 @@ public:
 
             pack.set_data(request->SerializeAsString());    /// 将序列化后的数据打包
             assert(!pack.data().empty());
-            pack.set_packtype(request->GetTypeName());  /// 记录打包前的数据类型
             pack.set_method(method->name());    /// 需要调用的方法
             pack.set_service(method->service()->name());    /// 需要调用的方法所在的服务
+            pack.set_sequence(sequence_);
+            unsetAlarm();
 
         } catch (std::exception &e) {
             controller->SetFailed("Message Pack Error");
+            unsetAlarm();
+            return;
         }
-
 
         std::string sss = pack.SerializeAsString();
         //std::cout << sss << std::endl;
@@ -153,26 +153,34 @@ public:
             sendMessages(sss);
             waitResponse(response);
             timestamp = time(nullptr);
+            unsetAlarm();
 
         } catch (std::exception &e) {
             controller->SetFailed(e.what());
+            unsetAlarm();
         }
 
     }
 
+
 private:
 
-    static int alarm_flag;
+    /// Set an alarm, if thread is blocked by read. Alarm will abort the system call.
+    static void setAlarm() {
+        struct sigaction act{};
+        act.sa_flags = 0;
+        act.sa_handler = emptyFunction;
+        sigaction(SIGALRM, &act, nullptr);
+        alarm(30);
+    }
 
-    std::atomic<int> sessions_; // the num of sessions
-
-    time_t timestamp{}; // 上一次成功通信的时间
-
-    IPAddress address;
-    int sockfd = 0;
-    bool connected = false;
-
-    std::mutex mtx;
+    /// Cancel the register of SIGALRM
+    static void unsetAlarm() {
+        struct sigaction act{};
+        act.sa_flags = 0;
+        act.sa_handler = emptyFunction;
+        sigaction(SIGALRM, &act, nullptr);
+    }
 
     void sendMessages(const std::string &str) {
         std::string str_to_send;
@@ -197,10 +205,6 @@ private:
 
     }
 
-    static void Alarm(int) {
-        alarm_flag = 1;
-    }
-
     void waitResponse(google::protobuf::Message *response) {
 
         std::cout << "waiting for response\n";
@@ -210,27 +214,19 @@ private:
 
         size_t rd;
 
-        // 定时三十秒，防止读操作一直被阻塞
-        signal(SIGALRM, Alarm);
-        alarm_flag = 0;
-        alarm(30);
-
         // 读取数据
         do {
 
             rd = buffer.readToBuffer(sockfd);   // 如果数据还没到，这里会阻塞
 
-            std::cout << "wait" << rd << std::endl;
-
         } while (!buffer.isCatchHTTPEnd() && rd > 0);
 
-        // 如果长时间没有收到回复
-        if (alarm_flag == 1) {
+        // 如果长时间没有收到回复,则会被中断
+        if (errno == EINTR) {
             setDisconnected();
             throw std::runtime_error("RPC TIMEOUT");
         }
 
-        std::cout << "end wait" << std::endl;
 
         // 判断数据包是否是完整的
         if (!buffer.isCatchHTTPEnd()) {
@@ -242,7 +238,6 @@ private:
 
                 throw std::runtime_error("Message Error");
             }
-
         }
 
         auto str = buffer.str();
@@ -264,6 +259,20 @@ private:
         ::close(sockfd);
     }
 
+
+private:
+
+
+    std::atomic<int> sessions_; // the num of sessions
+
+    time_t timestamp{}; // 上一次成功通信的时间
+
+    IPAddress address;
+    int sockfd = 0;
+    bool connected = false;
+
+    std::mutex mtx;
+    uint16_t sequence_ = 0;    // 序列号, 每个 channel 都会有一个单独的序列号
 };
 
 

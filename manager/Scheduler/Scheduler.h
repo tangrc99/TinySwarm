@@ -7,43 +7,46 @@
 
 #include "../WorkerDescriptor.h"
 
-class Scheduler {
-public:
-
-    explicit Scheduler(const std::list<WorkerDescriptor *> &workers) : workers_(workers) {}
-
-    virtual ~Scheduler() = default;
-
-    virtual WorkerDescriptor *getBestWorker(PodDescriptor *pod) = 0;
-
-protected:
-    const std::list<WorkerDescriptor *> &workers_;  // reference of manger's workers
-};
+namespace manager {
 
 
-class RoundRobin final : public Scheduler {
-public:
+    class Scheduler {
+    public:
 
-    explicit RoundRobin(const std::list<WorkerDescriptor *> &workers) : Scheduler(workers) {}
+        explicit Scheduler(const std::list<WorkerDescriptor *> &workers) : workers_(workers) {}
 
-    [[nodiscard]] WorkerDescriptor *getBestWorker(PodDescriptor *pod) override {
+        virtual ~Scheduler() = default;
 
-        int i = 0;
+        virtual WorkerDescriptor *getBestWorker(PodDescriptor *pod) = 0;
 
-        for (auto &worker: workers_) {
+    protected:
+        const std::list<WorkerDescriptor *> &workers_;  // reference of manger's workers
+    };
 
-            // 检查 worker 的服务和端口是否符合
-            if (worker->alive && worker->portAvailable(pod->port_))
-                return worker;
-          //  return worker;
+
+    class RoundRobin final : public Scheduler {
+    public:
+
+        explicit RoundRobin(const std::list<WorkerDescriptor *> &workers) : Scheduler(workers) {}
+
+        [[nodiscard]] WorkerDescriptor *getBestWorker(PodDescriptor *pod) override {
+
+            int i = 0;
+
+            for (auto &worker: workers_) {
+
+                // 检查 worker 的服务和端口是否符合
+                if (worker->alive && worker->portAvailable(pod->port_))
+                    return worker;
+                //  return worker;
+            }
+
+            return nullptr;
         }
 
-        return nullptr;
-    }
-
-private:
-    int last = 0;
-};
-
+    private:
+        int last = 0;
+    };
+}
 
 #endif //TINYSWARM_SCHEDULER_H

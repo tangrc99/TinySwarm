@@ -30,7 +30,7 @@ add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
         LogQueue.cpp LogQueue.h
         RPCInterface.cpp RPCInterface.h
         ServiceManager.h
-        ManagerError.h ServiceDescriptor.h Scheduler/Scheduler.h Result.h PodDescriptor.cpp ServiceManager.cpp Proxy/NoProxy.h)
+        ManagerError.h ServiceDescriptor.h Scheduler/Scheduler.h Result.h PodDescriptor.cpp ServiceManager.cpp Proxy/NoProxy.h Publisher/Publisher.cpp Publisher/Publisher.h)
 
 
 target_link_libraries(manager protobuf libTCPServer.a log4cxx hiredis redis++)

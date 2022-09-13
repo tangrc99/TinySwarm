@@ -16,38 +16,44 @@
 #include <google/protobuf/port_def.inc>
 
 PROTOBUF_PRAGMA_INIT_SEG
-constexpr MongoImageOidRange::MongoImageOidRange(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : min_oid_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , max_oid_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+
+namespace _pb = ::PROTOBUF_NAMESPACE_ID;
+namespace _pbi = _pb::internal;
+
+PROTOBUF_CONSTEXPR MongoImageOidRange::MongoImageOidRange(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.min_oid_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.max_oid_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct MongoImageOidRangeDefaultTypeInternal {
-  constexpr MongoImageOidRangeDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR MongoImageOidRangeDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~MongoImageOidRangeDefaultTypeInternal() {}
   union {
     MongoImageOidRange _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT MongoImageOidRangeDefaultTypeInternal _MongoImageOidRange_default_instance_;
-constexpr YoloTestResult::YoloTestResult(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : accuracy_(0)
-  , precision_(0)
-  , recall_(0)
-  , ap_(0)
-  , iou_(0){}
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MongoImageOidRangeDefaultTypeInternal _MongoImageOidRange_default_instance_;
+PROTOBUF_CONSTEXPR YoloTestResult::YoloTestResult(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.accuracy_)*/0
+  , /*decltype(_impl_.precision_)*/0
+  , /*decltype(_impl_.recall_)*/0
+  , /*decltype(_impl_.ap_)*/0
+  , /*decltype(_impl_.iou_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct YoloTestResultDefaultTypeInternal {
-  constexpr YoloTestResultDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  PROTOBUF_CONSTEXPR YoloTestResultDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
   ~YoloTestResultDefaultTypeInternal() {}
   union {
     YoloTestResult _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT YoloTestResultDefaultTypeInternal _YoloTestResult_default_instance_;
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_YoloInfer_2eproto[2];
-static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_YoloInfer_2eproto = nullptr;
-static const ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor* file_level_service_descriptors_YoloInfer_2eproto[1];
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 YoloTestResultDefaultTypeInternal _YoloTestResult_default_instance_;
+static ::_pb::Metadata file_level_metadata_YoloInfer_2eproto[2];
+static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_YoloInfer_2eproto = nullptr;
+static const ::_pb::ServiceDescriptor* file_level_service_descriptors_YoloInfer_2eproto[1];
 
 const uint32_t TableStruct_YoloInfer_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
@@ -56,28 +62,28 @@ const uint32_t TableStruct_YoloInfer_2eproto::offsets[] PROTOBUF_SECTION_VARIABL
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::MongoImageOidRange, min_oid_),
-  PROTOBUF_FIELD_OFFSET(::MongoImageOidRange, max_oid_),
+  PROTOBUF_FIELD_OFFSET(::MongoImageOidRange, _impl_.min_oid_),
+  PROTOBUF_FIELD_OFFSET(::MongoImageOidRange, _impl_.max_oid_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::YoloTestResult, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::YoloTestResult, accuracy_),
-  PROTOBUF_FIELD_OFFSET(::YoloTestResult, precision_),
-  PROTOBUF_FIELD_OFFSET(::YoloTestResult, recall_),
-  PROTOBUF_FIELD_OFFSET(::YoloTestResult, ap_),
-  PROTOBUF_FIELD_OFFSET(::YoloTestResult, iou_),
+  PROTOBUF_FIELD_OFFSET(::YoloTestResult, _impl_.accuracy_),
+  PROTOBUF_FIELD_OFFSET(::YoloTestResult, _impl_.precision_),
+  PROTOBUF_FIELD_OFFSET(::YoloTestResult, _impl_.recall_),
+  PROTOBUF_FIELD_OFFSET(::YoloTestResult, _impl_.ap_),
+  PROTOBUF_FIELD_OFFSET(::YoloTestResult, _impl_.iou_),
 };
-static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::MongoImageOidRange)},
   { 8, -1, -1, sizeof(::YoloTestResult)},
 };
 
-static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_MongoImageOidRange_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_YoloTestResult_default_instance_),
+static const ::_pb::Message* const file_default_instances[] = {
+  &::_MongoImageOidRange_default_instance_._instance,
+  &::_YoloTestResult_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_YoloInfer_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -90,19 +96,21 @@ const char descriptor_table_protodef_YoloInfer_2eproto[] PROTOBUF_SECTION_VARIAB
   "\n\022testWithoutRoadSeg\022\023.MongoImageOidRang"
   "e\032\017.YoloTestResultB\003\200\001\001b\006proto3"
   ;
-static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_YoloInfer_2eproto_once;
-const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_YoloInfer_2eproto = {
-  false, false, 311, descriptor_table_protodef_YoloInfer_2eproto, "YoloInfer.proto", 
-  &descriptor_table_YoloInfer_2eproto_once, nullptr, 0, 2,
-  schemas, file_default_instances, TableStruct_YoloInfer_2eproto::offsets,
-  file_level_metadata_YoloInfer_2eproto, file_level_enum_descriptors_YoloInfer_2eproto, file_level_service_descriptors_YoloInfer_2eproto,
+static ::_pbi::once_flag descriptor_table_YoloInfer_2eproto_once;
+const ::_pbi::DescriptorTable descriptor_table_YoloInfer_2eproto = {
+    false, false, 311, descriptor_table_protodef_YoloInfer_2eproto,
+    "YoloInfer.proto",
+    &descriptor_table_YoloInfer_2eproto_once, nullptr, 0, 2,
+    schemas, file_default_instances, TableStruct_YoloInfer_2eproto::offsets,
+    file_level_metadata_YoloInfer_2eproto, file_level_enum_descriptors_YoloInfer_2eproto,
+    file_level_service_descriptors_YoloInfer_2eproto,
 };
-PROTOBUF_ATTRIBUTE_WEAK const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable* descriptor_table_YoloInfer_2eproto_getter() {
+PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_YoloInfer_2eproto_getter() {
   return &descriptor_table_YoloInfer_2eproto;
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_YoloInfer_2eproto(&descriptor_table_YoloInfer_2eproto);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_YoloInfer_2eproto(&descriptor_table_YoloInfer_2eproto);
 
 // ===================================================================
 
@@ -113,66 +121,73 @@ class MongoImageOidRange::_Internal {
 MongoImageOidRange::MongoImageOidRange(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:MongoImageOidRange)
 }
 MongoImageOidRange::MongoImageOidRange(const MongoImageOidRange& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MongoImageOidRange* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.min_oid_){}
+    , decltype(_impl_.max_oid_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  min_oid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _impl_.min_oid_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    min_oid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+    _impl_.min_oid_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_min_oid().empty()) {
-    min_oid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_min_oid(), 
-      GetArenaForAllocation());
+    _this->_impl_.min_oid_.Set(from._internal_min_oid(), 
+      _this->GetArenaForAllocation());
   }
-  max_oid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _impl_.max_oid_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    max_oid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+    _impl_.max_oid_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_max_oid().empty()) {
-    max_oid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_max_oid(), 
-      GetArenaForAllocation());
+    _this->_impl_.max_oid_.Set(from._internal_max_oid(), 
+      _this->GetArenaForAllocation());
   }
   // @@protoc_insertion_point(copy_constructor:MongoImageOidRange)
 }
 
-inline void MongoImageOidRange::SharedCtor() {
-min_oid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  min_oid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-max_oid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  max_oid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+inline void MongoImageOidRange::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.min_oid_){}
+    , decltype(_impl_.max_oid_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.min_oid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.min_oid_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.max_oid_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.max_oid_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 MongoImageOidRange::~MongoImageOidRange() {
   // @@protoc_insertion_point(destructor:MongoImageOidRange)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void MongoImageOidRange::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  min_oid_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  max_oid_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _impl_.min_oid_.Destroy();
+  _impl_.max_oid_.Destroy();
 }
 
-void MongoImageOidRange::ArenaDtor(void* object) {
-  MongoImageOidRange* _this = reinterpret_cast< MongoImageOidRange* >(object);
-  (void)_this;
-}
-void MongoImageOidRange::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void MongoImageOidRange::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void MongoImageOidRange::Clear() {
@@ -181,24 +196,24 @@ void MongoImageOidRange::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  min_oid_.ClearToEmpty();
-  max_oid_.ClearToEmpty();
+  _impl_.min_oid_.ClearToEmpty();
+  _impl_.max_oid_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* MongoImageOidRange::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* MongoImageOidRange::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // string min_oid = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_min_oid();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "MongoImageOidRange.min_oid"));
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "MongoImageOidRange.min_oid"));
         } else
           goto handle_unusual;
         continue;
@@ -206,9 +221,9 @@ const char* MongoImageOidRange::_InternalParse(const char* ptr, ::PROTOBUF_NAMES
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_max_oid();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "MongoImageOidRange.max_oid"));
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "MongoImageOidRange.max_oid"));
         } else
           goto handle_unusual;
         continue;
@@ -262,7 +277,7 @@ uint8_t* MongoImageOidRange::_InternalSerialize(
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:MongoImageOidRange)
@@ -291,35 +306,31 @@ size_t MongoImageOidRange::ByteSizeLong() const {
         this->_internal_max_oid());
   }
 
-  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MongoImageOidRange::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     MongoImageOidRange::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MongoImageOidRange::GetClassData() const { return &_class_data_; }
 
-void MongoImageOidRange::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<MongoImageOidRange *>(to)->MergeFrom(
-      static_cast<const MongoImageOidRange &>(from));
-}
 
-
-void MongoImageOidRange::MergeFrom(const MongoImageOidRange& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:MongoImageOidRange)
-  GOOGLE_DCHECK_NE(&from, this);
+void MongoImageOidRange::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MongoImageOidRange*>(&to_msg);
+  auto& from = static_cast<const MongoImageOidRange&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:MongoImageOidRange)
+  GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (!from._internal_min_oid().empty()) {
-    _internal_set_min_oid(from._internal_min_oid());
+    _this->_internal_set_min_oid(from._internal_min_oid());
   }
   if (!from._internal_max_oid().empty()) {
-    _internal_set_max_oid(from._internal_max_oid());
+    _this->_internal_set_max_oid(from._internal_max_oid());
   }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void MongoImageOidRange::CopyFrom(const MongoImageOidRange& from) {
@@ -339,19 +350,17 @@ void MongoImageOidRange::InternalSwap(MongoImageOidRange* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &min_oid_, lhs_arena,
-      &other->min_oid_, rhs_arena
+      &_impl_.min_oid_, lhs_arena,
+      &other->_impl_.min_oid_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &max_oid_, lhs_arena,
-      &other->max_oid_, rhs_arena
+      &_impl_.max_oid_, lhs_arena,
+      &other->_impl_.max_oid_, rhs_arena
   );
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata MongoImageOidRange::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_YoloInfer_2eproto_getter, &descriptor_table_YoloInfer_2eproto_once,
       file_level_metadata_YoloInfer_2eproto[0]);
 }
@@ -365,47 +374,56 @@ class YoloTestResult::_Internal {
 YoloTestResult::YoloTestResult(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:YoloTestResult)
 }
 YoloTestResult::YoloTestResult(const YoloTestResult& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  YoloTestResult* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.accuracy_){}
+    , decltype(_impl_.precision_){}
+    , decltype(_impl_.recall_){}
+    , decltype(_impl_.ap_){}
+    , decltype(_impl_.iou_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&accuracy_, &from.accuracy_,
-    static_cast<size_t>(reinterpret_cast<char*>(&iou_) -
-    reinterpret_cast<char*>(&accuracy_)) + sizeof(iou_));
+  ::memcpy(&_impl_.accuracy_, &from._impl_.accuracy_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.iou_) -
+    reinterpret_cast<char*>(&_impl_.accuracy_)) + sizeof(_impl_.iou_));
   // @@protoc_insertion_point(copy_constructor:YoloTestResult)
 }
 
-inline void YoloTestResult::SharedCtor() {
-::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&accuracy_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&iou_) -
-    reinterpret_cast<char*>(&accuracy_)) + sizeof(iou_));
+inline void YoloTestResult::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.accuracy_){0}
+    , decltype(_impl_.precision_){0}
+    , decltype(_impl_.recall_){0}
+    , decltype(_impl_.ap_){0}
+    , decltype(_impl_.iou_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 YoloTestResult::~YoloTestResult() {
   // @@protoc_insertion_point(destructor:YoloTestResult)
-  if (GetArenaForAllocation() != nullptr) return;
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 inline void YoloTestResult::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void YoloTestResult::ArenaDtor(void* object) {
-  YoloTestResult* _this = reinterpret_cast< YoloTestResult* >(object);
-  (void)_this;
-}
-void YoloTestResult::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void YoloTestResult::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
 
 void YoloTestResult::Clear() {
@@ -414,22 +432,22 @@ void YoloTestResult::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&accuracy_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&iou_) -
-      reinterpret_cast<char*>(&accuracy_)) + sizeof(iou_));
+  ::memset(&_impl_.accuracy_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.iou_) -
+      reinterpret_cast<char*>(&_impl_.accuracy_)) + sizeof(_impl_.iou_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* YoloTestResult::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* YoloTestResult::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // int32 accuracy = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          accuracy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.accuracy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -437,7 +455,7 @@ const char* YoloTestResult::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
       // int32 precision = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          precision_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.precision_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -445,7 +463,7 @@ const char* YoloTestResult::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
       // int32 recall = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          recall_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.recall_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -453,7 +471,7 @@ const char* YoloTestResult::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
       // int32 AP = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
-          ap_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.ap_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -461,7 +479,7 @@ const char* YoloTestResult::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
       // int32 IoU = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
-          iou_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          _impl_.iou_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -498,35 +516,35 @@ uint8_t* YoloTestResult::_InternalSerialize(
   // int32 accuracy = 1;
   if (this->_internal_accuracy() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_accuracy(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_accuracy(), target);
   }
 
   // int32 precision = 2;
   if (this->_internal_precision() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_precision(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_precision(), target);
   }
 
   // int32 recall = 3;
   if (this->_internal_recall() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_recall(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_recall(), target);
   }
 
   // int32 AP = 4;
   if (this->_internal_ap() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_ap(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_ap(), target);
   }
 
   // int32 IoU = 5;
   if (this->_internal_iou() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_iou(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_iou(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:YoloTestResult)
@@ -543,67 +561,63 @@ size_t YoloTestResult::ByteSizeLong() const {
 
   // int32 accuracy = 1;
   if (this->_internal_accuracy() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_accuracy());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_accuracy());
   }
 
   // int32 precision = 2;
   if (this->_internal_precision() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_precision());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_precision());
   }
 
   // int32 recall = 3;
   if (this->_internal_recall() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_recall());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_recall());
   }
 
   // int32 AP = 4;
   if (this->_internal_ap() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_ap());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_ap());
   }
 
   // int32 IoU = 5;
   if (this->_internal_iou() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_iou());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_iou());
   }
 
-  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData YoloTestResult::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
     YoloTestResult::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*YoloTestResult::GetClassData() const { return &_class_data_; }
 
-void YoloTestResult::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<YoloTestResult *>(to)->MergeFrom(
-      static_cast<const YoloTestResult &>(from));
-}
 
-
-void YoloTestResult::MergeFrom(const YoloTestResult& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:YoloTestResult)
-  GOOGLE_DCHECK_NE(&from, this);
+void YoloTestResult::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<YoloTestResult*>(&to_msg);
+  auto& from = static_cast<const YoloTestResult&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:YoloTestResult)
+  GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from._internal_accuracy() != 0) {
-    _internal_set_accuracy(from._internal_accuracy());
+    _this->_internal_set_accuracy(from._internal_accuracy());
   }
   if (from._internal_precision() != 0) {
-    _internal_set_precision(from._internal_precision());
+    _this->_internal_set_precision(from._internal_precision());
   }
   if (from._internal_recall() != 0) {
-    _internal_set_recall(from._internal_recall());
+    _this->_internal_set_recall(from._internal_recall());
   }
   if (from._internal_ap() != 0) {
-    _internal_set_ap(from._internal_ap());
+    _this->_internal_set_ap(from._internal_ap());
   }
   if (from._internal_iou() != 0) {
-    _internal_set_iou(from._internal_iou());
+    _this->_internal_set_iou(from._internal_iou());
   }
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void YoloTestResult::CopyFrom(const YoloTestResult& from) {
@@ -621,15 +635,15 @@ void YoloTestResult::InternalSwap(YoloTestResult* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(YoloTestResult, iou_)
-      + sizeof(YoloTestResult::iou_)
-      - PROTOBUF_FIELD_OFFSET(YoloTestResult, accuracy_)>(
-          reinterpret_cast<char*>(&accuracy_),
-          reinterpret_cast<char*>(&other->accuracy_));
+      PROTOBUF_FIELD_OFFSET(YoloTestResult, _impl_.iou_)
+      + sizeof(YoloTestResult::_impl_.iou_)
+      - PROTOBUF_FIELD_OFFSET(YoloTestResult, _impl_.accuracy_)>(
+          reinterpret_cast<char*>(&_impl_.accuracy_),
+          reinterpret_cast<char*>(&other->_impl_.accuracy_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata YoloTestResult::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+  return ::_pbi::AssignDescriptors(
       &descriptor_table_YoloInfer_2eproto_getter, &descriptor_table_YoloInfer_2eproto_once,
       file_level_metadata_YoloInfer_2eproto[1]);
 }
@@ -750,10 +764,12 @@ void YoloTest_Stub::testWithoutRoadSeg(::PROTOBUF_NAMESPACE_ID::RpcController* c
 
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::MongoImageOidRange* Arena::CreateMaybeMessage< ::MongoImageOidRange >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::MongoImageOidRange*
+Arena::CreateMaybeMessage< ::MongoImageOidRange >(Arena* arena) {
   return Arena::CreateMessageInternal< ::MongoImageOidRange >(arena);
 }
-template<> PROTOBUF_NOINLINE ::YoloTestResult* Arena::CreateMaybeMessage< ::YoloTestResult >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::YoloTestResult*
+Arena::CreateMaybeMessage< ::YoloTestResult >(Arena* arena) {
   return Arena::CreateMessageInternal< ::YoloTestResult >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE

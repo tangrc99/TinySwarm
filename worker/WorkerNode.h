@@ -14,6 +14,8 @@
 #include "PodRecorder.h"
 #include "WorkerError.h"
 
+#include "LiveProbe.h"
+
 #include <list>
 #include <iostream>
 #include <unistd.h>
@@ -47,7 +49,7 @@ namespace worker {
     class WorkerNode {
     public:
 
-        explicit WorkerNode(const std::string &work_dir) : work_dir_(work_dir) {
+        explicit WorkerNode(const std::string &work_dir) : work_dir_(work_dir), probe_(new TCPProbe) {
 
             if (!std::filesystem::exists(work_dir)) {
                 std::cerr << "Work Directory Not Exits." << std::endl;
@@ -72,21 +74,29 @@ namespace worker {
             std::vector<std::function<void()>> functors = {
                     [this] { checkIfPodsRunning(); },    // 检查进程是否异常退出
                     [this] { updateStatus(); },     // 更新 worker 节点信息
-                    [this] { removeManagerNotUsed(10); }    // 定期移除过期 manager
+                    [this] { removeManagerNotUsed(10); },    // 定期移除过期 manager
+                    [this] { checkPodsUsingProbe(); }
             };
 
 
             rpc_service = new RPCInterface(this);
             rpc_server = new RPCServer(IPAddress(AF_INET, 8989), functors);
             rpc_server->addService(rpc_service);
-
-
         }
 
+
         ~WorkerNode() {
-            // 退出时关闭所有子进程
-            for (auto &service: pods) {
-                kill(service.pid, SIGKILL);
+
+            delete status;
+            delete rpc_service;
+            delete rpc_server;
+            delete probe_;
+
+            // 析构函数是被视为正常退出的
+            // 退出时关闭所有子进程以及输出文件
+            for (auto &pod: pods) {
+                kill(pod.pid, SIGKILL);
+                std::filesystem::remove(pod.out_file);
             }
         }
 
@@ -371,7 +381,6 @@ namespace worker {
             return kill(pid, SIGKILL) == 0;
         }
 
-
         /// Worker RPC Interface.To Force Stop a Docker Service By Alias and Manager
         /// \param alias The alias of Service to be stopped.
         /// \param manager The manger of Service to be stopped.
@@ -485,6 +494,32 @@ namespace worker {
             }
         }
 
+        /// Check services. If pod cannot response the live probe, pod will be set down.
+        void checkPodsUsingProbe() {
+            auto now = time(nullptr);
+
+            for (auto pod = pods.begin(); pod != pods.end();) {
+
+                auto probe = pod->probe_;
+
+                if (now - probe->lastProbeTime() < 5) {
+                    continue;
+                }
+
+                auto live = probe->isPeerAlive(IPAddress("127.0.0.1", AF_INET, pod->port_));
+
+                if (live) {
+                    pod++;
+
+                } else {
+                    down_pods.emplace_back(
+                            PodExitInformation(pod->alias, pod->manager, pod->out_file, -1, "BLOCKED"));
+                    auto pid = pod->pid;
+                    pods.erase(pod);
+                    kill(pid, SIGINT);
+                }
+            }
+        }
 
         /// Worker RPC Interface. Collect The Exit Information and Try to restart Process that exits because of worker down.
         /// \param manager The manager of services.
@@ -643,6 +678,8 @@ namespace worker {
         std::map<Manager, ManagerDescriptor> managers;   // manager信息
 
         std::unique_ptr<PodRecorder> recorder;
+
+        LiveProbe *probe_;  // 用于存活探测
     };
 
 }

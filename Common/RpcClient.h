@@ -73,6 +73,8 @@ public:
 
 private:
 
+    /// Release long not used channel which owns no sessions.
+    /// \param second LNU time.
     void removeChannelLNU(int second) {
         auto now = time(nullptr);
         // map 遍历一次性只能够删除一个元素

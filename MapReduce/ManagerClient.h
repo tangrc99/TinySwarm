@@ -22,9 +22,6 @@ namespace mapreduce {
             return pool_->findAddresses(token);
         }
 
-        bool SessionCallBack() override {
-
-        }
 
     private:
 

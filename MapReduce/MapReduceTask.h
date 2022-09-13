@@ -48,6 +48,7 @@ namespace mapreduce {
 
         }
 
+        ///
         ~MapReduceTask() {
             if (task_.joinable())
                 task_.join();
@@ -95,7 +96,6 @@ namespace mapreduce {
             for (int i = 0; i < num_; i++) {
                 sessions_[i]->async_run(rpc_method_, split_inputs_[i]);
             }
-
 
             status_ = Status::running;
 
@@ -164,7 +164,6 @@ namespace mapreduce {
 
             // 如果没有节点已经完成任务，那么在可用地址中随机分配一个地址
             auto addr = getRandomAddress();
-
 
             if (addr == nullptr) {
                 return;

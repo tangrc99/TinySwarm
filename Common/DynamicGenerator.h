@@ -14,6 +14,7 @@
 #include <google/protobuf/dynamic_message.h>
 #include <google/protobuf/compiler/importer.h>
 #include <memory>
+#include <list>
 
 using google::protobuf::DescriptorPool;
 using google::protobuf::DynamicMessageFactory;
@@ -22,7 +23,6 @@ using google::protobuf::compiler::Importer;
 
 namespace pf = google::protobuf;
 namespace fs = std::filesystem;
-
 
 using MessagePtr = std::shared_ptr<Message>;
 
@@ -34,7 +34,6 @@ private:
     google::protobuf::compiler::DiskSourceTree source;
 
 public:
-
     ///
     /// \param disk_path The DynamicGenerator will import all .proto file in disk_path
     explicit DynamicGenerator(const std::string &disk_path) {
@@ -63,10 +62,9 @@ public:
         m_factory->SetDelegateToGeneratedFactory(true);
     }
 
-    const pf::ServiceDescriptor *getServiceDescriptor(const std::string &service) {
-        return pool->FindServiceByName(service);
-    }
-
+    /// Get the input prototype of a method.
+    /// \param method Method Descriptor
+    /// \return MessagePtr
     MessagePtr getMethodInputProto(const pf::MethodDescriptor *method) {
 
         auto *input = method->input_type();
@@ -75,6 +73,9 @@ public:
         return MessagePtr(tempo->New());
     }
 
+    /// Get the output prototype of a method.
+    /// \param method Method Descriptor
+    /// \return MessagePtr
     MessagePtr getMethodOutputProto(const pf::MethodDescriptor *method) {
 
         auto *output = method->output_type();
@@ -83,12 +84,20 @@ public:
         return MessagePtr(tempo->New());
     }
 
+    /// Get the MethodDescriptor of a method.
+    /// \param service_name Service name of method.
+    /// \param method_name Name of method.
+    /// \return MethodDescriptor
     auto getMethod(const std::string &service_name, const std::string &method_name) {
-
         return pool->FindMethodByName(service_name + "." + method_name);
     }
 
-
+    /// Get the ServiceDescriptor of a method.
+    /// \param service_name Name of service.
+    /// \return ServiceDescriptor
+    const pf::ServiceDescriptor *getServiceDescriptor(const std::string &service_name) {
+        return pool->FindServiceByName(service_name);
+    }
 };
 
 

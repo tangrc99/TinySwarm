@@ -8,54 +8,56 @@
 #include <string>
 #include <utility>
 
-struct PodDescriptor;
+namespace manager {
 
-class Result {
-public:
+    struct PodDescriptor;
 
-    [[nodiscard]] bool isFail() const {
-        return fail_;
-    }
+    class Result {
+    public:
 
-    std::string reason() {
-        return reason_;
-    }
+        [[nodiscard]] bool isFail() const {
+            return fail_;
+        }
 
-    explicit Result() : fail_(false) {}
+        std::string reason() {
+            return reason_;
+        }
 
-    explicit Result(std::string reason) : fail_(true), reason_(std::move(reason)) {}
+        explicit Result() : fail_(false) {}
 
-private:
-    bool fail_;
-    std::string reason_;
-};
+        explicit Result(std::string reason) : fail_(true), reason_(std::move(reason)) {}
+
+    private:
+        bool fail_;
+        std::string reason_;
+    };
 
 
-class CreateResult {
+    class CreateResult {
 
-public:
+    public:
 
-    [[nodiscard]] bool isFail() const {
-        return fail_;
-    }
+        [[nodiscard]] bool isFail() const {
+            return fail_;
+        }
 
-    std::string reason() {
-        return reason_;
-    }
+        std::string reason() {
+            return reason_;
+        }
 
-    PodDescriptor *podDescriptor() {
-        return pod_;
-    }
+        PodDescriptor *podDescriptor() {
+            return pod_;
+        }
 
-    explicit CreateResult(PodDescriptor *pod) : fail_(false), pod_(pod) {}
+        explicit CreateResult(PodDescriptor *pod) : fail_(false), pod_(pod) {}
 
-    explicit CreateResult(std::string reason) : fail_(true), reason_(std::move(reason)), pod_(nullptr) {}
+        explicit CreateResult(std::string reason) : fail_(true), reason_(std::move(reason)), pod_(nullptr) {}
 
-private:
-    bool fail_;
-    std::string reason_;
-    PodDescriptor *pod_;
-};
-
+    private:
+        bool fail_;
+        std::string reason_;
+        PodDescriptor *pod_;
+    };
+}
 
 #endif //TINYSWARM_RESULT_H
