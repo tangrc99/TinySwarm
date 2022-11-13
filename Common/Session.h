@@ -54,9 +54,14 @@ public:
 
         th_ = std::thread([this, method, req]() {
 
-            channel_->CallMethod(method, &controller, req, response.get(), {});
+            try {
+                channel_->CallMethod(method, &controller, req, response.get(), {});
+                running.clear();
+            } catch (...) {
+                eptr_ = std::current_exception();
+                running.clear();
+            }
 
-            running.clear();
         });
 
 
@@ -85,6 +90,11 @@ public:
         while (!isFinished()) {
             usleep(100);
         }
+
+        if (eptr_) {
+            return true;
+        }
+
         if (controller.Failed())
             response = nullptr; // 清除本次调用的信息
 
@@ -94,6 +104,14 @@ public:
     /// Get fail reason if rpc is failed.
     /// \return Fail reason.
     std::string failedReason() {
+        if (eptr_)
+            try {
+                std::rethrow_exception(eptr_);
+            } catch (const std::exception &e) {
+                eptr_ = nullptr;
+                return e.what();
+            }
+
         return controller.ErrorText();
     }
 
@@ -110,6 +128,8 @@ protected:
 
     time_t start_ = 0;
     int max_wait_ = INT_MAX;
+
+    std::exception_ptr eptr_;
 };
 
 
