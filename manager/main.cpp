@@ -19,7 +19,8 @@
 
 
 
-using namespace manager;
+using namespace tiny_swarm;
+using namespace tiny_swarm::manager;
 
 void rpc_test() {
     Manager manager("127.0.0.1");
@@ -52,11 +53,6 @@ void rpc_test() {
     for (auto &r: services)
         std::cout << r->toSnapshotMessage() << std::endl;
 
-//    auto info = manager.getServiceInfoIterByAlias("my_hello1");
-//
-//    manager.publishMessage(*info);
-
-    ///for(;;);
 
 }
 
@@ -80,70 +76,11 @@ void serviceJsonTest() {
 }
 
 
-static int exit_flag;
-
-static void exit_func(int) {
-    std::cout << "received signal" << std::endl;
-    exit_flag = 1;
-}
-
-int signal_exit_test() {
-
-    auto addr = IPAddress::getIpByHost("www.baidu.com");
-
-    IPAddress ip(addr[0] + ":80");
-
-
-    int fd = ::socket(AF_INET, SOCK_STREAM, 0);
-    int fd2 = ::socket(AF_INET, SOCK_STREAM, 0);
-
-    auto res = ::connect(fd, ip.toSockAddrPtr(), ip.addrlen());
-    auto res2 = ::connect(fd2, ip.toSockAddrPtr(), ip.addrlen());
-
-    char buff[100];
-
-    std::thread th1([&buff, &fd] {
-
-        struct sigaction act{};
-        act.sa_flags = 0;
-        act.sa_handler = emptyFunction;
-
-        sigaction(SIGALRM,&act, nullptr);
-        std::cout << "wait for response " << std::endl;
-        ::read(fd, buff, 100);
-        std::cout << "end " << errno << std::endl;
-
-    });
-
-    std::thread th2([&buff, &fd2] {
-
-        struct sigaction act{};
-        act.sa_flags = 0;
-        act.sa_handler = emptyFunction;
-
-        sigaction(SIGALRM,&act, nullptr);
-        std::cout << "wait for response " << std::endl;
-        ::read(fd2, buff, 100);
-        std::cout << "end " << std::this_thread::get_id() << std::endl;
-
-    });
-
-    sleep(3);
-
-    pthread_kill(th1.native_handle(), SIGALRM);
-   // pthread_kill(th2.native_handle(), SIGALRM);
-
-    th1.join();
-    th2.join();
-
-    return 0;
-}
 
 
 int main(int argc, char *argv[]) {
 
 
-    return signal_exit_test();
     auto log_controller = LoggerController::getInstance();
     log_controller.init("../../properties/manager.properties", "fileappender");
 
@@ -151,42 +88,12 @@ int main(int argc, char *argv[]) {
 
     manager.connectToWorker(IPAddress("127.0.0.1", AF_INET, 8989));
 
-    //auto create_res = manager.createService("my_redis", 1, "redis", docker, 6379, {}, {"-p", "6379:6379"});
 
     manager.run();
 
-    // std::cout << create_res.dump(4);
 
-    auto workers = manager.showWorkerNodes();
-
-
-    std::cout << workers.dump(4);
-
-    //   std::cout << "json_out: " << create_res.dump(4);
 
     return 0;
 
-//
-//    sleep(5);
-//
-//    manager.checkServicesOnAllWorker(10);
-//
-//    for(auto & service : manager.down_services){
-//        std::cout << service->alias_ << "\n"
-//        << service->error->reason << "\n"
-////        << service->error->exit <<std::endl;
-////    }
-//
-//    auto wd = manager.connectToWorker(IPAddress("127.0.0.1",AF_INET, 8989));
-////
-////
-//    //auto wd = manager.findWorkerDescriptor("127.0.0.1",8989);
-//
-//    auto [res,error] = manager.createService(wd,"redis","my_redis",docker,
-//                                             {},{"-p","6379:6379"},0);
-//
-//
-////
-////    manager.snapshot();
-//    return 0;
+
 }

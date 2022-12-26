@@ -4,7 +4,7 @@
 
 #include "WorkerNode.h"
 
-using namespace worker;
+using namespace tiny_swarm::worker;
 
 void rpc_test() {
 
@@ -52,36 +52,6 @@ int main() {
     node.checkIfPodsRunning();
 
 
-    //node.stopDockerService(pid);
-//
-//    //auto res = node.stopService(pid);
-//
-////
-//   // auto res = kill(pid,SIGINT);
-//    //std::cout << res <<std::endl;
-//
-//    sleep(3);
-//
-    //node.stopService(pid);
-    //kill(pid, SIGKILL);
-
-
-    // node.checkServices();
-    // node.cleanDumpFiles();
-//
-//    for(auto &error : node.down_services){
-//
-//        std::cout << error.getErrorText();
-//    }
-//
-//    for(auto &s : node.services){
-//        std::cout<<s.pid << std::endl;
-//    }
-//
-//    if(node.services.empty())
-//        return 0;
-//
-//    for(;;);
 
     return 0;
 
