@@ -7,35 +7,36 @@
 
 #include "Proxy.h"
 
-namespace manager {
-    class NoProxy final : public Proxy {
-    public:
+namespace manager::proxy {
+        /// Class NoProxy do nothing in every interface and always returns ok.
+        class NoProxy final : public Proxy {
+        public:
 
-        std::string insertAddressPool(const std::string &pool_name, const AddressPool &pool) override {
-            return {};
-        }
+            std::string insertAddressPool(const std::string &pool_name, const AddressPool &pool) override {
+                return pool_name;
+            }
 
-        bool deleteAddressPool(const std::string &pool_name) override {
-            return true;
-        }
+            bool deleteAddressPool(const std::string &pool_name) override {
+                return true;
+            }
 
-        bool updateAddressPool(const std::string &pool_name, const AddressPool &pool) override {
-            return true;
-        }
+            bool updateAddressPool(const std::string &pool_name, const AddressPool &pool) override {
+                return true;
+            }
 
-        AddressPool findAddressPool(const std::string &pool_name) override {
-            return {};
-        }
+            AddressPool findAddressPool(const std::string &pool_name) override {
+                return {};
+            }
 
-        int getBindPort(const std::string &pool_name) override {
-            return -1;
-        }
+            int getBindPort(const std::string &pool_name) override {
+                return -1;
+            }
 
-        [[nodiscard]] std::string proxyType() const override {
-            return "NoProxy";
-        }
-    };
-}
+            [[nodiscard]] std::string proxyType() const override {
+                return "NoProxy";
+            }
+        };
+    }
 
 
 #endif //TINYSWARM_NOPROXY_H

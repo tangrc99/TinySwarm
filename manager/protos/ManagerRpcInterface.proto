@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option cc_generic_services = true;
+
+message ServiceName{
+  string token = 1; // 用户可以指定一个，如果未指定，则由 manager 随机指定
+}
+
+message ServiceParams{
+  int32 service_num = 1;
+  string service = 2;
+  int32 type = 3;
+  repeated string exe_params = 4;
+  repeated string docker_params = 5;
+  int32 restart = 6;
+  int32 port = 7;
+}
+
+message ServiceInfo{
+  ServiceName name = 1;
+  ServiceParams params = 2;
+}
+
+message JsonMessage{
+  string content = 1;
+}
+
+message AddressPool{
+  string proxy_address = 1;
+  repeated string pod_address = 2;
+}
+
+service ManagerService{
+  rpc createService(ServiceInfo) returns(JsonMessage);
+  rpc getServiceInfo(ServiceName) returns(JsonMessage);
+  rpc getAddressPool(ServiceName) returns(AddressPool); // 只返回 ServiceGroup 的地址池
+  rpc stopService(ServiceName) returns(ServiceName);
+}

@@ -12,41 +12,45 @@
 
 using namespace log4cxx;
 
+namespace logger{
 
-class ALogger;
+    class ALogger;
 
-class LoggerController {
-private:
+    class LoggerController {
+    private:
 
-    ALogger *log_ptr;
+        ALogger *log_ptr;
 
-    LoggerController();
+        LoggerController();
 
-public:
+    public:
 
-    void init(const char *log_conf_file, const char *appender_name);
+        void init(const char *log_conf_file, const char *appender_name);
 
-    static LoggerController getInstance() {
-        static LoggerController T;
-        return T;
-    }
+        static LoggerController getInstance() {
+            static LoggerController T;
+            return T;
+        }
 
-    static void exit() {
-        log4cxx::LogManager::shutdown();
-    }
+        static void exit() {
+            log4cxx::LogManager::shutdown();
+        }
 
-    void debug(const std::string &str) ;
+        void debug(const std::string &str) ;
 
-    void info(const std::string &str) ;
+        void info(const std::string &str) ;
 
-    void warn(const std::string &str) ;
+        void warn(const std::string &str) ;
 
-    void error(const std::string &str) ;
+        void error(const std::string &str) ;
 
-    void fatal(const std::string &str) ;
+        void fatal(const std::string &str) ;
 
 
-};
+    };
+}
+
+
 
 
 

@@ -4,6 +4,8 @@
 
 #include "ServiceManager.h"
 
+#include <sstream>
+
 namespace manager {
 
     ServiceManager::Token ServiceManager::generateToken(int length) {
@@ -79,5 +81,20 @@ namespace manager {
                 end_list_.erase(service);
         }
 
+    }
+
+    void ServiceManager::schedulerNotifyCallback(const std::string &pod_name) {
+        // 首先分割出 token
+        std::stringstream ss(pod_name);
+        std::string token;
+        std::getline(ss,token,'_');
+
+        auto pos = map_.find(token);
+        if(pos == map_.end())
+            return ;
+
+        auto &serv_group = pos->second;
+
+        proxy_->updateAddressPool(token,serv_group.getAddressPool());
     }
 }

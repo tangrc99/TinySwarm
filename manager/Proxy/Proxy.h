@@ -9,31 +9,49 @@
 #include <vector>
 #include <string>
 
-namespace manager {
+namespace manager::proxy{
 
-    /// 要求底层的负载均衡机制必须为轮询，不能为ip hash，
-    class Proxy {
-    public:
+        /// Class Proxy defines all interface to construct a service gateway
+        class Proxy {
+        public:
 
-        using AddressPool = std::vector<const std::string>;
+            /// Every address is host:port.
+            using AddressPool = std::vector<const std::string>;
 
-        virtual ~Proxy() = default;
+            virtual ~Proxy() = default;
 
-        virtual std::string insertAddressPool(const std::string &pool_name, const AddressPool &pool) = 0;
+            /// Interface to add a proxy pool.
+            /// \param pool_name Proxy pool name. Typically a service name or pod name.
+            /// \param pool Proxy address. Typically pods' address.
+            /// \return Proxy pool name.
+            virtual std::string insertAddressPool(const std::string &pool_name, const AddressPool &pool) = 0;
 
-        virtual bool deleteAddressPool(const std::string &pool_name) = 0;
+            /// Interface to delete a proxy pool.
+            /// \param pool_name Proxy pool name. Typically a service name or pod name.
+            /// \return Is ok
+            virtual bool deleteAddressPool(const std::string &pool_name) = 0;
 
-        virtual bool updateAddressPool(const std::string &pool_name, const AddressPool &pool) = 0;
+            /// Interface to update a proxy pool.
+            /// \param pool_name Proxy pool name. Typically a service name or pod name.
+            /// \param pool Proxy address. Typically pods' address.
+            /// \return Proxy pool name.
+            virtual bool updateAddressPool(const std::string &pool_name, const AddressPool &pool) = 0;
 
-        virtual AddressPool findAddressPool(const std::string &pool_name) = 0;
+            /// Get proxy address by name.
+            /// \param pool_name Proxy pool name. Typically a service name or pod name.
+            /// \return Proxy address. Typically pods' address.
+            virtual AddressPool findAddressPool(const std::string &pool_name) = 0;
 
-        virtual int getBindPort(const std::string &pool_name) = 0;
+            /// Get proxy type.
+            /// \return Proxy type name
+            [[nodiscard]] virtual std::string proxyType() const = 0;
 
-        [[nodiscard]] virtual std::string proxyType() const = 0;
-
-    private:
-
-    };
-}
+        private:
+            /// Not Used now.
+            /// \param pool_name
+            /// \return
+            virtual int getBindPort(const std::string &pool_name) = 0;
+        };
+    }
 
 #endif //PROXY_PROXY_H

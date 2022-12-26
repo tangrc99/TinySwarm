@@ -7,12 +7,18 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 aux_source_directory(Proxy PROXY_SRCS)
 
-add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
+find_package(nlohmann_json 3.2.0 REQUIRED)
+
+
+add_executable(manager
+        main.cpp
+        Manager.cpp Manager.h
+        WorkerDescriptor.h
 
         WorkerClient.h
 
-        WorkerRpcInterface.pb.cc
-        WorkerRpcInterface.pb.h
+        protos/WorkerRpcInterface.pb.cc
+        protos/WorkerRpcInterface.pb.h
 
 
         ${COMMON_SRCS}
@@ -23,14 +29,16 @@ add_executable(manager main.cpp Manager.cpp Manager.h WorkerDescriptor.h
         ../LogUtils/LoggerControl.h
         ../LogUtils/Logging.h
 
-        ManagerRpcInterface.pb.cc ManagerRpcInterface.pb.h
+        protos/ManagerRpcInterface.pb.cc
+        protos/ManagerRpcInterface.pb.h
 
 
         PodDescriptor.h
         LogQueue.cpp LogQueue.h
         RPCInterface.cpp RPCInterface.h
         ServiceManager.h
-        ManagerError.h ServiceDescriptor.h Scheduler/Scheduler.h Result.h PodDescriptor.cpp ServiceManager.cpp Proxy/NoProxy.h Publisher/Publisher.cpp Publisher/Publisher.h)
+        ServiceDescriptor.h Scheduler/Scheduler.h Result.h PodDescriptor.cpp ServiceManager.cpp
+        )
 
 
-target_link_libraries(manager protobuf libTCPServer.a log4cxx hiredis redis++)
+target_link_libraries(manager protobuf libTCPServer.a log4cxx hiredis redis++ nlohmann_json::nlohmann_json)

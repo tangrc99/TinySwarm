@@ -17,9 +17,10 @@
 
 namespace manager {
 
-
+    /// Class WorkerClient is used to import client proto.
     class WorkerClient final : public RpcClient {
     public:
+
 
         explicit WorkerClient() : RpcClient("WorkerService", "/Users/tangrenchu/CLionProjects/TinySwarm/worker") {
 

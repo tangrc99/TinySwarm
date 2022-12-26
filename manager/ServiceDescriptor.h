@@ -31,6 +31,7 @@ namespace manager {
         prepare, ready, hung, close
     };
 
+    /// Class ServiceDescriptor describes a service created by user.
     struct ServiceDescriptor {
 
         std::string token_;  // 用户service的唯一标识
@@ -51,6 +52,12 @@ namespace manager {
 
     public:
 
+        /// Constructor, RAII
+        /// \param token Unique service token
+        /// \param pods Owned pods
+        /// \param num Reclaimed pod num
+        /// \param proxy_address Proxy address to access, also called cluster ip
+        /// \param manager Manager owned this descriptor
         explicit ServiceDescriptor(std::string token, PodGroup pods, int num, std::string proxy_address,
                                    Manager *manager)
                 : token_(std::move(token)), pods_(std::move(pods)), num_(num),
@@ -66,6 +73,7 @@ namespace manager {
             type_ = pods_[0]->type_;
         }
 
+        /// Interface to simplify a stop operation. This function will stop all pods owned by this service group
         void stopPodsInService() {
 
             for (auto pod = pods_.begin(); pod != pods_.end();) {
@@ -109,10 +117,14 @@ namespace manager {
             return static_cast<int>(pods_.size() - size);
         }
 
+        /// Get list of pod's address.
+        /// \return A list with every pod's address
         Proxy::AddressPool getAddressPool() {
             return getPodGroupAddressPool(this->pods_);
         }
 
+        /// Get the cluster ip of this service group
+        /// \return Cluster ip
         Json getAccessAddress(){
             Json json;
             json["proxy_address"] = proxy_address_;
@@ -127,6 +139,8 @@ namespace manager {
             return json;
         }
 
+        /// Generate message in json format
+        /// \return generated message
         Json toJson() {
             Json json;
             json["token"] = token_;
@@ -141,7 +155,6 @@ namespace manager {
             std::vector<Json> vec;
             vec.reserve(pods_.size());
 
-            //FIXME : 这里会与底层的manager发生冲突吗？
             auto pods = pods_;
             for(auto pod:pods)
                 vec.emplace_back(pod->toJson());
@@ -150,7 +163,7 @@ namespace manager {
             return json;
         }
 
-        ///
+        /// Not used now.
         /// \return
         std::string toSnapshot(){
 

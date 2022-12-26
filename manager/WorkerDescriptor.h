@@ -11,11 +11,13 @@
 namespace manager {
 
 
+    /// Struct WorkerDescriptor describes a worker status view. It contains rpc connection to worker, created pods on worker
+    /// and other useful information.
     struct WorkerDescriptor {
         std::string ip;
         int port;
 
-        bool alive;     //FIXME 目前只有check 时会改变 alive 信息
+        bool alive;
 
         std::shared_ptr<Session> session;   // 用于通信的连接
 
@@ -23,6 +25,9 @@ namespace manager {
         std::list<PodDescriptor *> pods; // 当前节点上运行的pod
 
 
+        /// Interface to simplify a remove operation. This function is called after a pod is transferred or deleted on
+        /// this worker node.
+        /// \param pd PodDescriptor to be removed.
         void removePodDescriptor(PodDescriptor *pd) {
             for (auto it = pods.begin(); it != pods.end();) {
                 if (*it == pd) {
@@ -34,6 +39,10 @@ namespace manager {
             }
         }
 
+        /// Check is port current available on this worker node. This function will be called when manager select this
+        /// worker to create pod.
+        /// \param p Port
+        /// \return Is port available on this worker
         bool portAvailable(int p) {
             for (auto &pod: pods) {
                 if (pod->port_ == p)
@@ -42,6 +51,8 @@ namespace manager {
             return true;
         }
 
+        /// Generate message with json format
+        /// \return Generated message
         nlohmann::json toJson() {
             nlohmann::json json;
 

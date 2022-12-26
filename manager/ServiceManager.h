@@ -23,9 +23,8 @@ namespace manager {
 
         using Token = std::string;
 
-
         explicit ServiceManager(IPAddress address) : manager_(std::make_unique<Manager>("trc")),
-                                                     proxy_(std::make_unique<NoProxy>()) {
+                                                     proxy_(std::make_unique<proxy::NoProxy>()) {
 
             std::vector<std::function<void()>> functors = {
                     [this] {
@@ -51,6 +50,16 @@ namespace manager {
             server_->startService();
         }
 
+        /// Rpc Interface. Handle client's create request.
+        /// \param token Unique service token
+        /// \param num Nums to create
+        /// \param service Service name to create
+        /// \param type Service type to create
+        /// \param port Service listen port requested
+        /// \param exe_params Service startup params
+        /// \param docker_params Service docker startup params
+        /// \param restart Is service need restart
+        /// \return Create Information in json format
         Json createService(std::string token, int num, const std::string &service,
                            ServiceType type, int port, const std::vector<char *> &exe_params,
                            const std::vector<char *> &docker_params, int restart = 0) {
@@ -98,6 +107,9 @@ namespace manager {
             return sd.toJson();
         }
 
+        /// Rpc Interface. Delete a service by its token.
+        /// \param token Unique service token
+        /// \return Is delete operation ok
         bool deleteService(const std::string &token) {
 
             auto sd = getServiceDescriptor(token);
@@ -117,6 +129,9 @@ namespace manager {
             return proxy_->deleteAddressPool(token);
         }
 
+        /// Rpc Interface. Query service detailed information by its token.
+        /// \param token Unique service token
+        /// \return Detailed information in json format
         Json getServiceInformation(const std::string &token) {
 
             auto sd = getServiceDescriptor(token);
@@ -127,6 +142,9 @@ namespace manager {
             return sd->toJson();
         }
 
+        /// Rpc Interface. Query service's current host:port by its token.
+        /// \param token Unique service token
+        /// \return Detailed information in json format
         Json getAccessAddress(const std::string &token) {
 
             auto sd = getServiceDescriptor(token);
@@ -137,16 +155,27 @@ namespace manager {
             return sd->getAccessAddress();
         }
 
+        /// List current alive worker nodes.
+        /// \return Worker list in json format
         Json showWorkerNodes() {
             return manager_->showWorkerNodes();
         }
 
+        /// Connect to a worker with given address.
+        /// \param address Worker address
         void connectToWorker(const IPAddress &address) {
             manager_->connectToWorker(address);
         }
 
+        /// If a pod is scheduler by class Manager. Manager impl will call this function to notify network gateway's update.
+        /// \param pod_name Name of pod has been revised.
+        void schedulerNotifyCallback(const std::string &pod_name);
+
     private:
 
+        /// Wrapper function. Used to simplify search service group.
+        /// \param token Unique service token
+        /// \return If token exists, returns ptr pointed to such group. If token don't exists,returns nullptr
         manager::ServiceDescriptor *getServiceDescriptor(const std::string &token) {
             auto it = map_.find(token);
             return it == map_.end() ? nullptr : (&it->second);
@@ -177,10 +206,12 @@ namespace manager {
         RPCInterface *service_;
 
         std::unique_ptr<Manager> manager_;
-        std::unique_ptr<Proxy> proxy_;
+        std::unique_ptr<proxy::Proxy> proxy_;  // 用于提供服务网关的支持
         std::unique_ptr<RPCServer> server_;
     };
-}
+
+
+}// namespace manager
 
 
 #endif //TINYSWARM_SERVICEMANAGER_H

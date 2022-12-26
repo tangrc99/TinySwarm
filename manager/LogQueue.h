@@ -46,7 +46,6 @@ private:
     void LoopFlush();
 
 
-
     std::thread log_thread_;
 
     std::list<LogInformation> logs_;

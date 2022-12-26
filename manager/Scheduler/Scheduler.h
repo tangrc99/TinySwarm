@@ -7,16 +7,22 @@
 
 #include "../WorkerDescriptor.h"
 
-namespace manager {
+namespace manager::scheduler {
 
-
+    /// Scheduler is the base class of scheduling module. Different type of scheduling strategies should derived from this
+    /// class and override interface getBestWorker.
     class Scheduler {
     public:
 
+        /// Constructor of base class. Class owns a reference of current worker list.
+        /// \param workers worker list
         explicit Scheduler(const std::list<WorkerDescriptor *> &workers) : workers_(workers) {}
 
         virtual ~Scheduler() = default;
 
+        /// Interface to get scheduled worker.
+        /// \param pod Information of created pod
+        /// \return Descriptor of selected worker
         virtual WorkerDescriptor *getBestWorker(PodDescriptor *pod) = 0;
 
     protected:
@@ -24,28 +30,33 @@ namespace manager {
     };
 
 
+    /// RoundRobin Scheduling module impl.
     class RoundRobin final : public Scheduler {
     public:
 
+        /// Construct a RoundRobin scheduler.
+        /// \param workers Usable worker list
         explicit RoundRobin(const std::list<WorkerDescriptor *> &workers) : Scheduler(workers) {}
 
+        /// Select a worker to create pod using round-robin strategy.
+        /// \param pod Pod Descriptor
+        /// \return Descriptor of selected worker
         [[nodiscard]] WorkerDescriptor *getBestWorker(PodDescriptor *pod) override {
 
-            int i = 0;
+            int i = last.fetch_add(1);
+            i = i % static_cast<int>(workers_.size());
 
-            for (auto &worker: workers_) {
-
-                // 检查 worker 的服务和端口是否符合
-                if (worker->alive && worker->portAvailable(pod->port_))
-                    return worker;
-                //  return worker;
+            for (auto it = workers_.begin(); it != workers_.end(); i++) {
+                i--;
+                if (i == 0 && (*it)->alive && (*it)->portAvailable(pod->port_))
+                    return *it;
             }
 
             return nullptr;
         }
 
     private:
-        int last = 0;
+        std::atomic<int> last = 0;
     };
 }
 

@@ -8,25 +8,26 @@
 #include <exception>
 #include <string>
 
-namespace manager {
+namespace manager::proxy {
+        /// Class ProxyException is used in Proxy classes to identify where exception was threw.
+        class ProxyException : public std::exception {
+        public:
 
-    class ProxyException : public std::exception {
-    public:
-        explicit ProxyException(const char *reason) noexcept: what_(reason) {}
+            explicit ProxyException(const char *reason) noexcept: what_(reason) {}
 
-        explicit ProxyException(const std::string &reason) noexcept: what_(reason.c_str()) {}
+            explicit ProxyException(const std::string &reason) noexcept: what_(reason.c_str()) {}
 
-        ProxyException(const ProxyException &) noexcept = default;
+            ProxyException(const ProxyException &) noexcept = default;
 
-        ~ProxyException() noexcept override = default;
+            ~ProxyException() noexcept override = default;
 
-        [[nodiscard]] const char *what() const noexcept override {
-            return what_;
+            [[nodiscard]] const char *what() const noexcept override {
+                return what_;
+            };
+
+        private:
+            const char *what_;
         };
-
-    private:
-        const char *what_;
-    };
-}
+    }
 
 #endif //PROXY_PROXYEXCEPTION_H

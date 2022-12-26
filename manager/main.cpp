@@ -147,6 +147,8 @@ int signal_exit_test() {
 
 
 int main(int argc, char *argv[]) {
+
+
     return signal_exit_test();
     auto log_controller = LoggerController::getInstance();
     log_controller.init("../../properties/manager.properties", "fileappender");

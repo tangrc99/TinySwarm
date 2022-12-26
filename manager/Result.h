@@ -12,45 +12,34 @@ namespace manager {
 
     struct PodDescriptor;
 
-    class Result {
-    public:
-
-        [[nodiscard]] bool isFail() const {
-            return fail_;
-        }
-
-        std::string reason() {
-            return reason_;
-        }
-
-        explicit Result() : fail_(false) {}
-
-        explicit Result(std::string reason) : fail_(true), reason_(std::move(reason)) {}
-
-    private:
-        bool fail_;
-        std::string reason_;
-    };
-
-
+    /// Class CreateResult describes a result of pod creation.
     class CreateResult {
-
     public:
 
+        /// Is result failed.
+        /// \return Is result failed
         [[nodiscard]] bool isFail() const {
             return fail_;
         }
 
+        /// Get failed reason
+        /// \return Failed reason
         std::string reason() {
             return reason_;
         }
 
+        /// If succeed, get pod descriptor.
+        /// \return Created pod descriptor
         PodDescriptor *podDescriptor() {
             return pod_;
         }
 
+        /// Constructor describes a successful create process.
+        /// \param pod Created pod descriptor
         explicit CreateResult(PodDescriptor *pod) : fail_(false), pod_(pod) {}
 
+        /// Constructor describes a failed create process.
+        /// \param reason Failed reason
         explicit CreateResult(std::string reason) : fail_(true), reason_(std::move(reason)), pod_(nullptr) {}
 
     private:

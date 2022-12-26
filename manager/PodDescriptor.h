@@ -7,11 +7,11 @@
 
 #include <utility>
 #include <nlohmann/json.hpp>
-#include "WorkerRpcInterface.pb.h"
+#include "manager/protos/WorkerRpcInterface.pb.h"
 
 namespace manager {
 
-
+    /// Struct PodExitError contains all needed pod exit information.
     struct PodExitError {
         int exit;
         std::string reason;
@@ -22,6 +22,7 @@ namespace manager {
     struct WorkerDescriptor;
 
 
+    /// Struct PodDescriptor describes to pod view in manager node. It contains all information needed.
     struct PodDescriptor {
 
         std::string service_;   // 服务名称
@@ -37,21 +38,31 @@ namespace manager {
 
         PodExitError *error = nullptr;
 
+        /// Construction RAII.
         PodDescriptor(std::string service, std::string alias, ServiceType type, int alive, int port,
                       WorkerDescriptor *wd,
                       std::vector<char *> exe_params,
                       std::vector<char *> docker_params, int restart);
 
+        /// Construct an empty descriptor. Used to construct and then assignment.
         PodDescriptor() = default;
 
         ~PodDescriptor();
 
+        /// Bind this pod descriptor to a worker descriptor.
+        /// \param wd Worker descriptor to bind
         void bindWorker(WorkerDescriptor *wd);
 
+        /// Generate gossip message.
+        /// \return generated message
         [[nodiscard]] std::string toGossipMessage() const;
 
+        /// Generate snapshot message.
+        /// \return generated message
         [[nodiscard]] std::string toSnapshotMessage() const;
 
+        /// Generate json type message.
+        /// \return generated message
         nlohmann::json toJson();
 
     };
