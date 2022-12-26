@@ -26,13 +26,13 @@ worker 节点一共具有以下几个模块，分别负责不同的功能：
 worker 节点的方式如下：
 
 ```c++
- 		// 初始化 log4cxx 
- 		auto log_controller = LoggerController::getInstance();
-    log_controller.init("/properties/log4cxx.properties", "fileappender");
+// 初始化 log4cxx 
+auto log_controller = LoggerController::getInstance();
+log_controller.init("/properties/log4cxx.properties", "fileappender");
 
-		// 指定工作目录，启动地址和 etcd url
-		worker::WorkerNode node("work_dir","0.0.0.0:10001","127.0.0.1:2379");
-		node.start();
+// 指定工作目录，启动地址和 etcd url
+worker::WorkerNode node("work_dir","0.0.0.0:10001","127.0.0.1:2379");
+node.start();
 ```
 
 使用 tinyswarm 时，需要提前将二进制文件按照如下格式放入到工作目录中：
@@ -59,12 +59,12 @@ manager 节点比较复杂，主要负责处理用户请求，管理进程信息
 manager 节点的启动命令如下：
 
 ```c++
- 		// 初始化 log4cxx 
- 		auto log_controller = LoggerController::getInstance();
-    log_controller.init("/properties/log4cxx.properties", "fileappender");
+// 初始化 log4cxx 
+auto log_controller = LoggerController::getInstance();
+log_controller.init("/properties/log4cxx.properties", "fileappender");
 
-		// 指定启动地址和 etcd url
-		manager::ServiceManager manager("0.0.0.0:10000","127.0.0.1:2379");
-		manager.run();
+// 指定启动地址和 etcd url
+manager::ServiceManager manager("0.0.0.0:10000","127.0.0.1:2379");
+manager.run();
 ```
 
