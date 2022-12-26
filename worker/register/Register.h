@@ -10,7 +10,7 @@
 #include <etcd/Client.hpp>
 #include <etcd/KeepAlive.hpp>
 
-namespace worker::registry {
+namespace tiny_swarm::worker::registry {
 
     /// Class Register is used to register ip of worker to registry center. Lease is required to be used to make sure that
     /// manager will now connect to a down worker node.

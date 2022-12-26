@@ -12,7 +12,7 @@ using google::protobuf::RpcController;
 using google::protobuf::Closure;
 
 
-namespace manager {
+namespace tiny_swarm::manager {
 
     class ServiceManager;
 

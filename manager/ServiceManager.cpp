@@ -6,7 +6,7 @@
 
 #include <sstream>
 
-namespace manager {
+namespace tiny_swarm::manager {
 
     ServiceManager::Token ServiceManager::generateToken(int length) {
 

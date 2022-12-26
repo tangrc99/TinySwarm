@@ -5,7 +5,7 @@
 #include "PodStartRecorder.h"
 #include <sstream>
 
-namespace worker::recorder {
+namespace tiny_swarm::worker::recorder {
 
     PodStartRecorder::PodStartRecorder(std::string work_dir, RPCInterface *rpc_service) : work_dir_(std::move(work_dir)),
                                                                                 rpc_(rpc_service){

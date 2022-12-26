@@ -7,7 +7,7 @@
 
 #include "../WorkerDescriptor.h"
 
-namespace manager::scheduler {
+namespace tiny_swarm::manager::scheduler {
 
     /// Scheduler is the base class of scheduling module. Different type of scheduling strategies should derived from this
     /// class and override interface getBestWorker.

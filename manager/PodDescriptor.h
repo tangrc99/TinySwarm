@@ -9,7 +9,7 @@
 #include <nlohmann/json.hpp>
 #include "manager/protos/WorkerRpcInterface.pb.h"
 
-namespace manager {
+namespace tiny_swarm::manager {
 
     /// Struct PodExitError contains all needed pod exit information.
     struct PodExitError {

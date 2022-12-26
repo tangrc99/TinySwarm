@@ -13,7 +13,7 @@
 #include <fstream>
 #include <utility>
 
-namespace worker::recorder {
+namespace tiny_swarm::worker::recorder {
 
 /// Class PodRecorder is to record the startup information of process on disk.The records are used by worker node to
 /// restart itself.

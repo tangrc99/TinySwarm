@@ -10,7 +10,7 @@
 #include <string>
 #include <etcd/Watcher.hpp>
 
-namespace manager {
+namespace tiny_swarm::manager {
 
 
     class ManagerECTD {

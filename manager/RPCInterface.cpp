@@ -5,7 +5,7 @@
 #include "RPCInterface.h"
 #include "ServiceManager.h"
 
-namespace manager {
+namespace tiny_swarm::manager {
     RPCInterface::RPCInterface(ServiceManager *manager) : manager_(manager) {
 
     }

@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-namespace manager::proxy{
+namespace tiny_swarm::manager::proxy{
 
         /// Class Proxy defines all interface to construct a service gateway
         class Proxy {

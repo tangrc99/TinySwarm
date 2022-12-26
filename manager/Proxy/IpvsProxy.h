@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <mutex>
 
-namespace manager::proxy {
+namespace tiny_swarm::manager::proxy {
     /// Class IpvsProxy uses iptables and ipvs tool to manage client's route path to pods. Every service group will use
     /// a virtual ip 10.0.1.x:x to create a virtual server. The virtual server will use round-robin strategy to transmit
     /// user's connection. User can also use real ip to visit a single server.

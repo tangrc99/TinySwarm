@@ -5,8 +5,7 @@
 #include "PodDescriptor.h"
 #include "worker/probe/LiveProbe.h"
 
-namespace worker {
-
+namespace tiny_swarm::worker {
 
     PodDescriptor::PodDescriptor(pid_t pid_, int type_, std::string service_, std::string alias_, std::string exec_,
                                  std::string manager_, std::string out_file_, std::vector<char *> exe_params_,

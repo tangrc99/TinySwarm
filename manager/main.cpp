@@ -18,12 +18,6 @@
 #include <fstream>
 
 
-static void childSEFV(int signal) {
-    std::ofstream os("/Users/tangrenchu/CLionProjects/TinySwarm/logs.txt", std::ios::app);
-    os << "in signal func" << std::endl;
-    std::cout << signal << "called" << std::endl;
-    exit(139);
-}
 
 using namespace manager;
 

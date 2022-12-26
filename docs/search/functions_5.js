@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['findaddresspool_0',['findAddressPool',['../classtiny__swarm_1_1manager_1_1proxy_1_1_ipvs_proxy.html#a0d09a27473b1f05a149ca754392139ab',1,'tiny_swarm::manager::proxy::IpvsProxy::findAddressPool()'],['../classtiny__swarm_1_1manager_1_1proxy_1_1_nginx_proxy.html#aad607c7f39ba714ef87d239ef7caf791',1,'tiny_swarm::manager::proxy::NginxProxy::findAddressPool()'],['../classtiny__swarm_1_1manager_1_1proxy_1_1_no_proxy.html#ad2b1d01602ecdc70290e0ff3959e4a10',1,'tiny_swarm::manager::proxy::NoProxy::findAddressPool()'],['../classtiny__swarm_1_1manager_1_1proxy_1_1_proxy.html#afa3fc9a8f08e1d3aa66cc9bd6b31e89d',1,'tiny_swarm::manager::proxy::Proxy::findAddressPool()']]],
+  ['findworkerdescriptor_1',['findWorkerDescriptor',['../classtiny__swarm_1_1manager_1_1_manager.html#af2423079271dbadbc3eaf49ae1e9d4f0',1,'tiny_swarm::manager::Manager::findWorkerDescriptor(const std::string &amp;ip, int port)'],['../classtiny__swarm_1_1manager_1_1_manager.html#a4549a99759c4524a1d03efc3cae67746',1,'tiny_swarm::manager::Manager::findWorkerDescriptor(const std::string &amp;address)']]]
+];

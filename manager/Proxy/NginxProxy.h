@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-namespace manager::proxy {
+namespace tiny_swarm::manager::proxy {
         /// NginxProxy will build a service gateway at the application layer
         class NginxProxy : public Proxy {
         public:

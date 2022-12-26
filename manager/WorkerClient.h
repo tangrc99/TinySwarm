@@ -15,7 +15,7 @@
 #define CHECK "check"
 
 
-namespace manager {
+namespace tiny_swarm::manager {
 
     /// Class WorkerClient is used to import client proto.
     class WorkerClient final : public RpcClient {

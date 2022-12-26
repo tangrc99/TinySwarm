@@ -4,7 +4,7 @@
 
 #include "Manager.h"
 
-namespace manager{
+namespace tiny_swarm::manager {
 
     CreateResult
     Manager::selectWorkerToCreatePod(const string &service, const string &alias, ServiceType type, int port,

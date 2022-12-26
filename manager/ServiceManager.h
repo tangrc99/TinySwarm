@@ -15,7 +15,7 @@
 #include <nlohmann/json.hpp>
 
 
-namespace manager {
+namespace tiny_swarm::manager {
 
 /// 负责处理与用户之间的逻辑，防止都写在manager里面，此处只留给用户文本信息，而不留指向内部的指针等
     class ServiceManager {

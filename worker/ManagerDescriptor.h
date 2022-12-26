@@ -9,7 +9,7 @@
 #include <list>
 #include <utility>
 
-namespace worker {
+namespace tiny_swarm::worker {
 
     struct ManagerDescriptor {
 

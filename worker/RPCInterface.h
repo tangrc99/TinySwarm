@@ -11,7 +11,7 @@
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/message.h>
 
-namespace worker {
+namespace tiny_swarm::worker {
 
     class WorkerNode;
 

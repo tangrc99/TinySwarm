@@ -8,7 +8,7 @@
 #include "Session.h"
 #include "PodDescriptor.h"
 
-namespace manager {
+namespace tiny_swarm::manager {
 
 
     /// Struct WorkerDescriptor describes a worker status view. It contains rpc connection to worker, created pods on worker

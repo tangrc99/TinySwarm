@@ -5,7 +5,7 @@
 #include "RPCInterface.h"
 #include "WorkerNode.h"
 
-namespace worker {
+namespace tiny_swarm::worker {
 
     void
     RPCInterface::fork(::google::protobuf::RpcController *controller, const ::ForkInput *request, ::ForkEcho *response,

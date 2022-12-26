@@ -13,8 +13,7 @@
 #include <sstream>
 #include <list>
 
-namespace worker {
-
+namespace tiny_swarm::worker {
     /// Class WorkerStatus is used to manage the service status and running status of WorkerNode.
     class WorkerStatus {
     public:

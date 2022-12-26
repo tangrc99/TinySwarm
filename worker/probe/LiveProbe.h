@@ -9,7 +9,7 @@
 #include <sys/fcntl.h>
 #include "IPAddress.h"
 
-namespace worker::probe {
+namespace tiny_swarm::worker::probe {
 
 /// Class LiveProbe is used to check whether the process of pod is attachable.
     class LiveProbe {

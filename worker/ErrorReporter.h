@@ -12,7 +12,7 @@
 #include <thread>
 #include <condition_variable>
 
-namespace worker {
+namespace tiny_swarm::worker {
 
     using bsoncxx::builder::basic::make_document;
     using bsoncxx::builder::basic::make_array;

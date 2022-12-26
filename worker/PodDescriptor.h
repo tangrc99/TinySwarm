@@ -13,9 +13,10 @@
 #include <vector>
 #include <string>
 
-namespace worker {
+namespace tiny_swarm::worker {
 
     class LiveProbe;
+    class TCPProbe;
 
     struct PodDescriptor {
         pid_t pid;

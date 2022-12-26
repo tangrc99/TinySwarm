@@ -8,7 +8,7 @@
 #include <string>
 #include <utility>
 
-namespace manager {
+namespace tiny_swarm::manager {
 
     struct PodDescriptor;
 

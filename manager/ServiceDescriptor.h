@@ -11,7 +11,7 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 
-namespace manager {
+namespace tiny_swarm::manager {
 
     using Json = nlohmann::json;
     using PodGroup = std::vector<PodDescriptor *>;

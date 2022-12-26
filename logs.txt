@@ -1,3 +1,0 @@
-check log
-signal register
-in signal func

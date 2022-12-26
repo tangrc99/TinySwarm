@@ -5,7 +5,7 @@
 #include "Register.h"
 #include <nlohmann/json.hpp>
 
-namespace worker::registry {
+namespace tiny_swarm::worker::registry {
 
 
     ETCDRegister::ETCDRegister(const std::string &url,int ttl) : client_(url),ttl_(ttl) {

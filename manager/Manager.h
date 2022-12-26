@@ -18,7 +18,7 @@
 #include <sstream>
 #include <utility>
 
-namespace manager {
+namespace tiny_swarm::manager {
 
     class Manager {
 

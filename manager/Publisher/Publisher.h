@@ -9,7 +9,7 @@
 #include <sw/redis++/redis++.h>
 #include <iostream>
 
-namespace manager::publisher {
+namespace tiny_swarm::manager::publisher {
 
     /// Class Publisher is the base class to process manager's messages between themselves. There is not one interface.
     class Publisher {

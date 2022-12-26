@@ -5,7 +5,7 @@
 #include "PodDescriptor.h"
 #include "WorkerDescriptor.h"
 
-namespace manager {
+namespace tiny_swarm::manager {
 
 
     PodDescriptor::PodDescriptor(std::string service, std::string alias, ServiceType type, int alive, int port,

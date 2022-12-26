@@ -20,5 +20,4 @@ link_directories("/usr/local/lib")
 
 add_subdirectory(worker)
 add_subdirectory(manager)
-add_subdirectory(MapReduce)
-add_subdirectory(Yolo)
+

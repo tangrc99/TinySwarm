@@ -7,7 +7,7 @@
 
 #include "Proxy.h"
 
-namespace manager::proxy {
+namespace tiny_swarm::manager::proxy {
         /// Class NoProxy do nothing in every interface and always returns ok.
         class NoProxy final : public Proxy {
         public:

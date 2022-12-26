@@ -8,7 +8,7 @@
 #include <exception>
 #include <string>
 
-namespace manager::proxy {
+namespace tiny_swarm::manager::proxy {
         /// Class ProxyException is used in Proxy classes to identify where exception was threw.
         class ProxyException : public std::exception {
         public:
