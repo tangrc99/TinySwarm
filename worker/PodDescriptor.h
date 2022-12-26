@@ -39,7 +39,6 @@ namespace worker {
 
     };
 
-// FIXME : 这里的错误信息需要服务名，而不需要 进程的 信息，并且同一种服务可能有多个实例，因此服务名要多思考咋么命名
 
     struct PodExitInformation {
         std::string alias;  // 服务名称
@@ -50,11 +49,15 @@ namespace worker {
         int signal = 0; // 信号量
         bool core_dumped = false;
 
-        PodExitInformation(std::string alias_, std::string manager_, std::string out_file_, int status,
-                           std::string error = "") : alias(std::move(alias_)), manager(std::move(manager_)),
-                                                     out_file(std::move(out_file_)), error_text(std::move(error)) {
+        PodDescriptor desp_;
 
-            if(status != -1){
+        PodExitInformation(std::string alias_, std::string manager_, std::string out_file_, int status,
+                           const PodDescriptor& desp, std::string error = "") : alias(std::move(alias_)),
+                                                                         manager(std::move(manager_)),
+                                                                         out_file(std::move(out_file_)), desp_(desp),
+                                                                         error_text(std::move(error)) {
+
+            if (status != -1) {
                 // 这里解析由进程退出收集来的信息
                 if (WIFSIGNALED(status)) {
                     signal = status << 8 >> 8;
@@ -69,7 +72,7 @@ namespace worker {
         /// Parse Information and Generate Error Reason
         /// \return Error Text
         [[nodiscard]] std::string getErrorText() const {
-            if(!error_text.empty())
+            if (!error_text.empty())
                 return error_text;
 
             std::string core_dump = core_dumped ? " core dumped" : "";

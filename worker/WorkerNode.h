@@ -11,10 +11,11 @@
 #include "WorkerStatus.h"
 #include "RPCInterface.h"
 #include "ManagerDescriptor.h"
-#include "PodRecorder.h"
+#include "worker/recorder/PodStartRecorder.h"
 #include "WorkerError.h"
 
-#include "LiveProbe.h"
+#include "worker/probe/LiveProbe.h"
+#include "worker/util/LockFreeQueue.h"
 
 #include <list>
 #include <iostream>
@@ -27,28 +28,34 @@
 
 namespace worker {
 
+    /// Struct to record process exit information
     struct ExitInformation {
-        pid_t pid = 0;  //
-        int exit_code = 0;
+        pid_t pid = 0;  // exited process id
+        int exit_code = 0; // exited code
     };
 
-    static std::mutex infos_mtx;
-    static std::list<ExitInformation> infos;
+    /// LockFreeQueue to record process exit information
+    static LockFreeQueue<ExitInformation> infos;
 
 /// Receive the SIGCHLD and collect exit information.
     static void childExitHandler(int) {
 
         int status;
         pid_t pid = wait(&status);
-
-        std::lock_guard<std::mutex> lg(infos_mtx);
-        infos.emplace_back(ExitInformation{pid, status});
+        infos.push(ExitInformation{pid, status});   // 将错误信息收集到无锁队列中
     }
 
 
+    /// Class WorkerNode manages all process started. This class will accpect manager's request to start new process and
+    /// monitor their status using signal. Once a process exits with an exit code > 0, it's exit information(include exit
+    /// code, signal), stdout will be collected and send to mongodb and it's manager. Every process is also called Pod. And
+    /// Every pod is bind to it's manager. If it's manager is down, the pod will be shutdown by worker.
     class WorkerNode {
     public:
 
+        /// Constructor will do following things. 1.Check assigned directory to find available binary file.
+        /// 2.Construct WorkerNode's bridged class. 3.Registry signal handler 4.Start inner rpc server.
+        /// \param work_dir
         explicit WorkerNode(const std::string &work_dir) : work_dir_(work_dir), probe_(new TCPProbe) {
 
             if (!std::filesystem::exists(work_dir)) {
@@ -58,15 +65,14 @@ namespace worker {
 
             if (work_dir.back() == '/') {
                 status = new WorkerStatus(work_dir, work_dir + "WorkerInformation");
-                recorder = std::make_unique<PodRecorder>(work_dir + "ServiceRecord", rpc_service);
+                recorder = std::make_unique<PodStartRecorder>(work_dir + "ServiceRecord", rpc_service);
             } else {
                 status = new WorkerStatus(work_dir, work_dir + "/WorkerInformation");
-                recorder = std::make_unique<PodRecorder>(work_dir + "/ServiceRecord", rpc_service);
+                recorder = std::make_unique<PodStartRecorder>(work_dir + "/ServiceRecord", rpc_service);
             }
 
 
             // 这里要进行docker的注册，防止后面pull失败
-
             signal(SIGCHLD, childExitHandler);
 
 
@@ -433,14 +439,16 @@ namespace worker {
         /// If the service is marked restart, try to restart it.
         /// Only the Process that exits exceptionally will be collect reason.
         void checkIfPodsRunning() {
+            std::list<std::shared_ptr<ExitInformation>> error_infos;
 
-            if (infos.empty())
-                return;
-
-            std::list<ExitInformation> error_infos;
             {
-                std::lock_guard<std::mutex> lg(infos_mtx);
-                std::swap(infos, error_infos);
+                std::shared_ptr<ExitInformation> info = nullptr;
+
+                do{
+                    info = infos.pop();
+                    error_infos.emplace_back(info);
+                }
+                while(info != nullptr);
             }
 
             for (auto &info: error_infos) {
@@ -448,11 +456,11 @@ namespace worker {
 
                 for (auto pod = pods.begin(); pod != pods.end();) {
 
-                    if (pod->pid == info.pid) {
+                    if (pod->pid == info->pid) {
 
                         // 删除掉ManagerDescriptor中的记录
                         auto md = getOrAddManager(pod->manager);
-                        deletePodInManagerDescriptor(md, info.pid);
+                        deletePodInManagerDescriptor(md, info->pid);
 
                         // 删除对应的 ServiceRecord
                         recorder->removePodRecord(pod->alias);
@@ -474,7 +482,7 @@ namespace worker {
                             std::lock_guard<std::mutex> lg1(mtx2);
                             down_pods.emplace_back(
                                     PodExitInformation{pod->alias, pod->manager, pod->out_file,
-                                                       info.exit_code});
+                                                       info->exit_code, *pod});
 
                         } else {
                             // 对于 docker 进程
@@ -483,7 +491,7 @@ namespace worker {
 
                         }
 
-                        std::cout << "erased " << info.pid << " status " << info.exit_code << std::endl;
+                        std::cout << "erased " << info->pid << " status " << info->exit_code << std::endl;
                         pods.erase(pod);
                         break;
 
@@ -513,7 +521,7 @@ namespace worker {
 
                 } else {
                     down_pods.emplace_back(
-                            PodExitInformation(pod->alias, pod->manager, pod->out_file, -1, "BLOCKED"));
+                            PodExitInformation(pod->alias, pod->manager, pod->out_file, -1, *pod, "BLOCKED"));
                     auto pid = pod->pid;
                     pods.erase(pod);
                     kill(pid, SIGINT);
@@ -659,6 +667,11 @@ namespace worker {
         }
 
     private:
+
+        std::filesystem::path work_dir_;    // 当前节点的工作目录
+
+
+
         std::list<PodDescriptor> pods;        //FIXME :  加锁后性能可能较差
 
         std::mutex mtx1, mtx2;
@@ -666,8 +679,6 @@ namespace worker {
 
 
         std::list<std::string> unused_files;    // 记录已退出进程的未被清除文件名。
-
-        std::filesystem::path work_dir_;    // 当前节点的工作目录
 
         RPCServer *rpc_server;  // 当前节点工作的 rpc 服务器
         RPCInterface *rpc_service;  // 当前节点所运行的 rpc 服务
@@ -677,7 +688,7 @@ namespace worker {
         using Manager = std::string;
         std::map<Manager, ManagerDescriptor> managers;   // manager信息
 
-        std::unique_ptr<PodRecorder> recorder;
+        std::unique_ptr<recorder::PodStartRecorder> recorder;
 
         LiveProbe *probe_;  // 用于存活探测
     };

@@ -6,6 +6,7 @@
 #define TINYSWARM_WORKERSTATUS_H
 
 #include <unordered_map>
+#include <unordered_set>
 #include <string>
 #include <filesystem>
 #include <fstream>
@@ -34,7 +35,7 @@ namespace worker {
         void readServices(const std::string &service_dir) {
             for (auto &file: std::filesystem::directory_iterator(service_dir)) {
                 if (file.is_directory() && file.path().filename() != "ServiceRecord") {
-                    services.emplace(file.path().filename(), "Service Information"); // FIXME: 加入服务的描述文件
+                    services.emplace(file.path().filename()); // FIXME: 加入服务的描述文件
                 }
             }
         }
@@ -79,7 +80,8 @@ namespace worker {
         }
 
     private:
-        std::unordered_map<std::string, std::string> status, services;    // 用于记录各个参数
+        std::unordered_map<std::string, std::string> status;    // 用于记录各个参数
+        std::unordered_set<std::string> services;
 
         std::list<int> ports;
 

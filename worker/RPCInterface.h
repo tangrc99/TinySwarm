@@ -6,7 +6,7 @@
 #define TINYSWARM_RPCINTERFACE_H
 
 
-#include "WorkerRpcInterface.pb.h"
+#include "worker/protos/WorkerRpcInterface.pb.h"
 #include <google/protobuf/service.h>
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/message.h>

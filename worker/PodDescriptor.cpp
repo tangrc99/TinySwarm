@@ -3,7 +3,7 @@
 //
 
 #include "PodDescriptor.h"
-#include "LiveProbe.h"
+#include "worker/probe/LiveProbe.h"
 
 namespace worker {
 
